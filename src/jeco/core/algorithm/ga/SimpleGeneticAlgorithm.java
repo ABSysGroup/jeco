@@ -59,7 +59,8 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
 
         int nextPercentageReport = 10;
         HashMap<String,String> obsData = new HashMap<>();
-        while (currentGeneration < maxGenerations) {
+        stop = false;
+        while ((currentGeneration < maxGenerations) && !stop){
             step();
             int percentage = Math.round((currentGeneration * 100) / maxGenerations);
             Double bestObj = leaders.get(0).getObjectives().get(0);
@@ -81,6 +82,11 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
                 }
             }
         }
+        if (stop) {
+            logger.info("Execution stopped at generation "+ currentGeneration);
+            logger.info("Best objective value: "+leaders.get(0).getObjectives().get(0));
+        }
+        
         return leaders;
     }
 
