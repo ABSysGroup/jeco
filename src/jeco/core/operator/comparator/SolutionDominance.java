@@ -7,6 +7,8 @@ import jeco.core.problem.Variable;
 
 public class SolutionDominance<T extends Variable<?>> implements Comparator<Solution<T>> {
 
+    public static boolean minimize = true;
+    
   @Override
   public int compare(Solution<T> s1, Solution<T> s2) {
     if (s2 == null) {
@@ -30,9 +32,17 @@ public class SolutionDominance<T extends Variable<?>> implements Comparator<Solu
     }
 
     if (smaller && !bigger) {
-      return -1;
+      if (minimize) {
+          return -1;
+      } else {
+          return 1;
+      }
     } else if (bigger && !smaller) {
-      return 1;
+      if (minimize) {
+          return 1;
+      } else {
+          return -1;
+      }
     }
     return 0;
   }
