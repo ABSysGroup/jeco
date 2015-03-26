@@ -92,7 +92,7 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
         
         Solutions<V> afterLS = new Solutions<>();
         for (Solution<V> s : nonDominated) {
-            afterLS.add(localSearch.doLocalSearch(problem,s));
+            afterLS.add(localSearch.doLocalSearch(problem,dominance,s));
         }
         
         // Union of chid and afterLS, and reduce population.
