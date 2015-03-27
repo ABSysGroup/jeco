@@ -16,6 +16,7 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
+import org.apache.commons.math3.stat.StatUtils;
 
 /**
  * This class implements a memetic algorithm that works on several
@@ -33,6 +34,7 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
     protected Comparator<Solution<V>> dominance;
     protected int currentGeneration;
     protected Solutions<V> population;
+    protected Solutions<V> eliteSet;
 
     public Solutions<V> getPopulation() {
         return population;
@@ -60,6 +62,8 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
     @Override
     public void initialize() {
         dominance = new SolutionDominance<>();
+        this.eliteSet = new Solutions<>();
+
         // Create the initial solutionSet
         population = problem.newRandomSetOfSolutions(maxPopulationSize);
         problem.evaluate(population);
@@ -88,6 +92,7 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
         // Run the local search only in non-dominated
         Solutions<V> nonDominated = new Solutions<>();
         nonDominated.addAll(childPop);
+        nonDominated.addAll(population);
         nonDominated.reduceToNonDominated(dominance);
         
         Solutions<V> afterLS = new Solutions<>();
@@ -97,9 +102,14 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
         
         // Union of chid and afterLS, and reduce population.
         childPop.addAll(afterLS);
+        childPop.addAll(population);
         
         // Reducing the union
         population = reduce(childPop, maxPopulationSize);
+        
+        // Maintain eliteSet
+        eliteSet.addAll(population);
+        eliteSet.reduceToNonDominated(dominance);
         
     }
 
@@ -110,7 +120,15 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
             step();
             int percentage = Math.round((currentGeneration * 100) / maxGenerations);
             if (percentage == nextPercentageReport) {
-                logger.info(percentage + "% performed ...");
+                double[][] objs = new double[problem.getNumberOfObjectives()][population.size()];
+                String logStr = "";
+                for (int i=0; i<objs.length; i++) {
+                    for (int j=0; j<objs[0].length; j++) {
+                        objs[i][j] = population.get(j).getObjective(i);
+                    }
+                    logStr += " - Obj. "+i+": Max. "+StatUtils.max(objs[i])+"; Avg. "+StatUtils.mean(objs[i])+"; Min. "+StatUtils.min(objs[i]);
+                }
+                logger.info(percentage + "% performed ... "+logStr);
                 nextPercentageReport += 10;
             }
 
@@ -119,6 +137,8 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
     }
 
     public Solutions<V> getCurrentSolution() {
+        // Add elite Set and reduce
+        population.addAll(eliteSet);
         population.reduceToNonDominated(dominance);
         return population;
     }    
