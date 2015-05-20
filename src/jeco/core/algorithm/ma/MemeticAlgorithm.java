@@ -2,6 +2,7 @@ package jeco.core.algorithm.ma;
 
 import jeco.core.algorithm.ga.*;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import jeco.core.algorithm.Algorithm;
@@ -127,7 +128,7 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
         reduceLeaders();  // Will sort solutions !!
         
         // Run local search only in best solution
-        Solution<V> afterLS = localSearch.doLocalSearch(problem,this.getSolutions().get(0).clone());
+        Solution<V> afterLS = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<>(), this.getSolutions().get(0).clone());
         leaders.add(afterLS);
         reduceLeaders();
         
