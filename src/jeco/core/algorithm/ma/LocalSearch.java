@@ -1,5 +1,6 @@
 package jeco.core.algorithm.ma;
 
+import java.util.Comparator;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Variable;
@@ -17,5 +18,5 @@ public interface LocalSearch<V extends Variable<?>> {
      * @param s Input solution for local search.
      * @return New solution result of the local search.
      */
-    public Solution<V> doLocalSearch(Problem<V> problem, Solution<V> sol);
+    public Solution<V> doLocalSearch(Problem<V> problem, Comparator<Solution<V>> dominance, Solution<V> sol);
 }
