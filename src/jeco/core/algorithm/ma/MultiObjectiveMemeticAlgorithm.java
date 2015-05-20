@@ -19,7 +19,7 @@ import jeco.core.problem.Variable;
 
 /**
  * This class implements a memetic algorithm that works on several
- * objectives.
+ * objectives, based in NSGAII + LS.
  * 
  * @author J. M. Colmenar
  */
@@ -95,7 +95,7 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
             afterLS.add(localSearch.doLocalSearch(problem,s));
         }
         
-        // Union of chid and afterLS, and reduce population.
+        // Union of child and afterLS, and reduce population.
         childPop.addAll(afterLS);
         
         // Reducing the union
