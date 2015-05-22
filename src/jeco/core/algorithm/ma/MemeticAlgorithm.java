@@ -14,6 +14,7 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
+import jeco.core.util.random.RandomGenerator;
 
 /**
  * This class implements a memetic algorithm which consists in a SimpleGA + a
@@ -40,9 +41,11 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
     protected SelectionOperator<V> selectionOperator;
     protected LocalSearch<V> localSearch;
 
+    protected double probability = 1.0;
+    
     public MemeticAlgorithm(Problem<V> problem, Integer maxPopulationSize, Integer maxGenerations, 
             Boolean stopWhenSolved, MutationOperator<V> mutationOperator, CrossoverOperator<V> crossoverOperator, 
-            SelectionOperator<V> selectionOperator, LocalSearch localSearch) {
+            SelectionOperator<V> selectionOperator, LocalSearch localSearch, double lsProb) {
         super(problem);
         this.maxGenerations = maxGenerations;
         this.maxPopulationSize = maxPopulationSize;
@@ -51,6 +54,7 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
         this.crossoverOperator = crossoverOperator;
         this.selectionOperator = selectionOperator;
         this.localSearch = localSearch;
+        this.probability = lsProb;
     }
 
     @Override
@@ -118,20 +122,27 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
                 childPop.add(solution);
             }
         } // for
-        problem.evaluate(childPop);
-        population = childPop;
+        
+        Solutions<V> afterLS = new Solutions<V>();
+        // Run local search depending on probability:
+        for (Solution<V> sol : childPop) {
+            if (RandomGenerator.nextDouble() <= probability) {
+                Solution<V> sAfterLs = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<>(), sol.clone());            
+                afterLS.add(sAfterLs);
+            } else {
+                afterLS.add(sol);
+            }
+        }
+        
+        problem.evaluate(afterLS);
+        population = afterLS;
+                
         //Actualize the archive
         for (Solution<V> solution : population) {
             Solution<V> clone = solution.clone();
             leaders.add(clone);
         }
         reduceLeaders();  // Will sort solutions !!
-        
-        // Run local search only in best solution
-        Solution<V> afterLS = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<>(), this.getSolutions().get(0).clone());
-        leaders.add(afterLS);
-        reduceLeaders();
-        
         
         StringBuilder buffer = new StringBuilder();
         buffer.append("@ ").append(currentGeneration).append(";").append(leaders.get(0).getObjective(0));
