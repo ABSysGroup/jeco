@@ -18,7 +18,11 @@ public class RandomGenerator {
 	}
 
 	public static int nextInt(int lowerBound, int upperBound) {
+            if ((upperBound-lowerBound) <= 0) {
+                return 0;
+            } else {
 		return lowerBound + randomGenerator.nextInt(upperBound-lowerBound);
+            }
 	}
 	
 		public static int nextInteger(int lowerBound, int upperBound) {
