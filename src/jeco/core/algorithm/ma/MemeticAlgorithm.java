@@ -14,6 +14,7 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
+import jeco.core.util.ErrorHandler;
 import jeco.core.util.random.RandomGenerator;
 
 /**
@@ -108,47 +109,58 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
 
     @Override
     public void step() {
-        currentGeneration++;
-        // Create the offSpring solutionSet        
-        Solutions<V> childPop = new Solutions<V>();
-        Solution<V> parent1, parent2;
-        for (int i = 0; i < (maxPopulationSize / 2); i++) {
-            //obtain parents
-            parent1 = selectionOperator.execute(population).get(0);
-            parent2 = selectionOperator.execute(population).get(0);
-            Solutions<V> offSpring = crossoverOperator.execute(parent1, parent2);
-            for (Solution<V> solution : offSpring) {
-                mutationOperator.execute(solution);
-                childPop.add(solution);
-            }
-        } // for
-        
-        Solutions<V> afterLS = new Solutions<V>();
-        // Run local search depending on probability:
-        for (Solution<V> sol : childPop) {
-            if (RandomGenerator.nextDouble() <= probability) {
-                Solution<V> sAfterLs = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<>(), sol.clone());            
-                afterLS.add(sAfterLs);
-            } else {
-                afterLS.add(sol);
-            }
-        }
-        
-        problem.evaluate(afterLS);
-        population = afterLS;
-                
-        //Actualize the archive
-        for (Solution<V> solution : population) {
-            Solution<V> clone = solution.clone();
-            leaders.add(clone);
-        }
-        reduceLeaders();  // Will sort solutions !!
-        
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("@ ").append(currentGeneration).append(";").append(leaders.get(0).getObjective(0));
-        buffer.append(";").append(leaders.get(leaders.size() - 1).getObjective(0)).append(";").append(leaders.get(leaders.size() / 2).getObjective(0));
-        logger.fine(buffer.toString());
+        try {
+            currentGeneration++;
+            // Create the offSpring solutionSet        
+            Solutions<V> childPop = new Solutions<V>();
+            Solution<V> parent1, parent2;
+            for (int i = 0; i < (maxPopulationSize / 2); i++) {
+                //obtain parents
+                parent1 = selectionOperator.execute(population).get(0);
+                parent2 = selectionOperator.execute(population).get(0);
+                Solutions<V> offSpring = crossoverOperator.execute(parent1, parent2);
+                for (Solution<V> solution : offSpring) {
+                    mutationOperator.execute(solution);
+                    childPop.add(solution);
+                }
+            } // for
 
+            Solutions<V> afterLS = new Solutions<V>();
+            // Run local search depending on probability:
+            for (Solution<V> sol : childPop) {
+                if (RandomGenerator.nextDouble() <= probability) {
+                    Solution<V> sAfterLs = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<>(), sol.clone());
+                    afterLS.add(sAfterLs);
+                } else {
+                    afterLS.add(sol);
+                }
+            }
+
+            problem.evaluate(afterLS);
+            population = afterLS;
+
+            //Actualize the archive
+            for (Solution<V> solution : population) {
+                Solution<V> clone = solution.clone();
+                leaders.add(clone);
+            }
+            reduceLeaders();  // Will sort solutions !!
+
+            StringBuilder buffer = new StringBuilder();
+            buffer.append("@ ").append(currentGeneration).append(";").append(leaders.get(0).getObjective(0));
+            buffer.append(";").append(leaders.get(leaders.size() - 1).getObjective(0)).append(";").append(leaders.get(leaders.size() / 2).getObjective(0));
+            logger.fine(buffer.toString());
+        } catch (Exception e) {
+            // If an exception is generated, the execution is terminated.
+            // Build data string to log.
+            StringBuilder buffer = new StringBuilder();
+            buffer.append("\nCurr. Generation: ").append(currentGeneration);
+            buffer.append("\nBest Obj. 0: ").append(leaders.get(0).getObjective(0));
+            buffer.append("\nLeaders size: ").append(leaders.size());
+            buffer.append("\nPopulation size: ").append(population.size());
+            buffer.append("\n\nException: "+e.getLocalizedMessage()+"\n\n");
+            ErrorHandler.reportErrorAndExit(buffer.toString());
+        }
     }
 
     public void reduceLeaders() {
