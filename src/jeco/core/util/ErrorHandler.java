@@ -13,12 +13,17 @@ import java.util.Calendar;
  */
 public class ErrorHandler {
     private static ArrayList<String> errorData = new ArrayList<>();
+    private static String instance = "";
     
     private static String getFileName() {
         Calendar now = Calendar.getInstance();
         String fileName = "crashReport"+now.get(Calendar.YEAR)+"_"+now.get(Calendar.MONTH)+"_"+now.get(Calendar.DAY_OF_MONTH);
         fileName += "__"+now.get(Calendar.HOUR_OF_DAY)+"_"+now.get(Calendar.MINUTE)+"_"+now.get(Calendar.SECOND)+".txt";
         return fileName;
+    }
+    
+    public static void setInstance (String instance) {
+        ErrorHandler.instance = instance;
     }
     
     public static void reportErrorAndExit(String errorStr) {
@@ -34,6 +39,7 @@ public class ErrorHandler {
                 for (String s : errorData) {
                     writer.write(s+"\n");  
                 }
+                writer.write("\nInstance: "+instance+"\n");
 		
 	} catch (Exception e) {
 		e.printStackTrace();

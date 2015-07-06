@@ -158,7 +158,9 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
             buffer.append("\nBest Obj. 0: ").append(leaders.get(0).getObjective(0));
             buffer.append("\nLeaders size: ").append(leaders.size());
             buffer.append("\nPopulation size: ").append(population.size());
-            buffer.append("\n\nException: "+e.getLocalizedMessage()+"\n\n");
+            buffer.append("\nException: "+e.getMessage()+"\n");
+            buffer.append("\nException localized message: "+e.getLocalizedMessage()+"\n");
+            buffer.append("\n\nException stack trace: "+e.getStackTrace()+"\n\n");
             ErrorHandler.reportErrorAndExit(buffer.toString());
         }
     }
