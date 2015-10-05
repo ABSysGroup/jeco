@@ -9,11 +9,16 @@ public abstract class Problem<V extends Variable<?>> {
   protected double[] lowerBound;
   protected double[] upperBound;
 
+  protected int maxEvaluations;
+  protected int numEvaluations;
+  
   public Problem(int numberOfVariables, int numberOfObjectives) {
     this.numberOfVariables = numberOfVariables;
     this.numberOfObjectives = numberOfObjectives;
     this.lowerBound = new double[numberOfVariables];
     this.upperBound = new double[numberOfVariables];
+    this.maxEvaluations = Integer.MAX_VALUE;
+    this.numEvaluations = 0;
   }
 
   public int getNumberOfVariables() {
@@ -44,4 +49,8 @@ public abstract class Problem<V extends Variable<?>> {
 
   @Override
   public abstract Problem<V> clone();
+
+    public boolean reachedMaxEvaluations() {
+        return (numEvaluations >= maxEvaluations);
+    }
 }

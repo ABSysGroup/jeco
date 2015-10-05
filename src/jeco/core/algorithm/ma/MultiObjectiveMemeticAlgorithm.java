@@ -111,12 +111,16 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
         eliteSet.addAll(population);
         eliteSet.reduceToNonDominated(dominance);
         
+        if (problem.reachedMaxEvaluations()) {
+            this.stopExection();
+        }
+        
     }
 
     @Override
     public Solutions<V> execute() {
         int nextPercentageReport = 10;
-        while (currentGeneration < maxGenerations) {
+        while ((currentGeneration < maxGenerations) && !stop) {
             step();
             int percentage = Math.round((currentGeneration * 100) / maxGenerations);
             if (percentage == nextPercentageReport) {
