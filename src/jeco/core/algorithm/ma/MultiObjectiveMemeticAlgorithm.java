@@ -63,7 +63,9 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
     public void initialize() {
         dominance = new SolutionDominance<>();
         this.eliteSet = new Solutions<>();
-
+        
+        problem.setNumEvaluations(0);
+        this.stop = false;
         // Create the initial solutionSet
         population = problem.newRandomSetOfSolutions(maxPopulationSize);
         problem.evaluate(population);
