@@ -60,6 +60,9 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
 
     @Override
     public void initialize() {
+        problem.setNumEvaluations(0);
+        this.stop = false;
+        
         population = problem.newRandomSetOfSolutions(maxPopulationSize);
         leaders = new Solutions<V>();
         problem.evaluate(population);
