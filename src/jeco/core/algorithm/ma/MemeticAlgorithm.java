@@ -166,6 +166,10 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
             buffer.append("\n\nException stack trace: "+e.getStackTrace()+"\n\n");
             ErrorHandler.reportErrorAndExit(buffer.toString());
         }
+        
+        if (problem.reachedMaxEvaluations()) {
+            this.stopExection();
+        }
     }
 
     public void reduceLeaders() {
