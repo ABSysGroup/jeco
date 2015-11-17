@@ -406,8 +406,8 @@ public class BnfReader {
 			}
 			checkInfiniteRecursion();
 		} catch (Exception ex) {
-			System.out.println(ex);
-			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+//			ex.printStackTrace();
 			return false;
 		}
 		updateRuleFields();
