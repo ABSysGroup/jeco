@@ -59,6 +59,8 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
 
         int nextPercentageReport = 10;
         HashMap<String,String> obsData = new HashMap<>();
+        // For observers:
+        obsData.put("MaxGenerations", String.valueOf(maxGenerations));
         stop = false;
         while ((currentGeneration < maxGenerations) && !stop){
             step();
