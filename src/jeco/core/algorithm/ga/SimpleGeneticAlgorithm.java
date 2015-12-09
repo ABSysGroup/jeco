@@ -13,6 +13,7 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
+import org.apache.commons.math3.stat.StatUtils;
 
 public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
 
@@ -30,6 +31,8 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     protected MutationOperator<V> mutationOperator;
     protected CrossoverOperator<V> crossoverOperator;
     protected SelectionOperator<V> selectionOperator;
+    /////////////////////////////////////////////////////////////////////////
+    protected double[] fitnessValues = null;
 
     public SimpleGeneticAlgorithm(Problem<V> problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved, MutationOperator<V> mutationOperator, CrossoverOperator<V> crossoverOperator, SelectionOperator<V> selectionOperator) {
         super(problem);
@@ -74,7 +77,14 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
             this.notifyObservers(obsData);
             
             if (percentage == nextPercentageReport) {
-                logger.info(percentage + "% performed ..." + " -- Best fitness: " + bestObj);
+                // Compute more stats:
+                fitnessValues = new double[leaders.size()];
+                for (int i = 0; i < fitnessValues.length; i++) {
+                    fitnessValues[i] = leaders.get(i).getObjective(0);
+                }
+                double avg = StatUtils.mean(fitnessValues);
+                double stdDev = Math.sqrt(StatUtils.variance(fitnessValues));
+                logger.info(percentage + "% performed ..." + " -- Fitness info -->> Best: " + bestObj + " -->> Avg.: " + avg + " -->> Std. Dev.: " + stdDev );
                 nextPercentageReport += 10;
             }
             if (stopWhenSolved) {
