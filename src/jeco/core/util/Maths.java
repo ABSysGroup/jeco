@@ -1,15 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package jeco.core.util;
 
 import java.util.Collections;
 import java.util.List;
+import jeco.core.problem.Solutions;
+import jeco.core.problem.Variable;
+import jmetal.qualityIndicator.Hypervolume;
 
 /**
- *
- * @author jlrisco
+ * Utility functions. Must be refactored.
+ * 
+ * @author jlrisco, J. M. Colmenar
  */
 public class Maths {
 
@@ -48,4 +48,19 @@ public class Maths {
     res = Math.sqrt(res/(numbers.size()-1));
     return res;
   }
+  
+  public static <V extends Variable<?>> double calculateHypervolume(Solutions<V> solFront, int numObjectives) {
+        
+        double [][] front = new double[solFront.size()][numObjectives];
+        for (int i = 0; i < solFront.size(); i++) {
+            for (int obj=0; obj<numObjectives; obj++) {
+                front[i][obj] = solFront.get(i).getObjective(obj);
+            }
+        }
+              
+        Hypervolume hv = new Hypervolume();
+        
+        return hv.calculateHypervolume(front, front.length, numObjectives);
+    }
+  
 }

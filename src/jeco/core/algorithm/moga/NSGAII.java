@@ -3,6 +3,7 @@ package jeco.core.algorithm.moga;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import jeco.core.algorithm.Algorithm;
 import jeco.core.operator.assigner.CrowdingDistance;
@@ -16,6 +17,7 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
+import jeco.core.util.Maths;
 
 /**
  *
@@ -71,12 +73,26 @@ public class NSGAII<T extends Variable<?>> extends Algorithm<T> {
   @Override
   public Solutions<T> execute() {
     int nextPercentageReport = 10;
+    HashMap<String,String> obsData = new HashMap<>();
+    // For observers:
+    obsData.put("MaxGenerations", String.valueOf(maxGenerations));
+    double hv = Double.MAX_VALUE;
     while (currentGeneration < maxGenerations) {
       step();
+      
+      // Report Hv each 10 generations to observer:
+      if ((this.countObservers() > 0) && ((currentGeneration % 10) == 0)) {
+          hv = Maths.calculateHypervolume(population, problem.getNumberOfObjectives());
+          obsData.put("CurrentGeneration", String.valueOf(currentGeneration));
+          obsData.put("Hypervolume", String.valueOf(hv));
+          this.setChanged();
+          this.notifyObservers(obsData);
+      }
+      
       int percentage = Math.round((currentGeneration * 100) / maxGenerations);
       if (percentage == nextPercentageReport) {
-        logger.info(percentage + "% performed ...");
-        nextPercentageReport += 10;
+          logger.info(percentage + "% performed ... -> Hypervol.: "+hv);
+          nextPercentageReport += 10;
       }
 
     }

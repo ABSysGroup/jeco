@@ -2,7 +2,6 @@ package jeco.core.algorithm.ga;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import jeco.core.algorithm.Algorithm;
 import jeco.core.operator.comparator.SimpleDominance;
