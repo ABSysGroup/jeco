@@ -1,4 +1,6 @@
-jeco
+ABSys JECO
 ====
 
-This is the public repository for jeco
+Java Evolutionary COmputation library developed by current and former members of <a href="http://bioinspired.dacya.ucm.es/">ABSys Group</a>.
+
+
