@@ -7,7 +7,6 @@ import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.problems.Rastringin;
-import logger.core.MyLogger;
 
 /**
  * Class to test the SA solver.
@@ -22,7 +21,6 @@ public class SimulatedAnnealing_example {
      * @param args
      */
     public static void main(String[] args) {
-    	MyLogger.setup(Level.INFO);
         // First create the problem
         Rastringin problem = new Rastringin(4);
         // Second create the algorithm

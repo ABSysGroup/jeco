@@ -11,7 +11,6 @@ import jeco.core.operator.crossover.SinglePointCrossover;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
-import logger.core.MyLogger;
 
 /**
  * Example Pease note that using the Script Engine is too slow. We recommend
@@ -66,7 +65,6 @@ public class SimpleGrammaticalEvolution_example extends AbstractProblemGE {
   }
 
     public static void main(String[] args) {
-        MyLogger.setup();
         // First create the problem
         SimpleGrammaticalEvolution_example problem = new SimpleGrammaticalEvolution_example("test/grammar_example.bnf");
         // Second create the algorithm

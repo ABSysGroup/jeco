@@ -30,7 +30,6 @@ import jeco.core.problem.Variable;
 import jeco.core.util.NormalizedDataTable;
 import jeco.core.util.compiler.MyCompiler;
 import jeco.core.util.compiler.MyLoader;
-import logger.core.MyLogger;
 
 public class GramEvalTemporalModel extends AbstractProblemGE {
 
@@ -177,8 +176,7 @@ public class GramEvalTemporalModel extends AbstractProblemGE {
     }
     
     public static void runGE(Properties properties, int threadId, Observer obs) {
-        MyLogger.setup(properties.getProperty("LoggerBasePath") + "_" + threadId + ".log", Level.parse(properties.getProperty("LoggerLevel")));
-
+        logger.setLevel(Level.FINE);
         GramEvalTemporalModel problem = null;
         try {
             problem = new GramEvalTemporalModel(properties, threadId);

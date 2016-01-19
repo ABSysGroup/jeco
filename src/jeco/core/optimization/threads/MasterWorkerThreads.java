@@ -13,7 +13,6 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
-import logger.core.MyLogger;
 
 public class MasterWorkerThreads<V extends Variable<?>> extends Problem<V> {
 
@@ -84,7 +83,6 @@ public class MasterWorkerThreads<V extends Variable<?>> extends Problem<V> {
   }
 
   public static void main(String[] args) {
-	  MyLogger.setup();
     long begin = System.currentTimeMillis();
     // First create the problem
     GrammaticalEvolution_example problem = new GrammaticalEvolution_example("test/grammar_example.bnf");

@@ -77,7 +77,8 @@ public class NSGAII<T extends Variable<?>> extends Algorithm<T> {
     // For observers:
     obsData.put("MaxGenerations", String.valueOf(maxGenerations));
     double hv = Double.MAX_VALUE;
-    while (currentGeneration < maxGenerations) {
+    stop = false;
+    while ((currentGeneration < maxGenerations) && !stop){
       step();
       
       // Report Hv each 10 generations to observer:

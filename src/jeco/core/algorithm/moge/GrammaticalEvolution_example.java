@@ -10,7 +10,6 @@ import javax.script.ScriptException;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
-import logger.core.MyLogger;
 
 /**
  * Example
@@ -66,7 +65,6 @@ public class GrammaticalEvolution_example extends AbstractProblemGE {
   }
 
   public static void main(String[] args) {
-	  MyLogger.setup();
 		// First create the problem
 		GrammaticalEvolution_example problem = new GrammaticalEvolution_example("test/grammar_example.bnf");
 		// Second create the algorithm

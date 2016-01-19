@@ -28,7 +28,6 @@ import jeco.core.problem.Variable;
 import jeco.core.util.NormalizedDataTable;
 import jeco.core.util.compiler.MyCompiler;
 import jeco.core.util.compiler.MyLoader;
-import logger.core.MyLogger;
 
 /**
  * Class to develop "static" (non-temporal) models
@@ -187,7 +186,6 @@ public class GramEvalStaticModel extends AbstractProblemGE {
         } catch (Exception ex) {
             logger.severe(ex.getLocalizedMessage());
         }
-        MyLogger.setup(properties.getProperty("LoggerBasePath") + "_" + threadId + ".log", Level.parse(properties.getProperty("LoggerLevel")));
 
         GramEvalStaticModel problem = null;
         try {
