@@ -40,8 +40,8 @@ public class CombinatorialCrossover extends CrossoverOperator<Variable<Integer>>
             for (Variable<Integer> v : parent1.getVariables()) {
                 if (!union.contains(v.getValue())) {
                     union.add(v.getValue());
-                    if (parent1.getVariables().contains(v.getValue()) && 
-                        parent2.getVariables().contains(v.getValue())) {
+                    if (parent1.getVariables().contains(v) && 
+                        parent2.getVariables().contains(v)) {
                         fixedIdxs.add(i);
                     } else {
                         freeIdxs.add(i);
@@ -54,8 +54,8 @@ public class CombinatorialCrossover extends CrossoverOperator<Variable<Integer>>
             for (Variable<Integer> v : parent2.getVariables()) {
                 if (!union.contains(v.getValue())) {
                     union.add(v.getValue());
-                    if (parent1.getVariables().contains(v.getValue()) && 
-                        parent2.getVariables().contains(v.getValue())) {
+                    if (parent1.getVariables().contains(v) && 
+                        parent2.getVariables().contains(v)) {
                         fixedIdxs.add(i);
                     } else {
                         freeIdxs.add(i);
