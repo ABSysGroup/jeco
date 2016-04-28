@@ -54,10 +54,10 @@ public class SPEA2<T extends Variable<?>> extends Algorithm<T> {
         this.mutationOperator = mutationOperator;
         this.crossoverOperator = crossoverOperator;
         this.selectionOperator = selectionOperator;
+        dominance = new SolutionDominance<T>();
     }
 
     public void initialize() {
-        dominance = new SolutionDominance<T>();
         K = (int) Math.sqrt(maxPopulationSize + maxPopulationSize);
         //Initialize the variables
         archive = new Solutions<T>();
