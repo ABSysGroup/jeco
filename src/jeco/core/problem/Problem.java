@@ -18,7 +18,7 @@ public abstract class Problem<V extends Variable<?>> {
         this.lowerBound = new double[numberOfVariables];
         this.upperBound = new double[numberOfVariables];
         this.maxEvaluations = Integer.MAX_VALUE;
-        this.numEvaluations = 0;
+        resetNumEvaluations();
     }
 
     public int getNumberOfVariables() {
@@ -49,6 +49,10 @@ public abstract class Problem<V extends Variable<?>> {
         return numEvaluations;
     }
 
+    public final void resetNumEvaluations() {
+        numEvaluations = 0;
+    }
+    
     public void setNumEvaluations(int numEvaluations) {
         this.numEvaluations = numEvaluations;
     }
