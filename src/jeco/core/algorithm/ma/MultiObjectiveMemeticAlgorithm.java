@@ -16,6 +16,7 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
+import jeco.core.util.random.RandomGenerator;
 import org.apache.commons.math3.stat.StatUtils;
 
 /**
@@ -35,6 +36,7 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
     protected int currentGeneration;
     protected Solutions<V> population;
     protected Solutions<V> eliteSet;
+    protected double lsProbabilityInGeneration;
 
     public Solutions<V> getPopulation() {
         return population;
@@ -56,7 +58,12 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
         this.crossoverOperator = crossoverOperator;
         this.selectionOperator = selectionOperator;
         this.localSearch = localSearch;
+        this.lsProbabilityInGeneration = 1.0;
 
+    }
+
+    public void setLsProbabilityInGeneration(double lsProbabilityInGeneration) {
+        this.lsProbabilityInGeneration = lsProbabilityInGeneration;
     }
 
     @Override
@@ -97,13 +104,20 @@ public class MultiObjectiveMemeticAlgorithm<V extends Variable<?>> extends Algor
         nonDominated.addAll(population);
         nonDominated.reduceToNonDominated(dominance);
         
-        Solutions<V> afterLS = new Solutions<>();
-        for (Solution<V> s : nonDominated) {
-            afterLS.add(localSearch.doLocalSearch(problem,dominance,s));
+        double p = RandomGenerator.nextDouble();
+        if (p <= lsProbabilityInGeneration) {
+            // LS is run in this generation.
+            Solutions<V> afterLS = new Solutions<>();
+            for (Solution<V> s : nonDominated) {
+                afterLS.add(localSearch.doLocalSearch(problem,dominance,s));
+            }
+            // Union of child and afterLS, and reduce population.
+            childPop.addAll(afterLS);
+        } else {
+            // Keep the non-dominated
+            childPop.addAll(nonDominated);
         }
         
-        // Union of child and afterLS, and reduce population.
-        childPop.addAll(afterLS);
         childPop.addAll(population);
         
         // Reducing the union
