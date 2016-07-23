@@ -77,9 +77,9 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
             
             if (percentage == nextPercentageReport) {
                 // Compute more stats:
-                fitnessValues = new double[leaders.size()];
+                fitnessValues = new double[population.size()];
                 for (int i = 0; i < fitnessValues.length; i++) {
-                    fitnessValues[i] = leaders.get(i).getObjective(0);
+                    fitnessValues[i] = population.get(i).getObjective(0);
                 }
                 double avg = StatUtils.mean(fitnessValues);
                 double stdDev = Math.sqrt(StatUtils.variance(fitnessValues));
