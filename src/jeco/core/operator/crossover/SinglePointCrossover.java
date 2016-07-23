@@ -39,7 +39,7 @@ public class SinglePointCrossover<T extends Variable<?>> extends CrossoverOperat
         if (sol1Length < sol2Length) {
             point = RandomGenerator.nextInt(0, sol1Length);
         } else {
-            point = RandomGenerator.nextInt(0, sol1Length);
+            point = RandomGenerator.nextInt(0, sol2Length);
         }
         return point;
     }
