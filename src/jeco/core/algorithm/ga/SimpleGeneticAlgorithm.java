@@ -16,7 +16,7 @@ import org.apache.commons.math3.stat.StatUtils;
 
 public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
 
-    private static final Logger logger = Logger.getLogger(SimpleGeneticAlgorithm.class.getName());
+    protected static final Logger logger = Logger.getLogger(SimpleGeneticAlgorithm.class.getName());
 
     /////////////////////////////////////////////////////////////////////////
     protected Boolean stopWhenSolved = null;
