@@ -8,3 +8,11 @@ nbproject
 build.xml
 manifest.mf
 
+
+.DS_Store
+
+*.jar
+
+*.properties
+
+.DS_Store
