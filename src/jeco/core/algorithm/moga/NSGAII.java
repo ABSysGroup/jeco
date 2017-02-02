@@ -32,7 +32,7 @@ import jeco.core.util.Maths;
  */
 public class NSGAII<T extends Variable<?>> extends Algorithm<T> {
 
-  private static final Logger logger = Logger.getLogger(NSGAII.class.getName());
+  protected static final Logger logger = Logger.getLogger(NSGAII.class.getName());
   /////////////////////////////////////////////////////////////////////////
   protected int maxGenerations;
   protected int maxPopulationSize;
