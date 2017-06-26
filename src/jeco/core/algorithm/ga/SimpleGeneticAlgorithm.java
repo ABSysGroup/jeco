@@ -1,5 +1,6 @@
 package jeco.core.algorithm.ga;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -31,7 +32,6 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     protected CrossoverOperator<V> crossoverOperator;
     protected SelectionOperator<V> selectionOperator;
     /////////////////////////////////////////////////////////////////////////
-    protected double[] fitnessValues = null;
 
     public SimpleGeneticAlgorithm(Problem<V> problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved, MutationOperator<V> mutationOperator, CrossoverOperator<V> crossoverOperator, SelectionOperator<V> selectionOperator) {
         super(problem);
@@ -56,7 +56,7 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     }
 
     @Override
-    public Solutions<V> execute() {
+    public Solutions<V> execute() {     
         logger.fine("@ # Gen.;Min Fit.;Max Fit.;Med Fit.");
 
         int nextPercentageReport = 10;
@@ -77,13 +77,27 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
             
             if (percentage == nextPercentageReport) {
                 // Compute more stats:
-                fitnessValues = new double[population.size()];
-                for (int i = 0; i < fitnessValues.length; i++) {
-                    fitnessValues[i] = population.get(i).getObjective(0);
+                int infinityElems = 0;
+                ArrayList<Double> fitValsList = new ArrayList<>(population.size());
+                for (int i = 0; i < population.size(); i++) {
+                    if (Double.isInfinite(population.get(i).getObjective(0)) || Double.isNaN(population.get(i).getObjective(0))) {
+                        infinityElems++;
+                    } else {
+                        fitValsList.add(population.get(i).getObjective(0));
+                    }
+                }
+                // Put into array
+                double[] fitnessValues = new double[fitValsList.size()];
+                for (int i = 0; i < fitValsList.size(); i++) {
+                    fitnessValues[i] = fitValsList.get(i);
                 }
                 double avg = StatUtils.mean(fitnessValues);
                 double stdDev = Math.sqrt(StatUtils.variance(fitnessValues));
-                logger.info(percentage + "% performed ..." + " -- Fitness info -->> Best: " + bestObj + " -->> Avg.: " + avg + " -->> Std. Dev.: " + stdDev );
+                String msg = percentage + "% performed ..." + " -- Fitness info -->> Best: " + bestObj + " -->> Avg.: " + avg + " -->> Std. Dev.: " + stdDev;
+                if (infinityElems > 0) {
+                    msg += " -->> Infinity or NaN elems.: " + (infinityElems*100/population.size()) + " % ";
+                }
+                logger.info(msg);
                 nextPercentageReport += 10;
             }
             if (stopWhenSolved) {
