@@ -1,6 +1,7 @@
 package jeco.core.algorithm.moga;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -167,7 +168,7 @@ public class SPEA2<T extends Variable<?>> extends Algorithm<T> {
     }
 
     private double computeSigma(int i, Solutions<T> solutions) {
-        return computeSigmas(i, solutions).get(K);
+        return computeSigmas(i, solutions)[K];
     }
 
     public double euclideanDistance(Solution<T> sol1, Solution<T> sol2) {
@@ -180,17 +181,18 @@ public class SPEA2<T extends Variable<?>> extends Algorithm<T> {
         return Math.sqrt(sum);
     }
 
-    private ArrayList<Double> computeSigmas(int i, Solutions<T> solutions) {
+    private double[] computeSigmas(int i, Solutions<T> solutions) {
         int popSize = solutions.size();
         int j;
         double distance;
-        ArrayList<Double> distancesToI = new ArrayList<Double>();
+        double[] distancesToI = new double[solutions.size()];
         Solution<T> solI = solutions.get(i);
         for (j = 0; j < popSize; j++) {
-            distance = euclideanDistance(solI, solutions.get(j));
-            distancesToI.add(distance);
+            Solution<T> solJ = solutions.get(j);
+            distance = euclideanDistance(solI, solJ);
+            distancesToI[j]=distance;
         }
-        Collections.sort(distancesToI);
+        Arrays.sort(distancesToI);
         return distancesToI;
     }
 
@@ -224,13 +226,18 @@ public class SPEA2<T extends Variable<?>> extends Algorithm<T> {
 
     public Solutions<T> reduce(Solutions<T> pop, int maxSize) {
         int i, min;
-        ArrayList<ArrayList<Double>> allSigmas = new ArrayList<ArrayList<Double>>();
-        HashSet<Integer> erased = new HashSet<Integer>();
+        ArrayList<ArrayList<Double>> allSigmas = new ArrayList<>();
+        HashSet<Integer> erased = new HashSet<>();
         int toErase = pop.size() - maxSize;
         ArrayDominance comparator = new ArrayDominance();
 
         for (i = 0; i < pop.size(); i++) {
-            allSigmas.add(computeSigmas(i, pop));
+            double[] arr = computeSigmas(i, pop);
+            ArrayList<Double> list = new ArrayList<>(arr.length);
+            for (double d : arr) {
+                list.add(d);
+            }
+            allSigmas.add(list);
         }
 
         while (erased.size() < toErase) {
