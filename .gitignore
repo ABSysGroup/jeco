@@ -16,3 +16,7 @@ manifest.mf
 *.properties
 
 .DS_Store
+
+*.iml
+
+.idea/
