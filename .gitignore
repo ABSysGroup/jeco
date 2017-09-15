@@ -20,3 +20,5 @@ manifest.mf
 *.iml
 
 .idea/
+
+out/
