@@ -80,6 +80,8 @@ public abstract class AbstractProblemGE extends Problem<Variable<Integer>> {
 		Rule firstRule = reader.getRules().get(0);
 		Production firstProduction = firstRule.get(solution.getVariables().get(currentIdx++).getValue() % firstRule.size());
 		processProduction(firstProduction, solution, phenotype);
+                // Account for the number of genes that were used in decodification.
+                phenotype.setUsedGenes(currentIdx + (currentWrp * solution.getVariables().size()));
 		return phenotype;
 	}
 
