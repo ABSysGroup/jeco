@@ -132,7 +132,7 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
             }
         } // for
         problem.evaluate(childPop);
-        population = childPop;
+        population = replacement(population,childPop);
         //Actualize the archive
         for (Solution<V> solution : population) {
             Solution<V> clone = solution.clone();
@@ -173,4 +173,17 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     public Solutions<V> getSolutions() {
         return population;
     }
+
+    /**
+     * Replacement of population by the offspring.
+     *
+     * @param population
+     * @param offspring
+     * @return
+     */
+    protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
+        // Direct replacement with no strategy.
+        return offspring;
+    }
+
 }
