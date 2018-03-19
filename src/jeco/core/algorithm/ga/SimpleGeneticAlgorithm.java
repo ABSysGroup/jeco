@@ -175,7 +175,8 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     }
 
     /**
-     * Replacement of population by the offspring.
+     * Replacement of population by the offspring; by default this is a generational GA where all the population is
+     * replaced by the offspring.
      *
      * @param population
      * @param offspring
