@@ -61,10 +61,10 @@ public class StaticSimpleGeneticAlgorithm<V extends Variable<?>> extends SimpleG
      * of the population and including the 2 better offspring.
      * 
      * @param population
-     * @param childPop
+     * @param offspring
      * @return 
      */
-    private Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
+    protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
         Collections.sort(offspring, dominance);
         population.add(offspring.get(0));
         population.add(offspring.get(1));
