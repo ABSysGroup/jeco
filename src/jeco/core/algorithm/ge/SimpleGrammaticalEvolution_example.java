@@ -67,8 +67,9 @@ public class SimpleGrammaticalEvolution_example extends AbstractProblemGE {
     public static void main(String[] args) {
         // First create the problem
         SimpleGrammaticalEvolution_example problem = new SimpleGrammaticalEvolution_example("test/grammar_example.bnf");
+        problem.setSensibleInitialization(true,0.5);
         // Second create the algorithm
-        SimpleGrammaticalEvolution algorithm = new SimpleGrammaticalEvolution(problem,100,1000,1.0 / problem.getNumberOfVariables(),SinglePointCrossover.DEFAULT_PROBABILITY);
+        SimpleGrammaticalEvolution algorithm = new SimpleGrammaticalEvolution(problem,100,200,1.0 / problem.getNumberOfVariables(),SinglePointCrossover.DEFAULT_PROBABILITY);
         // Run
         algorithm.initialize();
         Solutions<Variable<Integer>> solutions = algorithm.execute();

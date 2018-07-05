@@ -26,7 +26,7 @@ public abstract class AbstractProblemGE extends Problem<Variable<Integer>> {
 	protected int currentWrp;
 	protected boolean correctSol;
         protected boolean sensibleInitialization;
-        protected double sensibleInitializationPercentile;
+        protected double sensibleInitializationPercentage;
 
 	public AbstractProblemGE(String pathToBnf, int numberOfObjectives, int chromosomeLength, int maxCntWrappings, int codonUpperBound) {
 		super(chromosomeLength, numberOfObjectives);
@@ -49,9 +49,9 @@ public abstract class AbstractProblemGE extends Problem<Variable<Integer>> {
 		this(pathToBnf, NUM_OF_OBJECTIVES_DEFAULT, CHROMOSOME_LENGTH_DEFAULT, MAX_CNT_WRAPPINGS_DEFAULT, CODON_UPPER_BOUND_DEFAULT);
 	}
         
-        public void setSensibleInitialization(boolean value, double percentile) {
+        public void setSensibleInitialization(boolean value, double percentage) {
             this.sensibleInitialization = value;
-            this.sensibleInitializationPercentile = percentile;
+            this.sensibleInitializationPercentage = percentage;
         }
 
 	abstract public void evaluate(Solution<Variable<Integer>> solution, Phenotype phenotype);
@@ -139,9 +139,9 @@ public abstract class AbstractProblemGE extends Problem<Variable<Integer>> {
                 
                 // Complete the solutions creating long elements:
                 if (sensibleInitialization) {
-                    // The minimum size of the individuals depends on the previous.
-                    long minSize = Math.round(StatUtils.percentile(consumedGenes, sensibleInitializationPercentile));
-                    
+                    // The minimum size of the individuals depends on the previous maximum
+                    double minSize = sensibleInitializationPercentage * StatUtils.max(consumedGenes);
+
                     do {
                         Solution<Variable<Integer>> solI = generateRandomSolution();
                         generatePhenotype(solI);
