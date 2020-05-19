@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
-import jmetal.qualityIndicator.Hypervolume;
+import org.uma.jmetal.qualityindicator.impl.Hypervolume;
 
 /**
  * Utility functions. Must be refactored.
