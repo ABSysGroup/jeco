@@ -10,12 +10,37 @@
 
     <name>jeco</name>
     <description>Java Evolutionary COmputation library</description>
+    <url>https://github.com/ABSysGroup/jeco</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>J. Manuel Colmenar</name>
+            <email>josemanuel.colmenar@urjc.es</email>
+            <organization>Universidad Rey Juan Carlos</organization>
+            <organizationUrl>http://www.urjc.es</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/ABSysGroup/jeco.git</connection>
+        <developerConnection>scm:git:ssh://github.com/ABSysGroup/jeco.git</developerConnection>
+        <url>https://github.com/ABSysGroup/jeco/tree/master</url>
+    </scm>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
 
     <dependencies>
         <dependency>
