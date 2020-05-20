@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.absysgroup.jeco</groupId>
-    <artifactId>jeco</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <artifactId>jeco-core</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>jeco</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Java Evolutionary COmputation library</description>
     <url>https://github.com/ABSysGroup/jeco</url>
 
@@ -123,9 +123,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>3.0.1</version>
-                    <configuration>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
                     <executions>
                         <execution>
                             <id>attach-javadoc</id>
