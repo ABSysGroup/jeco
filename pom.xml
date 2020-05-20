@@ -115,19 +115,22 @@
                                 <goal>jar</goal>
                             </goals>
                         </execution>
-                    </executions>
-                </plugin>
-
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <executions>
                         <execution>
                             <id>attach-javadoc</id>
                         </execution>
                     </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <!-- or whatever version you use -->
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
                 </plugin>
 
             </plugins>
