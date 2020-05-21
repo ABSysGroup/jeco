@@ -19,8 +19,10 @@ public class UniformMutation<T extends Variable<Double>> extends MutationOperato
 	protected Problem<T> problem;
 
 	/**
-	 * Constructor
 	 * Creates a new uniform mutation operator instance
+	 * @param problem Given problem.
+	 * @param probability Mutation probability
+	 * @param perturbationIndex perturbation index
 	 */
 	public UniformMutation(Problem<T> problem, double probability, double perturbationIndex) {
 		super(probability);

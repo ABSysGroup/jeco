@@ -68,7 +68,7 @@ public class SimulatedAnnealing<T extends Variable<?>> extends Algorithm<T> {
     /**
      * This constructor allows to establish the maximum number of iterations.
      *
-     * @param problem
+     * @param problem given problem.
      * @param maxIter number of iterations where the search will stop.
      * @param randomSeed seed for random number generation
      */
@@ -96,12 +96,13 @@ public class SimulatedAnnealing<T extends Variable<?>> extends Algorithm<T> {
 
     }
 
+
     /**
-     * Parameterized constructor
+     * Parameterized constructor.
      *
+     * @param problem Given problem.
      * @param maxIter number of iterations where the search will stop.
      * @param k is the weight of the temperature
-     * @param stopWhenFeasible stops the search if finds a feasible solution
      * @param randomSeed seed for random number generation
      * @param maxSecs is maximum execution time in seconds. If 0, then consider
      * max iterations

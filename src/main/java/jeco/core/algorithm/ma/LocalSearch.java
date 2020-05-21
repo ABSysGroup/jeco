@@ -15,7 +15,8 @@ public interface LocalSearch<V extends Variable<?>> {
     /**
      * Performs a local search over the given solution.
      * @param problem Problem to be used for evalution.
-     * @param s Input solution for local search.
+     * @param dominance Dominance comparator.
+     * @param sol Input solution for local search.
      * @return New solution result of the local search.
      */
     public Solution<V> doLocalSearch(Problem<V> problem, Comparator<Solution<V>> dominance, Solution<V> sol);

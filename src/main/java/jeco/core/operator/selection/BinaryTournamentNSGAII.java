@@ -26,8 +26,8 @@ public class BinaryTournamentNSGAII<T extends Variable<?>> extends SelectionOper
     } // BinaryTournament2
 
     /**
-     * Performs the operation
-     * @param object Object representing a SolutionSet
+     * Performs the operation.
+     * @param population Given population.
      * @return the selected solution
      */
     public Solutions<T> execute(Solutions<T> population) {

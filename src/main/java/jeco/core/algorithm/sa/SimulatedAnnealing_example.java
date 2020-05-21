@@ -17,9 +17,6 @@ public class SimulatedAnnealing_example {
 
     private static final Logger logger = Logger.getLogger(SimulatedAnnealing_example.class.getName());
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         // First create the problem
         Rastringin problem = new Rastringin(4);

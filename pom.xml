@@ -93,7 +93,7 @@
                     </configuration>
                 </plugin>
 
-                <!-- Source and the javadoc plugin
+                <!-- Source and the javadoc plugin -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -106,7 +106,7 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin> -->
+                </plugin>
 
             </plugins>
     </build>

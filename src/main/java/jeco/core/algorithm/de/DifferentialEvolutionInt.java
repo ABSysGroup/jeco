@@ -41,11 +41,16 @@ public class DifferentialEvolutionInt extends Algorithm<Variable<Integer>> {
     protected SimpleDominance<Variable<Integer>> dominance = new SimpleDominance<Variable<Integer>>();
     /////////////////////////////////////////////////////////////////////////
     protected HashSet<Integer> alreadyChosen = new HashSet<Integer>();
-    
-    
+
+
     /**
-     * Class constructor.
-     * @param problem
+     * Differential Evolution algorithm for integer problems.
+     * @param problem Problem.
+     * @param maxPopulationSize Population size.
+     * @param maxGenerations Max number of generations.
+     * @param stopWhenSolved Stop if solved.
+     * @param mutationFactor Mutation factor.
+     * @param recombinationFactor Recombination factor.
      */
     public DifferentialEvolutionInt(Problem<Variable<Integer>> problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved,
             Double mutationFactor, Double recombinationFactor) {

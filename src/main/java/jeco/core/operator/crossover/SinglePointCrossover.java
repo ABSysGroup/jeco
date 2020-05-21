@@ -139,9 +139,9 @@ public class SinglePointCrossover<T extends Variable<?>> extends CrossoverOperat
 
     /**
      * Executes the operation
-     *
-     * @param object An object containing an array of two parents
-     * @return An object containing the offSprings
+     * @return An object containing the offSprings.
+     * @param parent1 First parent.
+ 	 * @param parent2 Second parent.
      */
     public Solutions<T> execute(Solution<T> parent1, Solution<T> parent2) {
         return doCrossover(probability, parent1, parent2);

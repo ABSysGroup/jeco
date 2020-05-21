@@ -5,7 +5,7 @@ import jeco.core.problem.Variable;
 /**
  * El operador de mutación también requiere genéricos porque se accede a las variables.
  * @author jlrisco
- * @param <T>
+ * @param <T> Type of variable
  */
 public abstract class MutationOperator<T extends Variable<?>> {
 	protected double probability;

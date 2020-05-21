@@ -43,10 +43,10 @@ public class NonUniformMutation<T extends Variable<Double>> extends MutationOper
 	}
 
 	/**
-	 * Executes the operation
-	 * @param object An object containing a solution
+	 * Executes the operation.
+	 *
+	 * @param solution An object containing a solution
 	 * @return An object containing the mutated solution
-	 * @throws JMException
 	 */
 	public Solution<T> execute(Solution<T> solution) {
 		ArrayList<T> variables = solution.getVariables();

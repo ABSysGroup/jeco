@@ -18,9 +18,12 @@ public class PolynomialMutation<T extends Variable<Double>> extends MutationOper
 	 * eta_c stores the index for mutation to use
 	 */
 	protected double eta_m;
+
 	/**
-	 * Constructor.
-	 * Create a new PolynomialMutation operator with an specific index
+	 * Creates a new PolynomialMutation operator with an specific index.
+	 * @param problem Given problem
+	 * @param eta_m estimated m
+	 * @param probability probability
 	 */
 	public PolynomialMutation(Problem<T> problem, double eta_m, double probability) {
 		super(probability);
@@ -29,8 +32,8 @@ public class PolynomialMutation<T extends Variable<Double>> extends MutationOper
 	}
 
 	/**
-	 * Constructor
 	 * Creates a new instance of the polynomial mutation operator
+	 * @param problem Given problem.
 	 */
 	public PolynomialMutation(Problem<T> problem) {
 		this(problem, DEFAULT_ETA_M, 1.0 / problem.getNumberOfVariables());

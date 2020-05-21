@@ -237,7 +237,6 @@ public class OMOPSO<V extends Variable<Double>> extends Algorithm<V> {
      * Runs of the OMOPSO algorithm.
      * @return a <code>SolutionSet</code> that is a set of non dominated solutions
      * as a result of the algorithm execution
-     * @throws JMException
      */
     @Override
     public Solutions<V> execute() {

@@ -61,8 +61,7 @@ public class Solutions<V extends Variable<?>> extends ArrayList<Solution<V>> {
    * Function that reads a set of solutions from a file.
    * @param filePath File path
    * @return The set of solutions in the archive.
-   * @throws IOException 
-   * @throws java.lang.Exception
+   * @throws IOException I/O Exception
    */
   public static Solutions<Variable<?>> readFrontFromFile(String filePath) throws IOException {
       Solutions<Variable<?>> solutions = new Solutions<Variable<?>>();
@@ -89,6 +88,8 @@ public class Solutions<V extends Variable<?>> extends ArrayList<Solution<V>> {
    * @param filePath File path
    * @return The set of solutions in the archive. Each solution set is separated
    * in the file by a blank line.
+   * @throws FileNotFoundException if file not found.
+   * @throws IOException if I/O problem.
    */
   public static ArrayList<Solutions<Variable<?>>> readFrontsFromFile(String filePath) throws FileNotFoundException, IOException {
     ArrayList<Solutions<Variable<?>>> result = new ArrayList<Solutions<Variable<?>>>();

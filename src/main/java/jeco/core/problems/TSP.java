@@ -36,7 +36,7 @@ public class TSP extends Problem<Variable<Integer>> {
 
     /**
      * Creates a new TSP problem instance. It accepts data files from TSPLIB
-     * @param filename The file containing the definition of the problem
+     * @param xmlFilePath The file containing the definition of the problem
      */
     public TSP(String xmlFilePath) {
         super(1, 1);

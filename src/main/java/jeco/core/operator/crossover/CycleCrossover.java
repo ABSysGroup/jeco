@@ -72,8 +72,9 @@ public class CycleCrossover<V extends Variable<?>> extends CrossoverOperator<V> 
 
 	/**
 	 * Executes the operation
-	 * @param object An object containing an array of two parents
 	 * @return An object containing the offSprings
+	 * @param parent1 First parent.
+	 * @param parent2 Second parent.
 	 */
 	public Solutions<V> execute(Solution<V> parent1, Solution<V> parent2) {
 		return doCrossover(probability, parent1, parent2);

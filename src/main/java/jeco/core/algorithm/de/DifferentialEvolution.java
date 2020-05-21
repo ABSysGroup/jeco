@@ -40,11 +40,16 @@ public class DifferentialEvolution extends Algorithm<Variable<Double>> {
     protected SimpleDominance<Variable<Double>> dominance = new SimpleDominance<Variable<Double>>();
     /////////////////////////////////////////////////////////////////////////
     protected HashSet<Integer> alreadyChosen = new HashSet<Integer>();
-    
-    
+
+
     /**
-     * Class constructor.
-     * @param problem
+     * Differential Evolution algorithm.
+     * @param problem Problem.
+     * @param maxPopulationSize Population size.
+     * @param maxGenerations Max number of generations.
+     * @param stopWhenSolved Stop if solved.
+     * @param mutationFactor Mutation factor.
+     * @param recombinationFactor Recombination factor.
      */
     public DifferentialEvolution(Problem<Variable<Double>> problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved,
             Double mutationFactor, Double recombinationFactor) {
@@ -84,12 +89,12 @@ public class DifferentialEvolution extends Algorithm<Variable<Double>> {
         currentGeneration = 0;
     }
 
-    
+
     /**
      * Returns a target vector from the population selected by random
      * not selected before, and different to i.
-     * 
-     * @return 
+     * @param i Individual index.
+     * @return See desc.
      */
     protected Solution<Variable<Double>> targetVector(int i) {
         

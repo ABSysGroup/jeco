@@ -14,8 +14,8 @@ public class SwapMutationDouble<T extends Variable<?>> extends MutationOperator<
 	protected double probability;
 
 	/**
-	 * Constructor
 	 * Creates a new IntegerFlipMutation mutation operator instance
+	 * @param probability Probability
 	 */
 	public SwapMutationDouble(double probability) {
 		super(probability);
