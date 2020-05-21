@@ -23,3 +23,5 @@ manifest.mf
 
 out/
 target/
+javadoc/
+
