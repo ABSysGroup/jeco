@@ -73,4 +73,6 @@ public abstract class Problem<V extends Variable<?>> {
     public boolean reachedMaxEvaluations() {
         return (numEvaluations >= maxEvaluations);
     }
+
+    public String phenotypeToString(Solution<V> solution) { return "Not implemented"; }
 }
