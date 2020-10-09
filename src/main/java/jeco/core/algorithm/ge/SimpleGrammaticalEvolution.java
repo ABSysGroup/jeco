@@ -15,37 +15,15 @@ import jeco.core.problem.Variable;
  * 
  * @author J. M. Colmenar
  */
-public class SimpleGrammaticalEvolution extends Algorithm<Variable<Integer>> {
+public class SimpleGrammaticalEvolution extends SimpleGeneticAlgorithm<Variable<Integer>> {
 
-    SimpleGeneticAlgorithm<Variable<Integer>> algorithm;
-    
     public SimpleGrammaticalEvolution(Problem<Variable<Integer>> problem, int maxPopulationSize, int maxGenerations, double probMutation, double probCrossover) {
-        super(problem);
-        
-        // Algorithm operators
-        IntegerFlipMutation<Variable<Integer>> mutationOperator = new IntegerFlipMutation<Variable<Integer>>(problem, probMutation);
-        SinglePointCrossover<Variable<Integer>> crossoverOperator = new SinglePointCrossover<Variable<Integer>>(problem, SinglePointCrossover.DEFAULT_FIXED_CROSSOVER_POINT, probCrossover, SinglePointCrossover.ALLOW_REPETITION);
-        SimpleDominance<Variable<Integer>> comparator = new SimpleDominance<Variable<Integer>>();
-        BinaryTournament<Variable<Integer>> selectionOp = new BinaryTournament<Variable<Integer>>(comparator);
-        
-        algorithm = new SimpleGeneticAlgorithm<Variable<Integer>>(problem, 
-                maxPopulationSize, maxGenerations, true, mutationOperator, crossoverOperator, selectionOp);
-        
-    }
-
-    @Override
-    public void initialize() {
-        algorithm.initialize();
-    }
-
-    @Override
-    public void step() {
-        algorithm.step();
-    }
-
-    @Override
-    public Solutions<Variable<Integer>> execute() {
-        return algorithm.execute();
+        super(problem,
+                maxPopulationSize,
+                maxGenerations, true,
+                new IntegerFlipMutation<Variable<Integer>>(problem, probMutation),
+                new SinglePointCrossover<Variable<Integer>>(problem, SinglePointCrossover.DEFAULT_FIXED_CROSSOVER_POINT, probCrossover, SinglePointCrossover.ALLOW_REPETITION),
+                new BinaryTournament<Variable<Integer>>(new SimpleDominance<>()));
     }
 
 }
