@@ -216,10 +216,12 @@ public class DifferentialEvolutionInt extends Algorithm<Variable<Integer>> {
         }
         
         int nextPercentageReport = 10;
-        while (currentGeneration < maxGenerations) {
+        stop = false;
+        Double bestObj = Double.MAX_VALUE;
+        while ((currentGeneration < maxGenerations) && !stop){
             step();
             int percentage = Math.round((currentGeneration * 100) / maxGenerations);
-            Double bestObj = population.get(0).getObjectives().get(0);
+            bestObj = population.get(0).getObjectives().get(0);
             if (percentage == nextPercentageReport) {
                 logger.info(percentage + "% performed ..." + " -- Best fitness: " + bestObj);
                 nextPercentageReport += 10;
@@ -231,6 +233,12 @@ public class DifferentialEvolutionInt extends Algorithm<Variable<Integer>> {
             	}
             }
         }
+
+        if (stop) {
+            logger.info("Execution stopped at generation "+ currentGeneration);
+            logger.info("Best objective value: "+bestObj);
+        }
+
         return population;
     }
 
