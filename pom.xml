@@ -4,7 +4,7 @@
 
     <groupId>com.github.absysgroup.jeco</groupId>
     <artifactId>jeco-core</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -31,7 +31,7 @@
         <connection>scm:git:git://github.com/ABSysGroup/jeco.git</connection>
         <developerConnection>scm:git:ssh://github.com/ABSysGroup/jeco.git</developerConnection>
         <url>https://github.com/ABSysGroup/jeco/tree/master</url>
-        <tag>jeco-core-1.0.12</tag>
+        <tag>jeco-core-1.0.11</tag>
     </scm>
 
     <properties>
