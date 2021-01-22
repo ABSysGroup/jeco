@@ -31,7 +31,7 @@
         <connection>scm:git:git://github.com/ABSysGroup/jeco.git</connection>
         <developerConnection>scm:git:ssh://github.com/ABSysGroup/jeco.git</developerConnection>
         <url>https://github.com/ABSysGroup/jeco/tree/master</url>
-        <tag>HEAD</tag>
+        <tag>jeco-core-1.0.11</tag>
     </scm>
 
     <properties>
