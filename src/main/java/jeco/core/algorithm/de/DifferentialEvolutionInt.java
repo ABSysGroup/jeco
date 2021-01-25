@@ -66,17 +66,17 @@ public class DifferentialEvolutionInt extends Algorithm<Variable<Integer>> {
         rnd = new Random();
         
         if (np < 4) {
-            logger.severe("Differential Evolution requieres at least 4 individuals !!");
+            logger.severe("Differential Evolution requires at least 4 individuals !!");
             System.exit(-1);
         }
         
         if ((f<0) || (f>2)) {
-            logger.severe("Differential Evolution requieres mutation factor within range [0,2]");
+            logger.severe("Differential Evolution requires mutation factor within range [0,2]");
             System.exit(-1);            
         }
         
         if ((gr<0) || (gr>1)) {
-            logger.severe("Differential Evolution requieres recombination factor within range [0,1]");
+            logger.severe("Differential Evolution requires recombination factor within range [0,1]");
             System.exit(-1);            
         }        
     }
