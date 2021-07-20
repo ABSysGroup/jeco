@@ -32,9 +32,16 @@ public class Symbol {
 		return clone;
 	}
 
+
 	public boolean equals(Symbol right) {
 		return symbolString.equals(right.symbolString) && (type == right.type);
 	}
+	
+	/*@Override
+	public boolean equals(Object right) {
+		
+		return equals((Symbol) right);
+	}*/
 
 	public boolean isTerminal() {
 		return type == SYMBOL_TYPE.T_SYMBOL;

@@ -65,9 +65,9 @@ public class Rule extends ArrayList<Production> {
         this.lhs = s;
     }*/
 
-/*    public Symbol getLHS() {
+    public Symbol getLHS() {
         return this.lhs;
-    }*/
+    }
 
     
     
