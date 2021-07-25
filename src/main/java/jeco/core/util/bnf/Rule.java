@@ -25,6 +25,7 @@ public class Rule extends ArrayList<Production> {
     	return clone;
     }
     
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(lhs.symbolString);

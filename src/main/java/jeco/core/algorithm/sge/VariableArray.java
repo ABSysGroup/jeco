@@ -11,7 +11,7 @@ public class VariableArray<T> extends Variable<T[]> {
 	
 	@Override
     public VariableArray<T> clone() {
-        return new VariableArray<T>( value.clone());
+        return new VariableArray<>( value.clone());
     }
 
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BnfReader_sge extends BnfReader {
+public class BnfReaderSge extends BnfReader {
 	
 	  /* For structured gramatical evolution 
      * 
@@ -24,12 +24,12 @@ public class BnfReader_sge extends BnfReader {
      */
     public Map<String, Map<String ,Integer>> count_references() {
 
-    	Map<String, Map<String ,Integer>> count_references = new HashMap<String, Map<String ,Integer>>();
+    	Map<String, Map<String ,Integer>> count_references = new HashMap<>();
   	
     	for(Rule r : this.rules) {
-    		Map<String, Integer> temp = new HashMap<String, Integer>();
+    		Map<String, Integer> temp = new HashMap<>();
     		for(Production p: r) {
-    			Map<String, Integer> count = new HashMap<String, Integer>();
+    			Map<String, Integer> count = new HashMap<>();
     			for(Symbol s: p) {
     				if(!s.isTerminal()) {
     					if(!count.containsKey(s.symbolString)) {
@@ -68,15 +68,7 @@ public class BnfReader_sge extends BnfReader {
     	Map<String, Integer> this_references = new HashMap<>();
     	
     	for(Map.Entry<String, Integer> entry : references_rule.entrySet()) {
-    		
-    		//Map<String, Integer> recursive_call_ref = null;
-    		/*for(Rule next_rule: this.rules) {
-    			if(next_rule.lhs.symbolString.equals(entry.getKey())) {
-    				recursive_call_ref = find_references(next_rule, references, entry.getValue());
-    			}
-    			
-    		}*/
-    		
+    				
     		Map<String, Integer> recursive_call_ref = find_references(this.findRule(entry.getKey()), references, entry.getValue());
     		
     		for(Map.Entry<String, Integer> entry_2 : recursive_call_ref.entrySet()) {
@@ -109,28 +101,13 @@ public class BnfReader_sge extends BnfReader {
     }
 
     public static void main(String[] args) {
-        BnfReader_sge bnfReader = new BnfReader_sge();
+        BnfReaderSge bnfReader = new BnfReaderSge();
         bnfReader.load("test/grammar.bnf");
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());
             System.out.println(rule.lhs.toString());
-            try {
-				System.out.println(bnfReader.isRecursive(new ArrayList<Rule>(), rule));
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-            try {
-				if(!bnfReader.isInfinitlyRecursive(rule)) {
-					System.out.println(rule.minimumDepth);
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            
-            
-            
+			System.out.println(bnfReader.isRecursive(new ArrayList<Rule>(), rule));
+        
         }
         bnfReader.find_references_start();
         

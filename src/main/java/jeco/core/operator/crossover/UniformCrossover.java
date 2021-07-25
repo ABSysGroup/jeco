@@ -26,9 +26,9 @@ public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T
 			int size = Math.min(parent1.getVariables().size(), parent2.getVariables().size());
 			for(int i = 0; i< size; i++) {
 				if(RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY) {
-					T variable_1 = child1.getVariable(i);
+					T variable = child1.getVariable(i);
 					child1.getVariables().set(i, child2.getVariable(i));
-					child2.getVariables().set(i, variable_1);
+					child2.getVariables().set(i, variable);
 					
 					
 				}

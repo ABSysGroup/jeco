@@ -6,24 +6,23 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import jeco.core.algorithm.ge.SimpleGrammaticalEvolution;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moge.Phenotype;
-import jeco.core.operator.crossover.SinglePointCrossover;
+
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
-import jeco.core.problem.Variable;
+
 
 public class ProblemSGE_example extends AbstractProblemSGE{
 	
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
-	private String[] var = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 148;
+	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
+	private int goal = 126;
 	
-	public ProblemSGE_example(){
-		super("D:\\Documento\\UNI\\TFG\\jeco-master\\test\\grammar.bnf", 1, 0);
+	public ProblemSGE_example(String path){
+		super(path, 1);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
@@ -35,10 +34,10 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 		  String currentFunction = "";
 		    double error, totError = 0;
 		    for (int i = 0; i < phenotype.size(); ++i) {
-		    	if(i > var.length-1) {
-		    		currentFunction += phenotype.get(i).replaceAll("x1", "1")+ " ";
+		    	if(i > variables.length-1) {
+		    		currentFunction += phenotype.get(i).replace("x1", "1")+ " ";
 		    	}else {
-		    		currentFunction += phenotype.get(i).replaceAll("x1", var[i])+ " ";
+		    		currentFunction += phenotype.get(i).replace("x1", variables[i])+ " ";
 		    	}
 		      
 		    }  
@@ -63,22 +62,24 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 		
 	}
 
-	@Override
-	public void evaluate(Solution<VariableArray<Integer>> solution) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public Problem<VariableArray<Integer>> clone() {
-		// TODO Auto-generated method stub
-		return null;
+
+		ProblemSGE_example clone = new ProblemSGE_example(super.pathToBnf);
+		return clone;
+	}
+	
+	@Override
+	public void evaluate(Solution<VariableArray<Integer>> solution) {
+		logger.severe("Should not be called");
+		
 	}
 	
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemSGE_example problem = new ProblemSGE_example();
+        ProblemSGE_example problem = new ProblemSGE_example("test\\grammar.bnf");
      
         // Second create the algorithm
         StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
@@ -90,4 +91,6 @@ public class ProblemSGE_example extends AbstractProblemSGE{
             logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }
   }
+
+
 }

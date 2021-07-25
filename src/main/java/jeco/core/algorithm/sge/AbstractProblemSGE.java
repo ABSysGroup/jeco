@@ -1,22 +1,15 @@
 package jeco.core.algorithm.sge;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.Map;
 import java.util.Stack;
 
-import jeco.core.algorithm.moge.GrammaticalEvolution;
-import jeco.core.algorithm.moge.GrammaticalEvolution_example;
 import jeco.core.algorithm.moge.Phenotype;
-import jeco.core.operator.assigner.CrowdingDistance;
-import jeco.core.operator.assigner.FrontsExtractor;
-import jeco.core.operator.comparator.ComparatorNSGAII;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
-import jeco.core.problem.Variable;
-import jeco.core.util.bnf.BnfReader;
-import jeco.core.util.bnf.BnfReader_sge;
+import jeco.core.util.bnf.BnfReaderSge;
 import jeco.core.util.bnf.Production;
 import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
@@ -26,37 +19,36 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 
 	
 	protected String pathToBnf;
-	protected BnfReader_sge reader;
+	protected BnfReaderSge reader;
 	protected Integer[] indexes;
-	protected Map<String, Integer> max_references_symbol;
-	protected ArrayList<Integer> max_derivations;
+	protected Map<String, Integer> maxReferencesSymbol;
+	protected ArrayList<Integer> maxDerivations;
 	
-	protected ArrayList<String> order_symbols;
+	protected ArrayList<String> orderSymbols;
 
 	
-	public AbstractProblemSGE(String pathToBnf, int numberOfObjectives, int maxCntWrappings) {
+	protected AbstractProblemSGE(String pathToBnf, int numberOfObjectives) {
 		super(0, numberOfObjectives); //I need to read the file before I am able to know the size of the cromosome
 		this.pathToBnf = pathToBnf;
-		this.reader = new BnfReader_sge();
+		this.reader = new BnfReaderSge();
 		reader.load(pathToBnf);
 		
 		initialize();
-		
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	public void initialize() {
 		super.numberOfVariables = reader.number_of_options().size();
-		max_references_symbol = reader.find_references_start();
+		maxReferencesSymbol = reader.find_references_start();
 		Map<String, Integer> options = reader.number_of_options();
 		
-		this.order_symbols = new ArrayList<>();
-		if(options.size() != max_references_symbol.size()) {
+		this.orderSymbols = new ArrayList<>();
+		if(options.size() != maxReferencesSymbol.size()) {
 			throw new RuntimeException("Wrong loading in bnf file");
 		}
 		
-		for(Map.Entry<String, Integer> entry : max_references_symbol.entrySet()) {
-			this.order_symbols.add(entry.getKey());
+		for(Map.Entry<String, Integer> entry : maxReferencesSymbol.entrySet()) {
+			this.orderSymbols.add(entry.getKey());
 		}
 		
         this.lowerBound = new double[numberOfVariables];
@@ -64,19 +56,19 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 		
 		for (int i = 0; i < numberOfVariables; i++) {
 			lowerBound[i] = 0;
-			upperBound[i] = options.get(this.order_symbols.get(i));
+			upperBound[i] = options.get(this.orderSymbols.get(i));
 		}
 	}
 	
 	private Solution<VariableArray<Integer>> generateRandomSolution() {
         Solution<VariableArray<Integer>> solI = new Solution<>(numberOfObjectives);
         for (int j = 0; j < numberOfVariables; ++j) {
-       	 Integer list_derivation[] = new Integer[this.max_references_symbol.get(this.order_symbols.get(j))];
+       	 Integer[] list_derivation = new Integer[this.maxReferencesSymbol.get(this.orderSymbols.get(j))];
        	 for(int i = 0; i < list_derivation.length; i++) {
        		 list_derivation[i] = RandomGenerator.nextInteger((int) upperBound[j]);
        	 }
        	 
-       	 	VariableArray<Integer> varJ = new VariableArray<Integer>(list_derivation);
+       	 	VariableArray<Integer> varJ = new VariableArray<>(list_derivation);
             solI.getVariables().add(varJ);
         }
         return solI;
@@ -84,7 +76,7 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 	
 	@Override
 	public Solutions<VariableArray<Integer>> newRandomSetOfSolutions(int size){
-		Solutions<VariableArray<Integer>> solutions = new Solutions<VariableArray<Integer>>();
+		Solutions<VariableArray<Integer>> solutions = new Solutions<>();
 		
 		for(int i = 0; i < size; i++) {
 			solutions.add(generateRandomSolution());
@@ -94,7 +86,7 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 		return solutions;
 	}
 	
-	abstract public void evaluate(Solution<VariableArray<Integer>> solution, Phenotype phenotype);
+	public abstract void evaluate(Solution<VariableArray<Integer>> solution, Phenotype phenotype);
 	
 	@Override
 	public void evaluate(Solutions<VariableArray<Integer>> solutions) {
@@ -107,7 +99,7 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 
 		Phenotype phenotype = new Phenotype();
 		Rule firstRule = reader.getRules().get(0);
-		int index[] = new int[this.order_symbols.size()];
+		int[] index = new int[this.orderSymbols.size()];
 		Stack<Symbol> nextRules = new Stack<Symbol>(); 
 		nextRules.add(firstRule.getLHS());
 		Rule nextRule = null;
@@ -119,8 +111,8 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 			}
 			else {
 				nextRule = this.reader.findRule(next);
-				Production nextProduction = nextRule.get(solution.getVariables().get(this.order_symbols.indexOf(nextRule.getLHS().toString())).getValue()[index[this.order_symbols.indexOf(nextRule.getLHS().toString())]]);
-				index[this.order_symbols.indexOf(next.toString())]++;
+				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(nextRule.getLHS().toString())).getValue()[index[this.orderSymbols.indexOf(nextRule.getLHS().toString())]]);
+				index[this.orderSymbols.indexOf(next.toString())]++;
 				
 				for(int i = nextProduction.size()-1 ; i >= 0 ; i--) {
 					nextRules.add(nextProduction.get(i));
