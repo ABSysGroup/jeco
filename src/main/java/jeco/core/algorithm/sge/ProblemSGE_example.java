@@ -20,7 +20,7 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] var = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 145;
+	private int goal = 148;
 	
 	public ProblemSGE_example(){
 		super("D:\\Documento\\UNI\\TFG\\jeco-master\\test\\grammar.bnf", 1, 0);
@@ -30,8 +30,8 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 	
 
 	@Override
-	public void evaluate(Solution<Variable<Integer[]>> solution, Phenotype phenotype) {
-		  String originalFunction = phenotype.toString();
+	public void evaluate(Solution<VariableArray<Integer>> solution, Phenotype phenotype) {
+
 		  String currentFunction = "";
 		    double error, totError = 0;
 		    for (int i = 0; i < phenotype.size(); ++i) {
@@ -64,13 +64,13 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 	}
 
 	@Override
-	public void evaluate(Solution<Variable<Integer[]>> solution) {
+	public void evaluate(Solution<VariableArray<Integer>> solution) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Problem<Variable<Integer[]>> clone() {
+	public Problem<VariableArray<Integer>> clone() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -81,11 +81,11 @@ public class ProblemSGE_example extends AbstractProblemSGE{
         ProblemSGE_example problem = new ProblemSGE_example();
      
         // Second create the algorithm
-        StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,1.0 / problem.getNumberOfVariables(),0.7);
+        StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
         // Run
         algorithm.initialize();
-        Solutions<Variable<Integer[]>> solutions = algorithm.execute();
-        for (Solution<Variable<Integer[]>> solution : solutions) {
+        Solutions<VariableArray<Integer>> solutions = algorithm.execute();
+        for (Solution<VariableArray<Integer>> solution : solutions) {
             logger.info("Fitness = (" + solution.getObjectives().get(0) + ")");
             logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }

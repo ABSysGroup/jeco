@@ -69,7 +69,7 @@ public class EvolutionaryStrategy<T extends Variable<?>> extends Algorithm<T> {
 		int nextPercentageReport = 10;
 		while (currentGeneration < maxGenerations) {
 			step();
-			int percentage = Math.round((currentGeneration * 100) / maxGenerations);
+			int percentage = Math.round((currentGeneration * 100) / (float)maxGenerations);
 			if (percentage == nextPercentageReport) {
 				logger.info(percentage + "% performed ...");
 				nextPercentageReport += 10;

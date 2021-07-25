@@ -90,7 +90,7 @@ public class NSGAII<T extends Variable<?>> extends Algorithm<T> {
           this.notifyObservers(obsData);
       }
       
-      int percentage = Math.round((currentGeneration * 100) / maxGenerations);
+      int percentage = Math.round((currentGeneration * 100) / (float)maxGenerations);
       if (percentage == nextPercentageReport) {
           logger.info(percentage + "% performed ... -> Hypervol.: "+hv);
           nextPercentageReport += 10;

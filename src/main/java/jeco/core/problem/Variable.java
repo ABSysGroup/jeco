@@ -11,7 +11,7 @@ public class Variable<T> {
 
     public void setValue(T value) { this.value = value; }
     
-    @SuppressWarnings("unchecked")
+  
 	@Override
     public Variable<T> clone() {
         return new Variable<T>( value);

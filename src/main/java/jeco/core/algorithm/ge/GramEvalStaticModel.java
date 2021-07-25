@@ -72,11 +72,14 @@ public class GramEvalStaticModel extends AbstractProblemGE {
             }
         }
         // Compilation process:
+      
         File file = new File(compiler.getWorkDir() + File.separator + "PopPredictor" + threadId + ".java");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(AbstractPopPredictor.generateClassCode(threadId, phenotypes));
-        writer.flush();
-        writer.close();
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+       // BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	        writer.write(AbstractPopPredictor.generateClassCode(threadId, phenotypes));
+	        writer.flush();
+	        writer.close();
+        }
         LinkedList<String> filePaths = new LinkedList<>();
         filePaths.add(file.getAbsolutePath());
         boolean sucess = compiler.compile(filePaths);

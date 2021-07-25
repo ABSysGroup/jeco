@@ -22,17 +22,9 @@ public class IntegerFlipMutationList <T extends Variable<Integer[]>> extends Mut
 				
 				int lowerBound = (int)Math.round(problem.getLowerBound(i));
 				int upperBound = (int)Math.round(problem.getUpperBound(i));
-				//The arrays inside the genes are not cloned properly, to fix this issue, since the only operator
-				//that touches the inside of the list is the mutation I will create a new one and add all the values plus
-				//the changed one instead of chaging it inside
-				Integer[] value = new Integer[solution.getVariables().get(i).getValue().length];
-				for(int j = 0; j < solution.getVariables().get(i).getValue().length; j++) {
-					value[j] = solution.getVariables().get(i).getValue()[j];
-				}
 				
+				solution.getVariable(i).getValue()[selected_gene] = RandomGenerator.nextInteger(lowerBound, upperBound);
 				
-				value[selected_gene] = RandomGenerator.nextInteger(lowerBound, upperBound);
-				solution.getVariables().get(i).setValue(value);
 			}
 		}
 		return solution;

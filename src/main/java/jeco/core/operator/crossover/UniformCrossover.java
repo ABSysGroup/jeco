@@ -5,7 +5,7 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
-public class UniformCrossover<T extends Variable<Integer[]>> extends CrossoverOperator<T> {
+public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 
 	public static final double DEFAULT_PROBABILITY = 0.4;
 	private double probability;
@@ -19,7 +19,6 @@ public class UniformCrossover<T extends Variable<Integer[]>> extends CrossoverOp
 		
 		Solution<T> child1 = parent1.clone();
 		Solution<T> child2 = parent2.clone();
-		
 		solutions.add(child1);
 		solutions.add(child2);
 		

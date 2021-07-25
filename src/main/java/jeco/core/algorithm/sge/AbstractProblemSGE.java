@@ -16,16 +16,17 @@ import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.bnf.BnfReader;
+import jeco.core.util.bnf.BnfReader_sge;
 import jeco.core.util.bnf.Production;
 import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
-public abstract class AbstractProblemSGE extends Problem<Variable<Integer[]>> {
+public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>> {
 
 	
 	protected String pathToBnf;
-	protected BnfReader reader;
+	protected BnfReader_sge reader;
 	protected Integer[] indexes;
 	protected Map<String, Integer> max_references_symbol;
 	protected ArrayList<Integer> max_derivations;
@@ -36,7 +37,7 @@ public abstract class AbstractProblemSGE extends Problem<Variable<Integer[]>> {
 	public AbstractProblemSGE(String pathToBnf, int numberOfObjectives, int maxCntWrappings) {
 		super(0, numberOfObjectives); //I need to read the file before I am able to know the size of the cromosome
 		this.pathToBnf = pathToBnf;
-		this.reader = new BnfReader();
+		this.reader = new BnfReader_sge();
 		reader.load(pathToBnf);
 		
 		initialize();
@@ -67,23 +68,23 @@ public abstract class AbstractProblemSGE extends Problem<Variable<Integer[]>> {
 		}
 	}
 	
-	private Solution<Variable<Integer[]>> generateRandomSolution() {
-        Solution<Variable<Integer[]>> solI = new Solution<>(numberOfObjectives);
+	private Solution<VariableArray<Integer>> generateRandomSolution() {
+        Solution<VariableArray<Integer>> solI = new Solution<>(numberOfObjectives);
         for (int j = 0; j < numberOfVariables; ++j) {
        	 Integer list_derivation[] = new Integer[this.max_references_symbol.get(this.order_symbols.get(j))];
        	 for(int i = 0; i < list_derivation.length; i++) {
        		 list_derivation[i] = RandomGenerator.nextInteger((int) upperBound[j]);
        	 }
        	 
-            Variable<Integer[]> varJ = new Variable<>(list_derivation);
+       	 	VariableArray<Integer> varJ = new VariableArray<Integer>(list_derivation);
             solI.getVariables().add(varJ);
         }
         return solI;
     }
 	
 	@Override
-	public Solutions<Variable<Integer[]>> newRandomSetOfSolutions(int size){
-		Solutions<Variable<Integer[]>> solutions = new Solutions<Variable<Integer[]>>();
+	public Solutions<VariableArray<Integer>> newRandomSetOfSolutions(int size){
+		Solutions<VariableArray<Integer>> solutions = new Solutions<VariableArray<Integer>>();
 		
 		for(int i = 0; i < size; i++) {
 			solutions.add(generateRandomSolution());
@@ -93,16 +94,16 @@ public abstract class AbstractProblemSGE extends Problem<Variable<Integer[]>> {
 		return solutions;
 	}
 	
-	abstract public void evaluate(Solution<Variable<Integer[]>> solution, Phenotype phenotype);
+	abstract public void evaluate(Solution<VariableArray<Integer>> solution, Phenotype phenotype);
 	
 	@Override
-	public void evaluate(Solutions<Variable<Integer[]>> solutions) {
-	        for (Solution<Variable<Integer[]>> solution : solutions) {
+	public void evaluate(Solutions<VariableArray<Integer>> solutions) {
+	        for (Solution<VariableArray<Integer>> solution : solutions) {
 	            evaluate(solution, this.generatePhenotype(solution));
 	        }
 	}
 	
-	public Phenotype generatePhenotype(Solution<Variable<Integer[]>> solution) {
+	public Phenotype generatePhenotype(Solution<VariableArray<Integer>> solution) {
 
 		Phenotype phenotype = new Phenotype();
 		Rule firstRule = reader.getRules().get(0);
