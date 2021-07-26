@@ -228,7 +228,7 @@ public class DifferentialEvolution extends Algorithm<Variable<Double>> {
         Double bestObj = Double.MAX_VALUE;
         while ((currentGeneration < maxGenerations) && !stop){
             step();
-            int percentage = Math.round((currentGeneration * 100) / maxGenerations);
+            int percentage = Math.round((currentGeneration * 100) / (float)maxGenerations);
             bestObj = population.get(0).getObjectives().get(0);
             if (percentage == nextPercentageReport) {
                 logger.info(percentage + "% performed ..." + " -- Best fitness: " + bestObj);
