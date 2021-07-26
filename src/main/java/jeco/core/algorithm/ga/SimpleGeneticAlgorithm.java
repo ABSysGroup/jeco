@@ -66,7 +66,7 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
         stop = false;
         while ((currentGeneration < maxGenerations) && !stop){
             step();
-            int percentage = Math.round((currentGeneration * 100) / maxGenerations);
+            int percentage = Math.round((currentGeneration * 100) / (float)maxGenerations);
             Double bestObj = leaders.get(0).getObjectives().get(0);
             
             // For observers:

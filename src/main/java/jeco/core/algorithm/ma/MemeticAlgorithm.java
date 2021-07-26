@@ -127,7 +127,7 @@ public class MemeticAlgorithm<V extends Variable<?>> extends Algorithm<V> {
             Solutions<V> afterLS = new Solutions<V>();
             // Run local search:
             for (Solution<V> sol : childPop) {
-                Solution<V> sAfterLs = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<>(), sol.clone());
+                Solution<V> sAfterLs = localSearch.doLocalSearch(problem, (Comparator<Solution<V>>) new SolutionDominance<V>(), sol.clone()); //Me daba error con solo new SolutionDominance<>() editado a SolutionDominance<V>()  
                 afterLS.add(sAfterLs);
             }
 

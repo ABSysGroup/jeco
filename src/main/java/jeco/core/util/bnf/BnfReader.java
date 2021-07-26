@@ -585,12 +585,16 @@ public class BnfReader {
     public ArrayList<Rule> getRules() {
         return rules;
     }
+    
+
 
     public static void main(String[] args) {
         BnfReader bnfReader = new BnfReader();
         bnfReader.load("test/grammar.bnf");
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());
+            System.out.println(rule.lhs.toString());
+        
         }
     }
 

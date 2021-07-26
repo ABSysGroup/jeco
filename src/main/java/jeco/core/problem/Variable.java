@@ -11,10 +11,12 @@ public class Variable<T> {
 
     public void setValue(T value) { this.value = value; }
     
-    @Override
+  
+	@Override
     public Variable<T> clone() {
-        return new Variable<T>(value);
+        return new Variable<T>( value);
     }
+   
 
     @SuppressWarnings("unchecked")
 		@Override

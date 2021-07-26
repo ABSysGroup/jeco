@@ -25,6 +25,7 @@ public class Rule extends ArrayList<Production> {
     	return clone;
     }
     
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append(lhs.symbolString);
@@ -65,9 +66,9 @@ public class Rule extends ArrayList<Production> {
         this.lhs = s;
     }*/
 
-/*    public Symbol getLHS() {
+    public Symbol getLHS() {
         return this.lhs;
-    }*/
+    }
 
     
     
