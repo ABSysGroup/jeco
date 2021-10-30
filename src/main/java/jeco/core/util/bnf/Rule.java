@@ -39,6 +39,12 @@ public class Rule extends ArrayList<Production> {
         }
         return buffer.toString();
     }
+    
+    
+    public Symbol getLHS() {
+        return this.lhs;
+    }
+    
     /*    public Rule(Rule copy){
         super(copy);
         this.lhs = copy.lhs;
@@ -46,9 +52,9 @@ public class Rule extends ArrayList<Production> {
         this.minimumDepth = copy.minimumDepth;
     }*/
     
-/*    public boolean getRecursive() {
+    public boolean getRecursive() {
         return recursive;
-    }*/
+    }
     
 /*    public void setRecursive(boolean newRecursive){
         recursive=newRecursive;
@@ -66,10 +72,5 @@ public class Rule extends ArrayList<Production> {
         this.lhs = s;
     }*/
 
-    public Symbol getLHS() {
-        return this.lhs;
-    }
-
-    
-    
 }
+    

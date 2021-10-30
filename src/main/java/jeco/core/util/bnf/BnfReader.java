@@ -500,7 +500,7 @@ public class BnfReader {
         }
     }
 
-    boolean isRecursive(ArrayList<Rule> visitedRules, Rule currentRule) {
+    protected boolean isRecursive(ArrayList<Rule> visitedRules, Rule currentRule) {
         ArrayList<Production> prodIt;
         Rule definingRule;
 
@@ -590,12 +590,24 @@ public class BnfReader {
 
     public static void main(String[] args) {
         BnfReader bnfReader = new BnfReader();
-        bnfReader.load("test/grammar.bnf");
+        bnfReader.load("test/grammar_example.bnf");
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());
             System.out.println(rule.lhs.toString());
+            bnfReader.setProductionMinimumDepth(rule);
+            System.out.println(rule.minimumDepth);
+            try {
+            	System.out.println(bnfReader.isRecursive( new ArrayList<Rule>(), rule));
+				System.out.println(bnfReader.isInfinitlyRecursive(rule));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         
         }
+        
+        
+        
     }
 
 }

@@ -15,7 +15,7 @@ import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
-public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>> {
+public abstract class AbstractProblemSGE extends AbstractGECommon<VariableArray<Integer>> {
 
 	
 	protected String pathToBnf;
@@ -27,11 +27,11 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 	protected ArrayList<String> orderSymbols;
 
 	
-	protected AbstractProblemSGE(String pathToBnf, int numberOfObjectives) {
+	protected AbstractProblemSGE(String pathToBnf, int numberOfObjectives, int depth) {
 		super(0, numberOfObjectives); //I need to read the file before I am able to know the size of the cromosome
 		this.pathToBnf = pathToBnf;
 		this.reader = new BnfReaderSge();
-		reader.load(pathToBnf);
+		reader.loadSGE(pathToBnf, depth);
 		
 		initialize();
 
@@ -95,6 +95,7 @@ public abstract class AbstractProblemSGE extends Problem<VariableArray<Integer>>
 	        }
 	}
 	
+	@Override
 	public Phenotype generatePhenotype(Solution<VariableArray<Integer>> solution) {
 
 		Phenotype phenotype = new Phenotype();

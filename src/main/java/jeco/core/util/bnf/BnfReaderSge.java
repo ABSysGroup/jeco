@@ -3,8 +3,86 @@ package jeco.core.util.bnf;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 public class BnfReaderSge extends BnfReader {
+	
+	 public boolean loadSGE(String pathToBnfFile, int max_depth) {
+
+		 boolean load = super.load(pathToBnfFile);
+		  ArrayList<Rule> newRules = new ArrayList<>();
+		  for(Rule r: this.rules) {
+			  if(this.isRecursive(new ArrayList<>(), r)) {
+				  
+				  Rule temp = r; 
+				  Rule extra = r.clone();
+				  Symbol ruleLhs = temp.getLHS();
+				  
+				 /* ArrayList<Production> nonRecursive = new ArrayList<>();
+				  boolean enter = false;
+				  for(Production p: temp) {
+					  for(Symbol s: p) {
+						  if(s.equals(ruleLhs)) {
+							  enter = true;
+						  }
+					  }
+					  if(!enter) {
+						  nonRecursive.add(p);
+					  }
+					  enter = false;
+				  }*/
+				  
+				  for(int i = 1; i < max_depth; i++) {
+					  
+					  String newSymbol = null;
+					  for(Production p: temp) {
+						  for(Symbol s: p) {
+							  if(s.equals(ruleLhs)) {
+								  newSymbol = s.symbolString.substring(0, s.symbolString.length()-1) + i + ">";
+								  s.symbolString = s.symbolString.substring(0, s.symbolString.length()-1) + i + ">";
+							  }
+						  }
+						  
+					  }
+					  
+					  temp = extra.clone();
+					  temp.lhs.symbolString = newSymbol;
+					  newRules.add(temp);
+				  }
+				  
+
+				  Rule temp2 = new Rule();
+				  temp2.lhs = temp.lhs;
+				  boolean enter = false;
+				  for(int j = 0; j < temp.size(); j++) {
+					  enter = false;
+					  for(int k = 0 ; k <temp.get(j).size(); k++) {
+						  if(temp.get(j).get(k).equals(ruleLhs)) {
+							
+							  enter = true;
+						
+						  }
+						
+					  }
+					  if(!enter) {
+						  temp2.add(temp.get(j));
+					  }
+					
+				  }
+				  
+				  newRules.remove(temp);
+				  newRules.add(temp2);
+				  
+			  }
+		  }
+		  
+		  for(Rule r : newRules) {
+			  this.rules.add(r);
+		  }
+		  
+		  
+		 return load;
+	 }
 	
 	  /* For structured gramatical evolution 
      * 
@@ -64,6 +142,7 @@ public class BnfReaderSge extends BnfReader {
     
     public Map<String, Integer> find_references(Rule r, Map<String, Map<String, Integer>> references, int mult) {
     	
+    	if(r != null) {
     	Map<String, Integer> references_rule = references.get(r.lhs.symbolString);
     	Map<String, Integer> this_references = new HashMap<>();
     	
@@ -88,6 +167,15 @@ public class BnfReaderSge extends BnfReader {
     	
     	
     	return this_references;
+    	}
+    	return null;
+    }
+    
+    public ArrayList<Production> getNonRecursiveProductions(Rule r){
+    	ArrayList<Production> prod = new ArrayList<>();
+    	
+    	
+    	return prod;
     }
     
     public Map<String, Integer> number_of_options(){
@@ -102,11 +190,15 @@ public class BnfReaderSge extends BnfReader {
 
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        bnfReader.load("test/grammar.bnf");
+        bnfReader.loadSGE("test/grammar.bnf", 4);
         for (Rule rule : bnfReader.rules) {
+        	System.out.println("Rule recursive: "+ rule.recursive);
             System.out.println(rule.toString());
             System.out.println(rule.lhs.toString());
 			System.out.println(bnfReader.isRecursive(new ArrayList<Rule>(), rule));
+			for(Production p: rule) {
+				System.out.println(p.toString() + " " + p.recursive);
+			}
         
         }
         bnfReader.find_references_start();

@@ -1,6 +1,8 @@
 package jeco.core.algorithm.moge;
 
 import java.util.LinkedList;
+
+import jeco.core.algorithm.sge.AbstractGECommon;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
@@ -12,7 +14,7 @@ import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 import org.apache.commons.math3.stat.StatUtils;
 
-public abstract class AbstractProblemGE extends Problem<Variable<Integer>> {
+public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Integer>> {
 
 	public static final int CHROMOSOME_LENGTH_DEFAULT = 100;	
 	public static final int CODON_UPPER_BOUND_DEFAULT = 256;
@@ -72,6 +74,7 @@ public abstract class AbstractProblemGE extends Problem<Variable<Integer>> {
 		}
 	}
 
+	@Override
 	public Phenotype generatePhenotype(Solution<Variable<Integer>> solution) {
 		currentIdx = 0;
 		currentWrp = 0;

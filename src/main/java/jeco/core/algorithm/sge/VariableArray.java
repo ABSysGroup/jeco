@@ -1,5 +1,7 @@
 package jeco.core.algorithm.sge;
 
+import java.util.ArrayList;
+
 import jeco.core.problem.Variable;
 
 public class VariableArray<T> extends Variable<T[]> {
@@ -11,6 +13,7 @@ public class VariableArray<T> extends Variable<T[]> {
 	
 	@Override
     public VariableArray<T> clone() {
+
         return new VariableArray<>( value.clone());
     }
 

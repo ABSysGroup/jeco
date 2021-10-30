@@ -63,7 +63,10 @@ public abstract class Problem<V extends Variable<?>> {
         for (Solution<V> solution : solutions) {
             evaluate(solution);
         }
+        
     }
+    
+    public String phenotypeToString(Solution<V> solution) { return "Not implemented"; }
 
     public abstract void evaluate(Solution<V> solution);
 
@@ -74,5 +77,7 @@ public abstract class Problem<V extends Variable<?>> {
         return (numEvaluations >= maxEvaluations);
     }
 
-    public String phenotypeToString(Solution<V> solution) { return "Not implemented"; }
+
+
+    
 }
