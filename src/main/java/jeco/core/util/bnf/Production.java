@@ -46,11 +46,11 @@ public class Production extends ArrayList<Symbol> {
         this.minimumDepth = copy.minimumDepth;
     }*/
     
-/*    public boolean getRecursive() {
+    public boolean getRecursive() {
         return recursive;
     }
     
-    public void setRecursive(boolean newRecursive){
+   /* public void setRecursive(boolean newRecursive){
         recursive = newRecursive;
     }*/
     

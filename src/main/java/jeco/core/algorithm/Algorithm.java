@@ -23,18 +23,20 @@ public abstract class Algorithm<V extends Variable<?>> extends Observable {
   public void stopExection() {
       stop = true;
   }
+  
 
   public Algorithm(Problem<V> problem) {
-    this.problem = problem;
-  }
+    this.problem = problem;}
+  
 
   public void setProblem(Problem<V> problem) {
-    this.problem = problem;
-  }
+    this.problem = problem;}
+  
 
   public abstract void initialize();
 
   public abstract void step();
 
   public abstract Solutions<V> execute();
+  
 }
