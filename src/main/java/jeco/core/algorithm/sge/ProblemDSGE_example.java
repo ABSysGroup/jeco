@@ -6,12 +6,14 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.UniformCrossover;
 import jeco.core.operator.mutation.BasicMutationVariableList;
+import jeco.core.operator.mutation.BasicMutationVariableListAll;
 import jeco.core.operator.mutation.IntegerFlipMutationList;
 import jeco.core.operator.selection.BinaryTournament;
 import jeco.core.problem.Problem;
@@ -82,13 +84,13 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar.bnf", 5);
+        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 2);
 		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 5);
      
         // Second create the algorithm
         //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
-        NSGAII<VariableList<Integer>> algorithm = new NSGAII<VariableList<Integer>>(problem,100,200,new BasicMutationVariableList<VariableList<Integer>>(0.3, problem),
-                new UniformCrossover<VariableList<Integer>>( 0.7),
+        SimpleGeneticAlgorithm<VariableList<Integer>> algorithm = new SimpleGeneticAlgorithm<VariableList<Integer>>(problem,100,200,true, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
+                new UniformCrossover<VariableList<Integer>>( 0.7,0.25),
                 new BinaryTournament<VariableList<Integer>>(new SimpleDominance<>()));
         // Run
         algorithm.initialize();

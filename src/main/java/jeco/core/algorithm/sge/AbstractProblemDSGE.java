@@ -57,7 +57,7 @@ public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<
 	}
 	
 	private Solution<VariableList<Integer>> generateRandomSolution() {
-        Solution<VariableList<Integer>> solI = new Solution<>(this.numberOfVariables);
+        Solution<VariableList<Integer>> solI = new Solution<>(this.numberOfObjectives);
         ArrayList<VariableList<Integer>> temp = new ArrayList<>();
         for(int i = 0; i < this.orderSymbols.size(); i++) {
 
@@ -83,36 +83,6 @@ public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<
 		int[] index = new int[this.orderSymbols.size()];
 		Stack<Symbol> nextRules = new Stack<Symbol>(); 
 		nextRules.add(firstRule.getLHS());
-		/*Rule nextRule = null;
-		while(!nextRules.empty()) {
-			Symbol next = nextRules.pop();
-			
-			
-			if(next.isTerminal()) {
-				phenotype.add(next.toString());
-				
-			
-			}
-			else {
-				nextRule = this.reader.findRule(next);
-				if(index[this.orderSymbols.indexOf(next.toString())] + 1 >= solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
-					if(depth >= this.maxDepth) {
-						generateTerminalExpansion(next, solution);
-					}else {
-						generateExpansion(next, solution);
-					}
-				}
-				
-				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
-				index[this.orderSymbols.indexOf(next.toString())]++;
-				
-				for(int i = nextProduction.size()-1 ; i >= 0 ; i--) {
-					nextRules.add(nextProduction.get(i));
-				}
-			}
-			
-		}
-		*/
 		
 		auxCreatePhenotype(firstRule.getLHS(), phenotype, 0,  solution,  index);
 		
@@ -129,11 +99,20 @@ public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<
 		}
 		else {
 			Rule nextRule = this.reader.findRule(next);
+			//If the alele we are trying to expand does not exist (can happen due to a mutation or a crossover)
 			if(index[this.orderSymbols.indexOf(next.toString())] + 1 > solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
 				if(depth >= this.maxDepth) {
 					generateTerminalExpansion(next, solution);
 				}else {
 					generateExpansion(next, solution);
+				}
+				
+				//If the alele we are trying to expand goes over the maximun depth (can happen due to a mutation or a crossover) and it was recursive
+				//We transform it into a non-recursive call
+			}else if(nextRule.getRecursive() && depth >= this.maxDepth) {
+				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
+				if(nextProduction.getRecursive()) {
+					transformToTerminalExpansion(next, solution, index[this.orderSymbols.indexOf(next.toString())]);
 				}
 			}
 			
@@ -169,6 +148,38 @@ public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<
 		return rand_prod;
 	}
 	
+	/**
+	 * Transform the production at pos to a non-recursive production to control bloating due to the tree becoming too big through mutation and crossover
+	 * @param sym
+	 * @param solution
+	 * @param pos
+	 * @return
+	 */
+	private int transformToTerminalExpansion(Symbol sym, Solution<VariableList<Integer>> solution, int pos) {
+		int rand_prod;
+		Rule ruleSymbol = this.reader.findRule(sym);
+		
+		//We get the productions that are not recursive and put their indexes in a list
+		ArrayList<Integer> listProd = new ArrayList<>();
+		int index = 0; 
+		for(Production p: ruleSymbol) {
+			if(!p.getRecursive()) {
+				listProd.add(index);
+			}
+			index++;
+		}
+		
+		//Select one of the indexes of the list
+		int selec = RandomGenerator.nextInt(listProd.size());
+		rand_prod = listProd.get(selec);
+		
+		//Remove the previous values that we had on the position and add the new non-recursive value
+		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).remove(pos);
+		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(pos,rand_prod);
+
+		return rand_prod;
+	}
+	
 	private int generateExpansion(Symbol sym, Solution<VariableList<Integer>> solution) {
 		Rule ruleSymbol = this.reader.findRule(sym);
 		int rand_prod = RandomGenerator.nextInt(ruleSymbol.size());
@@ -178,13 +189,16 @@ public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<
 		return rand_prod;
 	}
 	
-	
+	/**
+	 * Creates a new solution with a certain depth
+	 * @param depth
+	 * @param solution
+	 * @param sym
+	 */
 	private void createIndividual(int depth, ArrayList<VariableList<Integer>> solution, Symbol sym) {
 		int rand_prod = RandomGenerator.nextInt(reader.findRule(sym).size());
 		Rule ruleSymbol = reader.findRule(sym);
 		Production expansion = ruleSymbol.get(rand_prod);
-		int depthrec = depth;
-		
 		
 		if(ruleSymbol.getRecursive()) {
 			if(expansion.getRecursive()) {

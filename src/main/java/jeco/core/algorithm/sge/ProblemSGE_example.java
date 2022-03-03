@@ -6,12 +6,14 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.UniformCrossover;
 import jeco.core.operator.mutation.IntegerFlipMutationList;
+import jeco.core.operator.mutation.IntegerFlipMutationListAll;
 import jeco.core.operator.selection.BinaryTournament;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
@@ -83,12 +85,12 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemSGE_example problem = new ProblemSGE_example("test/grammar.bnf", 4);
+        ProblemSGE_example problem = new ProblemSGE_example("test/grammar.bnf", 2);
      
         // Second create the algorithm
         //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
-        NSGAII<VariableArray<Integer>> algorithm = new NSGAII<>(problem,100,200,new IntegerFlipMutationList<VariableArray<Integer>>(problem, 0.3),
-                new UniformCrossover<VariableArray<Integer>>( 0.7),
+        SimpleGeneticAlgorithm<VariableArray<Integer>> algorithm = new SimpleGeneticAlgorithm<>(problem,100,200,true,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),
+                new UniformCrossover<VariableArray<Integer>>( 0.7,0.25),
                 new BinaryTournament<VariableArray<Integer>>(new SimpleDominance<>()));
         // Run
         algorithm.initialize();

@@ -92,7 +92,7 @@ public class BnfReaderSge extends BnfReader {
      * <z> ::= <var> <var>
      * 
      *  the correct answer should be to count <var> as 1 instante <z> as 1 instance and then <z> will multiply the <var> by 2 and add the 1
-     *  for line, what  acctually happens is that the Map of references takes the biggest value for <var> and for <z> but they don't look into
+     *  for line, what  actually happens is that the Map of references takes the biggest value for <var> and for <z> but they don't look into
      *  either so when we calculate the max references for each variable we will count 2 for <var> plus 1 <z> plus 2 <var> that come from the recursive
      *  call in <z> with has been already calculated (and it has it's own multiplication number) so in total after calculating the references in line
      *  we will get 4 <var> and 1 <z> which would be incorrect since the actual maximum for <var> is 3
@@ -190,7 +190,8 @@ public class BnfReaderSge extends BnfReader {
 
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        bnfReader.loadSGE("test/grammar.bnf", 4);
+        //bnfReader.loadSGE("test/grammar.bnf", 4);
+        bnfReader.loadSGE("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf",2);
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);
             System.out.println(rule.toString());
