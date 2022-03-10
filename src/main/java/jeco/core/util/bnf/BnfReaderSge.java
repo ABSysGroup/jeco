@@ -2,6 +2,7 @@ package jeco.core.util.bnf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
@@ -186,6 +187,46 @@ public class BnfReaderSge extends BnfReader {
     	}
     	
     	return options;
+    }
+    
+    
+    public List<String> getTerminalProductions(){
+    	List<String> terminals = new ArrayList<>();
+    	
+    	for(Rule r: this.rules) {
+    		boolean terminal = true;
+    		for(Production p: r) {
+    			for(Symbol s: p) {
+    				if(!s.isTerminal()) {
+    					terminal = false;
+    				}
+    			}
+    		}
+    		
+    		if(terminal) {
+    			terminals.add(r.lhs.symbolString);
+    		}
+    	}
+    	
+    	return terminals;
+    }
+    
+    public Map<String, List<String>> getSubsequentProductions(){
+    	Map<String, List<String>> nextSymbols= new HashMap<>();
+    	
+    	for(Rule r: this.rules) {
+    		nextSymbols.put(r.lhs.symbolString, new ArrayList<>());
+    		for(Production p: r) {
+    			for(Symbol s: p) {
+    				if(!nextSymbols.get(r.lhs.symbolString).contains(s.symbolString)) {
+    					nextSymbols.get(r.lhs.symbolString).add(s.symbolString);
+    				}
+    			}
+    		}
+    		
+    	}
+    	
+    	return nextSymbols;
     }
 
     public static void main(String[] args) {

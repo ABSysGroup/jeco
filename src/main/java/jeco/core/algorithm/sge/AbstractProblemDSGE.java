@@ -1,6 +1,7 @@
 package jeco.core.algorithm.sge;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -16,19 +17,12 @@ import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
-public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<Integer>> {
+public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableList<Integer>> {
 
 	private int maxDepth;
-	protected String pathToBnf;
-	protected BnfReaderSge reader;
-	
-	protected ArrayList<Integer> maxDerivations;
-	protected ArrayList<String> orderSymbols;
 	
 	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth) {
-		super(0, numberOfObjectives);
-		this.maxDepth = maxDepth;
-		reader = new BnfReaderSge();
+		super(pathToBnf, 0, numberOfObjectives);
 		reader.load(pathToBnf);
 		
 		
@@ -37,14 +31,34 @@ public abstract class AbstractProblemDSGE extends AbstractGECommon<VariableList<
 	}
 	
 	
-	private void initialize() {
+	public void initialize() {
 		
 		Map<String, Integer> options = reader.number_of_options();
 		this.numberOfVariables = options.size();
 		this.orderSymbols = new ArrayList<>();
 		
+		List<String> terminalProductions = reader.getTerminalProductions();
+		int j = 0;
+		
 		for(Map.Entry<String, Integer> entry : options.entrySet()) {
 			this.orderSymbols.add(entry.getKey());
+			if(terminalProductions.contains(entry.getKey())) {
+				this.terminals.add(j);
+			}
+			j++;
+		}
+		
+		
+		Map<String, List<String>> subsequentSymbols = reader.getSubsequentProductions();
+		for(int i = 0; i < this.orderSymbols.size(); i++) {
+			
+			ArrayList<Integer> nextSym = new ArrayList<>();
+			this.Non_tToTerminals.add(nextSym);
+			for(int k = 0; k < this.orderSymbols.size(); k++) {
+				if(subsequentSymbols.get(this.orderSymbols.get(i)).contains(this.orderSymbols.get(k))) {
+					nextSym.add(k);
+				}
+			}
 		}
 		
         this.lowerBound = new double[numberOfVariables];
