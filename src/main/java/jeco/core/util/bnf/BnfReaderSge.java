@@ -2,6 +2,7 @@ package jeco.core.util.bnf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
@@ -92,7 +93,7 @@ public class BnfReaderSge extends BnfReader {
      * <z> ::= <var> <var>
      * 
      *  the correct answer should be to count <var> as 1 instante <z> as 1 instance and then <z> will multiply the <var> by 2 and add the 1
-     *  for line, what  acctually happens is that the Map of references takes the biggest value for <var> and for <z> but they don't look into
+     *  for line, what  actually happens is that the Map of references takes the biggest value for <var> and for <z> but they don't look into
      *  either so when we calculate the max references for each variable we will count 2 for <var> plus 1 <z> plus 2 <var> that come from the recursive
      *  call in <z> with has been already calculated (and it has it's own multiplication number) so in total after calculating the references in line
      *  we will get 4 <var> and 1 <z> which would be incorrect since the actual maximum for <var> is 3
@@ -187,10 +188,51 @@ public class BnfReaderSge extends BnfReader {
     	
     	return options;
     }
+    
+    
+    public List<String> getTerminalProductions(){
+    	List<String> terminals = new ArrayList<>();
+    	
+    	for(Rule r: this.rules) {
+    		boolean terminal = true;
+    		for(Production p: r) {
+    			for(Symbol s: p) {
+    				if(!s.isTerminal()) {
+    					terminal = false;
+    				}
+    			}
+    		}
+    		
+    		if(terminal) {
+    			terminals.add(r.lhs.symbolString);
+    		}
+    	}
+    	
+    	return terminals;
+    }
+    
+    public Map<String, List<String>> getSubsequentProductions(){
+    	Map<String, List<String>> nextSymbols= new HashMap<>();
+    	
+    	for(Rule r: this.rules) {
+    		nextSymbols.put(r.lhs.symbolString, new ArrayList<>());
+    		for(Production p: r) {
+    			for(Symbol s: p) {
+    				if(!nextSymbols.get(r.lhs.symbolString).contains(s.symbolString)) {
+    					nextSymbols.get(r.lhs.symbolString).add(s.symbolString);
+    				}
+    			}
+    		}
+    		
+    	}
+    	
+    	return nextSymbols;
+    }
 
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        bnfReader.loadSGE("test/grammar.bnf", 4);
+        //bnfReader.loadSGE("test/grammar.bnf", 4);
+        bnfReader.loadSGE("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf",2);
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);
             System.out.println(rule.toString());

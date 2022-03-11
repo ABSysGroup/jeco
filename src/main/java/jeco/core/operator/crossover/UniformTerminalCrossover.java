@@ -1,17 +1,20 @@
 package jeco.core.operator.crossover;
 
+import jeco.core.algorithm.sge.AbstractProblemSGE;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
-public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
+public class UniformTerminalCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 
 	private double DEFAULT_PROBABILITY;
 	private double probability;
-	public UniformCrossover(double probability, double probOfChange) {
+	AbstractProblemSGE<T> problem; 
+	public UniformTerminalCrossover(AbstractProblemSGE<T> problem, double probability, double probOfChange) {
 		this.probability = probability;
 		this.DEFAULT_PROBABILITY = probOfChange;
+		this.problem = problem;
 	}
 	
 	@Override
@@ -26,7 +29,7 @@ public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T
 		if (RandomGenerator.nextDouble() <= probability) {
 			int size = Math.min(parent1.getVariables().size(), parent2.getVariables().size());
 			for(int i = 0; i< size; i++) {
-				if(RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY) {
+				if((problem.getIndexesTerminals().contains((Integer) i)) && RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY) {
 					T variable = child1.getVariable(i);
 					child1.getVariables().set(i, child2.getVariable(i));
 					child2.getVariables().set(i, variable);

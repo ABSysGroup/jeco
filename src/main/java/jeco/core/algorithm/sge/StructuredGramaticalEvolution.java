@@ -20,7 +20,7 @@ public class StructuredGramaticalEvolution extends StaticSimpleGeneticAlgorithm<
                 maxPopulationSize,
                 maxGenerations, true,
                 new IntegerFlipMutationList<VariableArray<Integer>>(problem, probMutation),
-                new UniformCrossover<VariableArray<Integer>>( probCrossover),
+                new UniformCrossover<VariableArray<Integer>>( probCrossover, 0.25),
                 new BinaryTournament<VariableArray<Integer>>(new SimpleDominance<>()));
     }
 
