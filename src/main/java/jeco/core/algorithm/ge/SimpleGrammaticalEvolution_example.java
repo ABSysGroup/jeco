@@ -78,5 +78,4 @@ public class SimpleGrammaticalEvolution_example extends AbstractProblemGE {
             logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }
   }
-
 }

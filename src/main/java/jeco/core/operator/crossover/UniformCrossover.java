@@ -7,11 +7,10 @@ import jeco.core.util.random.RandomGenerator;
 
 public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 
-	private double DEFAULT_PROBABILITY;
+	public static final double DEFAULT_PROBABILITY = 0.4;
 	private double probability;
-	public UniformCrossover(double probability, double probOfChange) {
+	public UniformCrossover(double probability) {
 		this.probability = probability;
-		this.DEFAULT_PROBABILITY = probOfChange;
 	}
 	
 	@Override

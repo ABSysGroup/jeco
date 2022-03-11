@@ -21,7 +21,8 @@ public abstract class Algorithm<V extends Variable<?>> extends Observable {
    * taken into account in children classes.
    */
   public void stopExection() {
-      stop = true;}
+      stop = true;
+  }
   
 
   public Algorithm(Problem<V> problem) {

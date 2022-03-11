@@ -16,11 +16,10 @@ public class IntegerFlipMutationList <T extends Variable<Integer[]>> extends Mut
 	@Override
 	public Solution<T> execute(Solution<T> solution) {
 		for (int i = 0; i < solution.getVariables().size(); i++) {
-			//If the mutation affects a gene and the probability is less than the probability of mutation
-			if (((int)Math.round(problem.getLowerBound(i)) < (int)Math.round(problem.getUpperBound(i))) && RandomGenerator.nextDouble() < probability) {
+			if (RandomGenerator.nextDouble() < probability) {
 				
 				int selected_gene = RandomGenerator.nextInt(solution.getVariable(i).getValue().length);
-							
+				
 				int lowerBound = (int)Math.round(problem.getLowerBound(i));
 				int upperBound = (int)Math.round(problem.getUpperBound(i));
 				

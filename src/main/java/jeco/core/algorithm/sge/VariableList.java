@@ -24,10 +24,6 @@ public class VariableList<T> extends Variable<ArrayList<T>>  {
 		this.value.add(pos, val);
 	}
 	
-	public void remove( int pos) {
-		this.value.remove(pos);
-	}
-	
 	@Override
     public VariableList<T> clone() {
 		ArrayList<T> varList = new ArrayList<>();
