@@ -17,7 +17,7 @@ public class IntegerFlipMutationListAll <T extends Variable<Integer[]>> extends 
 	public Solution<T> execute(Solution<T> solution) {
 		for (int i = 0; i < solution.getVariables().size(); i++) {
 			//If the mutation affects a gene and the probability is less than the probability of mutation
-			if (((int)Math.round(problem.getLowerBound(i)) < (int)Math.round(problem.getUpperBound(i)))) {
+			if ((((int)Math.round(problem.getLowerBound(i))+1) < (int)Math.round(problem.getUpperBound(i)))) {
 				
 				for(int j = 0; j < solution.getVariable(i).getValue().length; j++) {
 							
@@ -25,7 +25,14 @@ public class IntegerFlipMutationListAll <T extends Variable<Integer[]>> extends 
 						int lowerBound = (int)Math.round(problem.getLowerBound(i));
 						int upperBound = (int)Math.round(problem.getUpperBound(i));
 						
-						solution.getVariable(i).getValue()[j] = RandomGenerator.nextInteger(lowerBound, upperBound);
+						int newValue;
+						//We always try to change it to a different value than the original
+						do {
+							newValue =  RandomGenerator.nextInteger(lowerBound, upperBound);
+						}while(newValue == solution.getVariable(i).getValue()[j]);
+						
+						solution.getVariable(i).getValue()[j] = newValue;
+						//solution.getVariable(i).getValue()[j] = RandomGenerator.nextInteger(lowerBound, upperBound);
 					}
 				}
 			}

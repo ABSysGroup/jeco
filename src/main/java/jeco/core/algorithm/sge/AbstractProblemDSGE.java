@@ -113,6 +113,13 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		}
 		else {
 			Rule nextRule = this.reader.findRule(next);
+			
+			if(nextRule.getRecursive()) {
+				depth = depth+1;
+			}else {
+				depth = 0;
+			}
+			
 			//If the alele we are trying to expand does not exist (can happen due to a mutation or a crossover)
 			if(index[this.orderSymbols.indexOf(next.toString())] + 1 > solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
 				if(depth >= this.maxDepth) {
@@ -130,12 +137,14 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 				}
 			}
 			
+			
 			Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
 			index[this.orderSymbols.indexOf(next.toString())]++;
 			
 			for(int i = 0 ; i < nextProduction.size() ; i++) {
 				
-				auxCreatePhenotype(nextProduction.get(i),phenotype, depth + 1, solution, index);
+				//auxCreatePhenotype(nextProduction.get(i),phenotype, depth + 1, solution, index);
+				auxCreatePhenotype(nextProduction.get(i),phenotype, depth, solution, index);
 			}
 			
 		}
@@ -215,6 +224,12 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		Production expansion = ruleSymbol.get(rand_prod);
 		
 		if(ruleSymbol.getRecursive()) {
+			depth = depth+1;
+		}else {
+			depth = 0;
+		}
+		
+		if(ruleSymbol.getRecursive()) {
 			if(expansion.getRecursive()) {
 				if(depth >= this.maxDepth) {
 					ArrayList<Integer> listProd = new ArrayList<>();
@@ -231,13 +246,15 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 					
 				}
 			}
+			
 		}
 
 		solution.get(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
-	
+		
 		for(Symbol nextSym: expansion) {
 			if(!nextSym.isTerminal()) {
-				createIndividual(depth +1, solution, nextSym);
+				//createIndividual(depth +1, solution, nextSym);
+				createIndividual(depth, solution, nextSym);
 			}
 			
 		}
