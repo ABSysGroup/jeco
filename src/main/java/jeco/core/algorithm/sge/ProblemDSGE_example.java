@@ -28,8 +28,8 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
 	private int goal = 126;
 	
-	public ProblemDSGE_example(String path, int depht){
-		super(path, 1, depht);
+	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth){
+		super(path, 1, depht,bloatingControl, treeDepth);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
@@ -73,7 +73,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	@Override
 	public Problem<VariableList<Integer>> clone() {
 
-		ProblemDSGE_example clone = new ProblemDSGE_example(super.pathToBnf, 5);
+		ProblemDSGE_example clone = new ProblemDSGE_example(super.pathToBnf, 5,true ,true);
 		return clone;
 	}
 	
@@ -86,7 +86,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 3);
+        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 6, false, true);
 		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 5);
      
         // Second create the algorithm

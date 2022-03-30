@@ -20,12 +20,15 @@ import jeco.core.util.random.RandomGenerator;
 public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableList<Integer>> {
 
 	private int maxDepth;
+	private boolean bloatingControl;
+	private boolean treeDepth;
 	
-	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth) {
+	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth) {
 		super(pathToBnf, 0, numberOfObjectives);
 		reader.load(pathToBnf);
-		
-		
+		this.bloatingControl = bloatingControl;
+		this.treeDepth = treeDepth;
+		this.maxDepth = maxDepth;
 		initialize();
 		// TODO Auto-generated constructor stub
 	}
@@ -114,12 +117,6 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		else {
 			Rule nextRule = this.reader.findRule(next);
 			
-			if(nextRule.getRecursive()) {
-				depth = depth+1;
-			}else {
-				depth = 0;
-			}
-			
 			//If the alele we are trying to expand does not exist (can happen due to a mutation or a crossover)
 			if(index[this.orderSymbols.indexOf(next.toString())] + 1 > solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
 				if(depth >= this.maxDepth) {
@@ -130,7 +127,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 				
 				//If the alele we are trying to expand goes over the maximun depth (can happen due to a mutation or a crossover) and it was recursive
 				//We transform it into a non-recursive call
-			}else if(nextRule.getRecursive() && depth >= this.maxDepth) {
+			}else if(bloatingControl && nextRule.getRecursive() && (depth >= this.maxDepth)) {
 				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
 				if(nextProduction.getRecursive()) {
 					transformToTerminalExpansion(next, solution, index[this.orderSymbols.indexOf(next.toString())]);
@@ -139,12 +136,27 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 			
 			
 			Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
+			
+			//If we are considering tree depth instead of recursive we always add one 
+			if(!treeDepth) {
+				if(nextProduction.getRecursive()) {
+					depth = depth+1;
+				}else {
+					depth = 0;
+				}	
+			}else {
+				depth = depth+1;
+			}
+			
 			index[this.orderSymbols.indexOf(next.toString())]++;
 			
 			for(int i = 0 ; i < nextProduction.size() ; i++) {
 				
-				//auxCreatePhenotype(nextProduction.get(i),phenotype, depth + 1, solution, index);
+				/*if(treeDepth) {
+					auxCreatePhenotype(nextProduction.get(i),phenotype, depth + 1, solution, index);
+				}else {*/
 				auxCreatePhenotype(nextProduction.get(i),phenotype, depth, solution, index);
+				//}
 			}
 			
 		}
@@ -223,10 +235,15 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		Rule ruleSymbol = reader.findRule(sym);
 		Production expansion = ruleSymbol.get(rand_prod);
 		
-		if(ruleSymbol.getRecursive()) {
-			depth = depth+1;
+		//If we are considering tree depth instead of recursive we always add one 
+		if(!treeDepth) {
+			if(expansion.getRecursive()) {
+				depth = depth+1;
+			}else {
+				depth = 0;
+			}	
 		}else {
-			depth = 0;
+			depth = depth+1;
 		}
 		
 		if(ruleSymbol.getRecursive()) {

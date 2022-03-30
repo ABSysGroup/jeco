@@ -87,8 +87,8 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemSGE_example problem = new ProblemSGE_example("D:/Documento/UNI/TFG/Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf", 3);
-     
+        //ProblemSGE_example problem = new ProblemSGE_example("D:/Documento/UNI/TFG/Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf", 3);
+		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example.bnf", 6);
         // Second create the algorithm
         //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
         SimpleGeneticAlgorithm<VariableArray<Integer>> algorithm = new SimpleGeneticAlgorithm<>(problem,100,200,true,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),
