@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 public class BnfReaderSge extends BnfReader {
@@ -33,7 +34,7 @@ public class BnfReaderSge extends BnfReader {
 					  enter = false;
 				  }*/
 				  
-				  for(int i = 1; i < max_depth; i++) {
+				  for(int i = 0; i < max_depth; i++) {
 					  
 					  String newSymbol = null;
 					  for(Production p: temp) {
@@ -81,7 +82,8 @@ public class BnfReaderSge extends BnfReader {
 			  this.rules.add(r);
 		  }
 		  
-		  
+		 //Update the recursion
+		 this.updateRuleFields();
 		 return load;
 	 }
 	
@@ -137,8 +139,51 @@ public class BnfReaderSge extends BnfReader {
     	return count_references;
     }
     
+    public Map<String, Integer> count_references(Rule r) {
+    	Map<String, Integer> max_ref = new HashMap<String, Integer>();
+    	
+    	max_ref.put(r.lhs.symbolString, 1);
+    	for(Production p: r) {
+    		Map<String, Integer> temp = new HashMap<String, Integer>();
+    		for(Symbol s: p) {
+    			
+    			if(!s.isTerminal()) {
+    				//We introduce the symbol into the temp count and then we call  callreferences for the rule
+	    			/*if(temp.containsKey(s.symbolString)) {
+	    				temp.put(s.symbolString, temp.get(s.symbolString) + 1);
+	    			}else {
+	    				temp.put(s.symbolString, 1);
+	    			}*/
+	    			Map<String, Integer> temp2 = count_references(this.findRule(s));
+	    			
+	    			for(Entry<String, Integer> entry: temp2.entrySet()) {
+	    				if(temp.containsKey(entry.getKey())) {
+	    					temp.put(entry.getKey(), entry.getValue() + temp.get(entry.getKey()));
+	    				}else {
+		    				temp.put(entry.getKey(), entry.getValue());
+		    			}
+	    			}
+	    			
+    			}
+    			
+    			for(Entry<String, Integer> entry: temp.entrySet()) {
+    				if(max_ref.containsKey(entry.getKey())) {
+    					if(max_ref.get(entry.getKey()) < entry.getValue()) {
+    						max_ref.put(entry.getKey(), entry.getValue());
+    					}
+    				}else {
+    					max_ref.put(entry.getKey(), entry.getValue());
+	    			}
+    			}
+    		}
+    	}
+    	
+    	return max_ref;
+    }
+    
     public Map<String, Integer> find_references_start(){
-    	return find_references(this.rules.get(0), this.count_references(), 1);
+    	//return find_references(this.rules.get(0), this.count_references(), 1);
+    	return count_references(this.rules.get(0));
     }
     
     public Map<String, Integer> find_references(Rule r, Map<String, Map<String, Integer>> references, int mult) {
@@ -231,8 +276,8 @@ public class BnfReaderSge extends BnfReader {
 
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        //bnfReader.loadSGE("test/grammar.bnf", 4);
-        bnfReader.loadSGE("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf",2);
+        bnfReader.loadSGE("test/grammar.bnf", 4);
+        //bnfReader.load("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf");
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);
             System.out.println(rule.toString());
@@ -243,8 +288,9 @@ public class BnfReaderSge extends BnfReader {
 			}
         
         }
-        bnfReader.find_references_start();
+        Map<String, Integer> ref = bnfReader.find_references_start();
         
+       // Map<String, Integer> ref2 = bnfReader.count_references(bnfReader.getRules().get(0));
         
     }
 

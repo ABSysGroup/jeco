@@ -516,6 +516,7 @@ public class BnfReader {
             return true;
         }
 
+        boolean recursive = false;
         // Go through each production in the rule
         for (Production production : prodIt) {
             for (Symbol symbol : production) {
@@ -526,13 +527,21 @@ public class BnfReader {
                             visitedRules.add(definingRule);
                             if (isRecursive(visitedRules, currentRule)) {
                                 production.recursive = true;
+                                recursive = true;
                                 return true;
+                                
                             }
+                        //If we have already checked for recursiveness we set the production accordingly
+                        }else {
+                        	if(definingRule.recursive) {
+                        		production.recursive = true;
+                        	}
                         }
                     }
                 }
             }
         }
+       // return recursive;
         return false;
     }
 

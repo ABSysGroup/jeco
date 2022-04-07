@@ -86,7 +86,8 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 6, false, true);
+        //ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 2, true, false);
+        ProblemDSGE_example problem = new ProblemDSGE_example("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 3, true, false);
 		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 5);
      
         // Second create the algorithm

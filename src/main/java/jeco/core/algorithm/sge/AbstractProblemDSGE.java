@@ -89,6 +89,8 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 
         }
         
+        generatePhenotype(solI);
+        
         return solI;
 	}
 
@@ -235,17 +237,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		Rule ruleSymbol = reader.findRule(sym);
 		Production expansion = ruleSymbol.get(rand_prod);
 		
-		//If we are considering tree depth instead of recursive we always add one 
-		if(!treeDepth) {
-			if(expansion.getRecursive()) {
-				depth = depth+1;
-			}else {
-				depth = 0;
-			}	
-		}else {
-			depth = depth+1;
-		}
-		
+		//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
 		if(ruleSymbol.getRecursive()) {
 			if(expansion.getRecursive()) {
 				if(depth >= this.maxDepth) {
@@ -264,6 +256,17 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 				}
 			}
 			
+		}
+		
+		//If we are considering tree depth instead of recursive we always add one 
+		if(!treeDepth) {
+			if(expansion.getRecursive()) {
+				depth = depth+1;
+			}else {
+				depth = 0;
+			}	
+		}else {
+			depth = depth+1;
 		}
 
 		solution.get(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);

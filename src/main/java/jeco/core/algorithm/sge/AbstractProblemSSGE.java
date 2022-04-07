@@ -124,7 +124,8 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 			}
 			else {
 				nextRule = this.reader.findRule(next);
-				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(nextRule.getLHS().toString())).getValue()[index[this.orderSymbols.indexOf(nextRule.getLHS().toString())]]);
+				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue()[index[this.orderSymbols.indexOf(next.toString())]]);
+			
 				index[this.orderSymbols.indexOf(next.toString())]++;
 				
 				for(int i = nextProduction.size()-1 ; i >= 0 ; i--) {
