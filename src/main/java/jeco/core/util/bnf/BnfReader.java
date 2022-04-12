@@ -497,7 +497,33 @@ public class BnfReader {
         for (Rule rule : rules) {
             rule.minimumDepth = Integer.MAX_VALUE >> 1;
             rule.recursive = false;
+            
+            for(Production p: rule) {
+            	p.recursive = false;
+            	p.minimumDepth = Integer.MAX_VALUE >> 1;
+            }
         }
+    }
+    
+    
+    /**
+     * Checks that given a Rule and a Production they are both recursive and that the recursive element is the same one
+     * @param r
+     * @param p
+     * @return
+     */
+    public boolean sameRecursion(Rule r, Production p) {
+    	if(r.getRecursive() && p.getRecursive()) {
+    		
+    		for(Symbol s: p) {
+    			if(s.equals(r.lhs)) {
+    				return true;
+    			}
+    		}
+    		
+    	}
+    		
+    	return false;
     }
 
     protected boolean isRecursive(ArrayList<Rule> visitedRules, Rule currentRule) {
@@ -516,7 +542,7 @@ public class BnfReader {
             return true;
         }
 
-        boolean recursive = false;
+   
         // Go through each production in the rule
         for (Production production : prodIt) {
             for (Symbol symbol : production) {
@@ -527,7 +553,7 @@ public class BnfReader {
                             visitedRules.add(definingRule);
                             if (isRecursive(visitedRules, currentRule)) {
                                 production.recursive = true;
-                                recursive = true;
+                           
                                 return true;
                                 
                             }
@@ -599,7 +625,8 @@ public class BnfReader {
 
     public static void main(String[] args) {
         BnfReader bnfReader = new BnfReader();
-        bnfReader.load("test/grammar_example.bnf");
+        //bnfReader.load("test/grammar_example.bnf");
+        bnfReader.load("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf");
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());
             System.out.println(rule.lhs.toString());

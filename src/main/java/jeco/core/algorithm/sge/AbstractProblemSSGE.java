@@ -17,20 +17,28 @@ import jeco.core.util.random.RandomGenerator;
 
 public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArray<Integer>> {
 
-	protected Integer[] indexes;
+	//protected Integer[] indexes;
+	//String of non-terminal to Integer of number of derivations
 	protected Map<String, Integer> maxReferencesSymbol;
-	protected ArrayList<Integer> maxDerivations;
-
 	
 	protected AbstractProblemSSGE(String pathToBnf, int numberOfObjectives, int depth) {
 		super(pathToBnf, 0, numberOfObjectives); //I need to read the file before I am able to know the size of the cromosome
 		reader.loadSGE(pathToBnf, depth);
 		
+		maxReferencesSymbol = reader.find_references_start();
+		Map<String, Integer> options = reader.number_of_options();
+		
+		if(options.size() != maxReferencesSymbol.size()) {
+			throw new RuntimeException("Wrong loading in bnf file");
+		}
+		
 		initialize();
+		
 
 	}
 	
-	public void initialize() {
+	/*public void initialize() {
+		
 		super.numberOfVariables = reader.number_of_options().size();
 		maxReferencesSymbol = reader.find_references_start();
 		Map<String, Integer> options = reader.number_of_options();
@@ -41,9 +49,13 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 		}
 		
 		List<String> terminalProductions = reader.getTerminalProductions();
+		
 		int j = 0;
 		for(Map.Entry<String, Integer> entry : maxReferencesSymbol.entrySet()) {
+			//Set the order of the lists to be able to reference them later
 			this.orderSymbols.add(entry.getKey());
+			
+			//Set the rules that only produce terminals
 			if(terminalProductions.contains(entry.getKey())) {
 				this.terminals.add(j);
 			}
@@ -51,6 +63,7 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 			j++;
 		}
 		
+		//Get the subsequent symbols of a certain rule
 		Map<String, List<String>> subsequentSymbols = reader.getSubsequentProductions();
 		for(int i = 0; i < this.orderSymbols.size(); i++) {
 			
@@ -70,23 +83,27 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 			lowerBound[i] = 0;
 			upperBound[i] = options.get(this.orderSymbols.get(i));
 		}
-	}
+	}*/
 	
-	private Solution<VariableArray<Integer>> generateRandomSolution() {
+	protected Solution<VariableArray<Integer>> generateRandomSolution() {
         Solution<VariableArray<Integer>> solI = new Solution<>(numberOfObjectives);
+        //For each variable
         for (int j = 0; j < numberOfVariables; ++j) {
-       	 Integer[] list_derivation = new Integer[this.maxReferencesSymbol.get(this.orderSymbols.get(j))];
-       	 for(int i = 0; i < list_derivation.length; i++) {
-       		 list_derivation[i] = RandomGenerator.nextInteger((int) upperBound[j]);
-       	 }
-       	 
-       	 	VariableArray<Integer> varJ = new VariableArray<>(list_derivation);
-            solI.getVariables().add(varJ);
+        	//Generate the non-terminal list
+			Integer[] list_derivation = new Integer[this.maxReferencesSymbol.get(this.orderSymbols.get(j))];
+			
+			//Generate the alleles
+			for(int i = 0; i < list_derivation.length; i++) {
+				list_derivation[i] = RandomGenerator.nextInteger((int) upperBound[j]);
+			}
+			 
+			VariableArray<Integer> varJ = new VariableArray<>(list_derivation);
+			solI.getVariables().add(varJ);
         }
         return solI;
     }
 	
-	@Override
+	/*@Override
 	public Solutions<VariableArray<Integer>> newRandomSetOfSolutions(int size){
 		Solutions<VariableArray<Integer>> solutions = new Solutions<>();
 		
@@ -94,9 +111,8 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 			solutions.add(generateRandomSolution());
 		}
 		
-		
 		return solutions;
-	}
+	}*/
 	
 	public abstract void evaluate(Solution<VariableArray<Integer>> solution, Phenotype phenotype);
 	
@@ -107,6 +123,9 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 	        }
 	}
 	
+	/**
+	 * Generate phenotype from a list of VariableArray
+	 */
 	@Override
 	public Phenotype generatePhenotype(Solution<VariableArray<Integer>> solution) {
 

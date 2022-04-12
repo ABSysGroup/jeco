@@ -33,7 +33,7 @@ public class BnfReaderSge extends BnfReader {
 					  }
 					  enter = false;
 				  }*/
-				  
+				  r.recursive = false;
 				  for(int i = 0; i < max_depth; i++) {
 					  
 					  String newSymbol = null;
@@ -276,8 +276,8 @@ public class BnfReaderSge extends BnfReader {
 
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        bnfReader.loadSGE("test/grammar.bnf", 4);
-        //bnfReader.load("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf");
+        //bnfReader.loadSGE("test/grammar.bnf", 4);
+        bnfReader.loadSGE("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 3);
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);
             System.out.println(rule.toString());
@@ -288,7 +288,7 @@ public class BnfReaderSge extends BnfReader {
 			}
         
         }
-        Map<String, Integer> ref = bnfReader.find_references_start();
+       // Map<String, Integer> ref = bnfReader.find_references_start();
         
        // Map<String, Integer> ref2 = bnfReader.count_references(bnfReader.getRules().get(0));
         

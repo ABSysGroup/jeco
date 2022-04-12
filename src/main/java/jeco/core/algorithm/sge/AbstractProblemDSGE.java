@@ -34,7 +34,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	}
 	
 	
-	public void initialize() {
+	/*public void initialize() {
 		
 		Map<String, Integer> options = reader.number_of_options();
 		this.numberOfVariables = options.size();
@@ -71,17 +71,20 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 			lowerBound[i] = 0;
 			upperBound[i] = options.get(this.orderSymbols.get(i));
 		}
-	}
+	}*/
 	
-	private Solution<VariableList<Integer>> generateRandomSolution() {
+	protected Solution<VariableList<Integer>> generateRandomSolution() {
         Solution<VariableList<Integer>> solI = new Solution<>(this.numberOfObjectives);
         ArrayList<VariableList<Integer>> temp = new ArrayList<>();
+        
+        //Add a VariableList for each non-terminal in accordance to the order of the rules
         for(int i = 0; i < this.orderSymbols.size(); i++) {
-
+        	
         	VariableList<Integer> tempVar = new VariableList<Integer>();
         	temp.add(tempVar);
         } 
         
+        //Create the individual with initial depth 0
         createIndividual(0, temp, reader.getRules().get(0).getLHS());
 
         for(VariableList<Integer> var : temp) {
@@ -89,14 +92,13 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 
         }
         
-        generatePhenotype(solI);
+        //generatePhenotype(solI);
         
         return solI;
 	}
 
 	@Override
 	protected Phenotype generatePhenotype(Solution<VariableList<Integer>> solution) {
-		int depth = 0;
 		Phenotype phenotype = new Phenotype();
 		Rule firstRule = reader.getRules().get(0);
 		int[] index = new int[this.orderSymbols.size()];
@@ -120,7 +122,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 			Rule nextRule = this.reader.findRule(next);
 			
 			//If the alele we are trying to expand does not exist (can happen due to a mutation or a crossover)
-			if(index[this.orderSymbols.indexOf(next.toString())] + 1 > solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
+			if(index[this.orderSymbols.indexOf(next.toString())] >= solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
 				if(depth >= this.maxDepth) {
 					generateTerminalExpansion(next, solution);
 				}else {
@@ -131,7 +133,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 				//We transform it into a non-recursive call
 			}else if(bloatingControl && nextRule.getRecursive() && (depth >= this.maxDepth)) {
 				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
-				if(nextProduction.getRecursive()) {
+				if(reader.sameRecursion(nextRule, nextProduction)) {
 					transformToTerminalExpansion(next, solution, index[this.orderSymbols.indexOf(next.toString())]);
 				}
 			}
@@ -141,7 +143,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 			
 			//If we are considering tree depth instead of recursive we always add one 
 			if(!treeDepth) {
-				if(nextProduction.getRecursive()) {
+				if(reader.sameRecursion(nextRule, nextProduction)) {
 					depth = depth+1;
 				}else {
 					depth = 0;
@@ -233,34 +235,33 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	 * @param sym
 	 */
 	private void createIndividual(int depth, ArrayList<VariableList<Integer>> solution, Symbol sym) {
-		int rand_prod = RandomGenerator.nextInt(reader.findRule(sym).size());
 		Rule ruleSymbol = reader.findRule(sym);
+		int rand_prod = RandomGenerator.nextInt(ruleSymbol.size());
+		
 		Production expansion = ruleSymbol.get(rand_prod);
 		
 		//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
-		if(ruleSymbol.getRecursive()) {
-			if(expansion.getRecursive()) {
-				if(depth >= this.maxDepth) {
-					ArrayList<Integer> listProd = new ArrayList<>();
-					int index = 0; 
-					for(Production p: ruleSymbol) {
-						if(!p.getRecursive()) {
-							listProd.add(index);
-						}
-						index++;
+		if(reader.sameRecursion(ruleSymbol, expansion)) {
+			if(depth >= this.maxDepth) {
+				ArrayList<Integer> listProd = new ArrayList<>();
+				int index = 0; 
+				for(Production p: ruleSymbol) {
+					if(!p.getRecursive()) {
+						listProd.add(index);
 					}
-					int selec = RandomGenerator.nextInt(listProd.size());
-					rand_prod = listProd.get(selec);
-					expansion = ruleSymbol.get(rand_prod);
-					
+					index++;
 				}
+				int selec = RandomGenerator.nextInt(listProd.size());
+				rand_prod = listProd.get(selec);
+				expansion = ruleSymbol.get(rand_prod);
+				
 			}
 			
 		}
 		
 		//If we are considering tree depth instead of recursive we always add one 
 		if(!treeDepth) {
-			if(expansion.getRecursive()) {
+			if(reader.sameRecursion(ruleSymbol, expansion)) {
 				depth = depth+1;
 			}else {
 				depth = 0;
@@ -281,18 +282,6 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		
 		
 		
-	}
-
-	@Override
-	public Solutions<VariableList<Integer>> newRandomSetOfSolutions(int size) {
-		Solutions<VariableList<Integer>> solutions = new Solutions<>();
-		
-		for(int i = 0; i < size; i++) {
-			solutions.add(generateRandomSolution());
-		}
-		
-		
-		return solutions;
 	}
 	
 	@Override
