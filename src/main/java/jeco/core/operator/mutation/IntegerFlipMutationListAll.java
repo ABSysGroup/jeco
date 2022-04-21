@@ -16,14 +16,16 @@ public class IntegerFlipMutationListAll <T extends Variable<Integer[]>> extends 
 	@Override
 	public Solution<T> execute(Solution<T> solution) {
 		for (int i = 0; i < solution.getVariables().size(); i++) {
+			
+			int lowerBound = (int)Math.round(problem.getLowerBound(i));
+			int upperBound = (int)Math.round(problem.getUpperBound(i));
+			
 			//If the mutation affects a gene and the probability is less than the probability of mutation
-			if ((((int)Math.round(problem.getLowerBound(i))+1) < (int)Math.round(problem.getUpperBound(i)))) {
+			if ((lowerBound +1) < upperBound) {
 				
 				for(int j = 0; j < solution.getVariable(i).getValue().length; j++) {
 							
 					if (RandomGenerator.nextDouble() < probability) {
-						int lowerBound = (int)Math.round(problem.getLowerBound(i));
-						int upperBound = (int)Math.round(problem.getUpperBound(i));
 						
 						int newValue;
 						//We always try to change it to a different value than the original

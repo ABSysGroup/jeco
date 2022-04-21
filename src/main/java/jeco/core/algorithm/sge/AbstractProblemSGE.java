@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
@@ -29,7 +30,12 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void initialize() {
+	/**
+	 * Initialization for the algorithm, common to both DynamicSGE and StaticSGE version, set the bounds
+	 * for each non-terminal, the order of the lists and a map with the next productions for a certain one.
+	 * 
+	 */
+	protected void initialize() {
 		
 		super.numberOfVariables = reader.number_of_options().size();
 		Map<String, Integer> options = reader.number_of_options();
@@ -95,5 +101,7 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 		
 		return solutions;
 	}
+	
+	protected abstract void evaluate(Solution<T> solution, Phenotype phenotype);
 	
 }

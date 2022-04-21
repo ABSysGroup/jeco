@@ -30,7 +30,7 @@ public class BasicMutationVariableListAll <T extends Variable<ArrayList<Integer>
 		//Check that the mutation will affect the gene because it  has more than one derivation, and that we are using the gene mutated
 		//(Since a gene might not be in use in the current solution)
 		for(int i = 0; i < problem.getNumberOfVariables(); i++) {
-			if((problem.getLowerBound(i)+1) < problem.getUpperBound(i) && ((VariableList<Integer>) solution.getVariable(i)).size() > 0) {
+			if((problem.getLowerBound(i)+1) < problem.getUpperBound(i) && (solution.getVariable(i).getValue().size() > 0)) {
 				options.add(i);
 			}
 		}
@@ -47,7 +47,7 @@ public class BasicMutationVariableListAll <T extends Variable<ArrayList<Integer>
 					//int randValue = RandomGenerator.nextInt((int) problem.getLowerBound(options.get(i)),(int) problem.getUpperBound(options.get(i)));
 					int randValue;
 					do {
-						randValue = RandomGenerator.nextInt((int) problem.getLowerBound(options.get(i)),(int) problem.getUpperBound(options.get(i)));
+						randValue = RandomGenerator.nextInt((int) Math.round(problem.getLowerBound(options.get(i))),(int) Math.round(problem.getUpperBound(options.get(i))));
 					}while(randValue == solution.getVariable(options.get(i)).getValue().get(randAlele));
 					
 			

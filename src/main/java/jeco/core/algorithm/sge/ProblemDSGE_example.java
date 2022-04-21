@@ -7,6 +7,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
+import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
@@ -87,14 +88,14 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public static void main(String[] args) {
         // First create the problem
         ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 4, true, false);
-        //ProblemDSGE_example problem = new ProblemDSGE_example("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 3, true, false);
+        //ProblemDSGE_example problem = new ProblemDSGE_example("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 0, true, true);
 		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 1, true, false);
      
         // Second create the algorithm
         //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
-        SimpleGeneticAlgorithm<VariableList<Integer>> algorithm = new SimpleGeneticAlgorithm<VariableList<Integer>>(problem,100,200,true, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
-                new SubTreeCrossover<VariableList<Integer>>(problem, 0.7,0.25),
-                new BinaryTournament<VariableList<Integer>>(new SimpleDominance<>()));
+        StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
+                new UniformCrossover<VariableList<Integer>>(0.7,0.25),
+                new BinaryTournament<VariableList<Integer>>(new SimpleDominance<>()), 0.1);
         // Run
         algorithm.initialize();
         Solutions<VariableList<Integer>> solutions = algorithm.execute();

@@ -94,7 +94,7 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 			
 			//Generate the alleles
 			for(int i = 0; i < list_derivation.length; i++) {
-				list_derivation[i] = RandomGenerator.nextInteger((int) upperBound[j]);
+				list_derivation[i] = RandomGenerator.nextInteger((int) lowerBound[j], (int) upperBound[j]);
 			}
 			 
 			VariableArray<Integer> varJ = new VariableArray<>(list_derivation);
@@ -113,8 +113,7 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 		
 		return solutions;
 	}*/
-	
-	public abstract void evaluate(Solution<VariableArray<Integer>> solution, Phenotype phenotype);
+
 	
 	@Override
 	public void evaluate(Solutions<VariableArray<Integer>> solutions) {
@@ -132,30 +131,32 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 		Phenotype phenotype = new Phenotype();
 		Rule firstRule = reader.getRules().get(0);
 		int[] index = new int[this.orderSymbols.size()];
-		Stack<Symbol> nextRules = new Stack<Symbol>(); 
-		nextRules.add(firstRule.getLHS());
-		Rule nextRule = null;
-		while(!nextRules.empty()) {
-			Symbol next = nextRules.pop();
+
+		auxCreatePhenotype(firstRule.getLHS(), phenotype, solution, index);
+		
+		return phenotype;
+	}
+	
+	private void auxCreatePhenotype(Symbol next, Phenotype phenotype, Solution<VariableArray<Integer>> solution, int[] index) {
+		
+		if(next.isTerminal()) {
+			phenotype.add(next.toString());
 			
-			if(next.isTerminal()) {
-				phenotype.add(next.toString());
-			}
-			else {
-				nextRule = this.reader.findRule(next);
-				Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue()[index[this.orderSymbols.indexOf(next.toString())]]);
+		}
+		else {
+			Rule nextRule = this.reader.findRule(next);
 			
-				index[this.orderSymbols.indexOf(next.toString())]++;
+			Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue()[index[this.orderSymbols.indexOf(next.toString())]]);
+			
+			index[this.orderSymbols.indexOf(next.toString())]++;
+			
+			for(int i = 0 ; i < nextProduction.size() ; i++) {
+
+				auxCreatePhenotype(nextProduction.get(i),phenotype, solution, index);
 				
-				for(int i = nextProduction.size()-1 ; i >= 0 ; i--) {
-					nextRules.add(nextProduction.get(i));
-				}
 			}
 			
 		}
-		
-  
-		return phenotype;
 	}
 	
 	 

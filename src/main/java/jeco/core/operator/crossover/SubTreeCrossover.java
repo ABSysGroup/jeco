@@ -60,7 +60,7 @@ public class SubTreeCrossover<T extends Variable<?>> extends CrossoverOperator<T
 	void rec_Change(Solution<T> child1, Solution<T> child2, int gene, ArrayList<Integer> changed) {
 		ArrayList<Integer> nextProd = problem.getNextProd().get(gene);
 		for(Integer i: nextProd) {
-			if(!(changed.contains(i)) && RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY) {
+			if(!(changed.contains(i)) && (RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY)) {
 				T variable = child1.getVariable(i);
 				child1.getVariables().set(i, child2.getVariable(i));
 				child2.getVariables().set(i, variable);

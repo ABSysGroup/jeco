@@ -7,6 +7,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
+import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
@@ -87,13 +88,13 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	
 	public static void main(String[] args) {
         // First create the problem
-        //ProblemSGE_example problem = new ProblemSGE_example("D:/Documento/UNI/TFG/Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf", 3);
+        //ProblemSGE_example problem = new ProblemSGE_example("D:/Documento/UNI/TFG/Accuracy2Clases_Recursion_v2_Mix_BinExprp.bnf", 1);
 		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example.bnf", 4);
         // Second create the algorithm
         //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
-        SimpleGeneticAlgorithm<VariableArray<Integer>> algorithm = new SimpleGeneticAlgorithm<>(problem,100,200,true,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),
+        StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableArray<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<>(problem,100,500,false,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),
                 new SubTreeCrossover<VariableArray<Integer>>(problem, 0.7, 0.5),
-                new BinaryTournament<VariableArray<Integer>>(new SimpleDominance<>()));
+                new BinaryTournament<VariableArray<Integer>>(new SimpleDominance<>()), 0.1);
         // Run
         algorithm.initialize();
         Solutions<VariableArray<Integer>> solutions = algorithm.execute();

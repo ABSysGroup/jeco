@@ -36,7 +36,7 @@ public abstract class Algorithm<V extends Variable<?>> extends Observable {
 
   public abstract void step();
   
-  public Solutions<?> getPopulation() {
+  public Solutions<V> getPopulation() {
 	  throw new RuntimeException("Not implemented in specific algorithm type");
   }
   

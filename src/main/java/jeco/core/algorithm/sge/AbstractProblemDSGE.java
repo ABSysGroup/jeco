@@ -73,6 +73,9 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		}
 	}*/
 	
+	/**
+	 * Generates a random Individual of type VariableList<Integer>
+	 */
 	protected Solution<VariableList<Integer>> generateRandomSolution() {
         Solution<VariableList<Integer>> solI = new Solution<>(this.numberOfObjectives);
         ArrayList<VariableList<Integer>> temp = new ArrayList<>();
@@ -121,7 +124,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		else {
 			Rule nextRule = this.reader.findRule(next);
 			
-			//If the alele we are trying to expand does not exist (can happen due to a mutation or a crossover)
+			//If the alele we are trying to expand does not exist (can happen due to a mutation or a crossover) we generate a new alele
 			if(index[this.orderSymbols.indexOf(next.toString())] >= solution.getVariable(this.orderSymbols.indexOf(next.toString())).size()) {
 				if(depth >= this.maxDepth) {
 					generateTerminalExpansion(next, solution);
@@ -147,7 +150,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 					depth = depth+1;
 				}else {
 					depth = 0;
-				}	
+				}
 			}else {
 				depth = depth+1;
 			}
@@ -166,24 +169,40 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		}
 	}
 	
-	
-	private int generateTerminalExpansion(Symbol sym, Solution<VariableList<Integer>> solution) {
+	/**
+	 * Add a non-recursive production (in relation to the rule) to the individual Solution in the list determined by sym
+	 * @param sym
+	 * @param solution
+	 * @return
+	 */
+	private void generateTerminalExpansion(Symbol sym, Solution<VariableList<Integer>> solution) {
 		int rand_prod;
 		Rule ruleSymbol = this.reader.findRule(sym);
 		
+		rand_prod = TerminalExpansion(ruleSymbol);
+		
+		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
+
+	}
+	
+	private int TerminalExpansion(Rule ruleSymbol) {
+
+		int rand_prod;
+		
+		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
 		ArrayList<Integer> listProd = new ArrayList<>();
 		int index = 0; 
 		for(Production p: ruleSymbol) {
-			if(!p.getRecursive()) {
+			if(!reader.sameRecursion(ruleSymbol, p)) {
 				listProd.add(index);
 			}
 			index++;
 		}
+		
+		//Select one of the indexes of the list
 		int selec = RandomGenerator.nextInt(listProd.size());
 		rand_prod = listProd.get(selec);
 		
-		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
-
 		return rand_prod;
 	}
 	
@@ -194,38 +213,32 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	 * @param pos
 	 * @return
 	 */
-	private int transformToTerminalExpansion(Symbol sym, Solution<VariableList<Integer>> solution, int pos) {
+	private void transformToTerminalExpansion(Symbol sym, Solution<VariableList<Integer>> solution, int pos) {
 		int rand_prod;
 		Rule ruleSymbol = this.reader.findRule(sym);
 		
-		//We get the productions that are not recursive and put their indexes in a list
-		ArrayList<Integer> listProd = new ArrayList<>();
-		int index = 0; 
-		for(Production p: ruleSymbol) {
-			if(!p.getRecursive()) {
-				listProd.add(index);
-			}
-			index++;
-		}
-		
-		//Select one of the indexes of the list
-		int selec = RandomGenerator.nextInt(listProd.size());
-		rand_prod = listProd.get(selec);
+		rand_prod = TerminalExpansion(ruleSymbol);
 		
 		//Remove the previous values that we had on the position and add the new non-recursive value
 		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).remove(pos);
 		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(pos,rand_prod);
 
-		return rand_prod;
+		//return rand_prod;
 	}
 	
-	private int generateExpansion(Symbol sym, Solution<VariableList<Integer>> solution) {
+	
+	/**
+	 * Adds a random expansion to the list of the rule identified by sym to the solution
+	 * @param sym
+	 * @param solution
+	 * @return
+	 */
+	private void generateExpansion(Symbol sym, Solution<VariableList<Integer>> solution) {
 		Rule ruleSymbol = this.reader.findRule(sym);
 		int rand_prod = RandomGenerator.nextInt(ruleSymbol.size());
 		
 		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
 		
-		return rand_prod;
 	}
 	
 	/**
@@ -243,29 +256,20 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
 		if(reader.sameRecursion(ruleSymbol, expansion)) {
 			if(depth >= this.maxDepth) {
-				ArrayList<Integer> listProd = new ArrayList<>();
-				int index = 0; 
-				for(Production p: ruleSymbol) {
-					if(!p.getRecursive()) {
-						listProd.add(index);
-					}
-					index++;
-				}
-				int selec = RandomGenerator.nextInt(listProd.size());
-				rand_prod = listProd.get(selec);
+				rand_prod = TerminalExpansion(ruleSymbol);
 				expansion = ruleSymbol.get(rand_prod);
 				
 			}
 			
 		}
 		
-		//If we are considering tree depth instead of recursive we always add one 
+		//If we are considering tree depth instead of recursive depth we always add one 
 		if(!treeDepth) {
 			if(reader.sameRecursion(ruleSymbol, expansion)) {
 				depth = depth+1;
 			}else {
 				depth = 0;
-			}	
+			}
 		}else {
 			depth = depth+1;
 		}
@@ -291,7 +295,6 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	        }
 	}
 
-	public abstract void evaluate(Solution<VariableList<Integer>> solution, Phenotype phenotype);
 
 
 }
