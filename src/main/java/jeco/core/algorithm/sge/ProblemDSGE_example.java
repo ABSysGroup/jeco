@@ -35,6 +35,11 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 	
+	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
+		 ScriptEngineManager mgr = new ScriptEngineManager();
+		evaluator = mgr.getEngineByName("JavaScript");
+	}
 
 	@Override
 	public void evaluate(Solution<VariableList<Integer>> solution, Phenotype phenotype) {
@@ -87,10 +92,11 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 4, true, false);
+        //ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 4, true, false, 4,0);
         //ProblemDSGE_example problem = new ProblemDSGE_example("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 0, true, true);
 		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 1, true, false);
-     
+		ProblemDSGE_example problem = new ProblemDSGE_example("D:\\TFG\\Accuracy2Clases_Recursion_v6_Mix_BinExpr.bnf", 6, true, true, 6,1);
+		
         // Second create the algorithm
         //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),

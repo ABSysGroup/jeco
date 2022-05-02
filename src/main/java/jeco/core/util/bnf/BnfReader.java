@@ -525,6 +525,13 @@ public class BnfReader {
     		
     	return false;
     }
+    
+    public boolean sameRecursion(Rule r, Symbol s) {
+    	if(r.getRecursive() && (s.equals(r.lhs))) {
+    		return true;
+    	}
+    	return false;
+    }
 
     protected boolean isRecursive(ArrayList<Rule> visitedRules, Rule currentRule) {
         ArrayList<Production> prodIt;

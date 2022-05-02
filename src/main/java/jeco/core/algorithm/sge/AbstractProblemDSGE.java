@@ -18,17 +18,42 @@ import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
 public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableList<Integer>> {
-
+	
+	//Max depth an individual can be
 	private int maxDepth;
+	private int maxDepthInit;
+	private int minRecDepthInit;
 	private boolean bloatingControl;
 	private boolean treeDepth;
 	
+	/**
+	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0
+	 * @param pathToBnf
+	 * @param numberOfObjectives
+	 * @param maxDepth
+	 * @param bloatingControl
+	 * @param treeDepth
+	 */
 	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth) {
 		super(pathToBnf, 0, numberOfObjectives);
 		reader.load(pathToBnf);
 		this.bloatingControl = bloatingControl;
 		this.treeDepth = treeDepth;
 		this.maxDepth = maxDepth;
+		this.minRecDepthInit = 0;
+		this.maxDepthInit = maxDepth;
+		initialize();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit) {
+		super(pathToBnf, 0, numberOfObjectives);
+		reader.load(pathToBnf);
+		this.bloatingControl = bloatingControl;
+		this.treeDepth = treeDepth;
+		this.maxDepth = maxDepth;
+		this.minRecDepthInit = minRecInit;
+		this.maxDepthInit = maxInit;
 		initialize();
 		// TODO Auto-generated constructor stub
 	}
@@ -88,7 +113,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
         } 
         
         //Create the individual with initial depth 0
-        createIndividual(0, temp, reader.getRules().get(0).getLHS());
+        createIndividual(0,0, temp, reader.getRules().get(0).getLHS());
 
         for(VariableList<Integer> var : temp) {
         	solI.getVariables().add(var);
@@ -145,7 +170,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 			Production nextProduction = nextRule.get(solution.getVariables().get(this.orderSymbols.indexOf(next.toString())).getValue().get(index[this.orderSymbols.indexOf(next.toString())]));
 			
 			//If we are considering tree depth instead of recursive we always add one 
-			if(!treeDepth) {
+			/*if(!treeDepth) {
 				if(reader.sameRecursion(nextRule, nextProduction)) {
 					depth = depth+1;
 				}else {
@@ -153,16 +178,28 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 				}
 			}else {
 				depth = depth+1;
-			}
+			}*/
 			
 			index[this.orderSymbols.indexOf(next.toString())]++;
 			
 			for(int i = 0 ; i < nextProduction.size() ; i++) {
 				
+				if(!treeDepth) {
+					if(reader.sameRecursion(nextRule, nextProduction.get(i))) {
+						//The next symbol has the same recursion as this rule therefore we add depth+1 
+						auxCreatePhenotype(nextProduction.get(i),phenotype, depth+1, solution, index);
+					}else {
+						//The next symbol is not recursive with the current rule therefore we reset the depth to 0
+						auxCreatePhenotype(nextProduction.get(i),phenotype, 0, solution, index);
+					}
+				}else {
+					auxCreatePhenotype(nextProduction.get(i),phenotype, depth+1, solution, index);
+				}
+				
 				/*if(treeDepth) {
 					auxCreatePhenotype(nextProduction.get(i),phenotype, depth + 1, solution, index);
 				}else {*/
-				auxCreatePhenotype(nextProduction.get(i),phenotype, depth, solution, index);
+				//auxCreatePhenotype(nextProduction.get(i),phenotype, depth, solution, index);
 				//}
 			}
 			
@@ -194,6 +231,26 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		int index = 0; 
 		for(Production p: ruleSymbol) {
 			if(!reader.sameRecursion(ruleSymbol, p)) {
+				listProd.add(index);
+			}
+			index++;
+		}
+		
+		//Select one of the indexes of the list
+		int selec = RandomGenerator.nextInt(listProd.size());
+		rand_prod = listProd.get(selec);
+		
+		return rand_prod;
+	}
+	
+	private int RecursiveExpansion(Rule ruleSymbol) {
+		int rand_prod;
+		
+		//We get the productions that are recursive with the ruleSymbol and put their indexes in a list
+		ArrayList<Integer> listProd = new ArrayList<>();
+		int index = 0; 
+		for(Production p: ruleSymbol) {
+			if(reader.sameRecursion(ruleSymbol, p)) {
 				listProd.add(index);
 			}
 			index++;
@@ -242,12 +299,12 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	}
 	
 	/**
-	 * Creates a new solution with a certain depth
+	 * Creates a new solution with a certain initial depth
 	 * @param depth
 	 * @param solution
 	 * @param sym
 	 */
-	private void createIndividual(int depth, ArrayList<VariableList<Integer>> solution, Symbol sym) {
+	private void createIndividual(int depth, int Recdepth, ArrayList<VariableList<Integer>> solution, Symbol sym) {
 		Rule ruleSymbol = reader.findRule(sym);
 		int rand_prod = RandomGenerator.nextInt(ruleSymbol.size());
 		
@@ -255,16 +312,30 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		
 		//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
 		if(reader.sameRecursion(ruleSymbol, expansion)) {
-			if(depth >= this.maxDepth) {
+			if(depth >= this.maxDepthInit) {
 				rand_prod = TerminalExpansion(ruleSymbol);
 				expansion = ruleSymbol.get(rand_prod);
-				
-			}
+				//Recdepth = 0; //The recursive depth is set to 0, we are generate a non-recursive rule.
+			}/*else {
+				Recdepth++; //In other case the next rule is recursive so we add to the rec depth.
+			}*/
 			
+		}else {
+			//If the rule is recursive and we are expanding a non-recursive production but the minRecDepthInit is less than the minimum then we generate only recursive expansions
+			//If we are considering bloating then the rule will only expand if we are not over the max depth limit
+			if(ruleSymbol.getRecursive() && (Recdepth < this.minRecDepthInit) && (depth < this.maxDepthInit)) {
+				rand_prod = RecursiveExpansion(ruleSymbol);
+				expansion = ruleSymbol.get(rand_prod);
+				//Recdepth++; //We change to a recursive rule so we add one.
+			}/*else {
+				Recdepth =0; //The recursive depth is set to 0, we are generate a non-recursive rule.
+			}*/
 		}
 		
+		
+		
 		//If we are considering tree depth instead of recursive depth we always add one 
-		if(!treeDepth) {
+		/*if(!treeDepth) {
 			if(reader.sameRecursion(ruleSymbol, expansion)) {
 				depth = depth+1;
 			}else {
@@ -272,14 +343,36 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 			}
 		}else {
 			depth = depth+1;
-		}
+		}*/
 
 		solution.get(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
 		
 		for(Symbol nextSym: expansion) {
 			if(!nextSym.isTerminal()) {
 				//createIndividual(depth +1, solution, nextSym);
-				createIndividual(depth, solution, nextSym);
+				
+				boolean sameRecursion = reader.sameRecursion(ruleSymbol, nextSym); 
+				//If we are considering tree depth instead of recursive depth we always add one to the depth
+				if(!treeDepth) {
+					if(reader.sameRecursion(ruleSymbol, nextSym)) {
+						//The next symbol has the same recursion as this rule therefore we add depth+1 and Recdepth+1
+						createIndividual(depth+1,Recdepth+1, solution, nextSym);
+					}else {
+						//The next symbol is nos recursive with the current rule therefore we reset the depth to 0
+						createIndividual(0,0, solution, nextSym);
+					}
+				}else {
+					//We consider tree depth
+					if(sameRecursion) {
+						//The next symbol has the same recursion as this symbol so we can add one to the initial Rec depth
+						createIndividual(depth+1,Recdepth+1, solution, nextSym);
+					}else {
+						//The next symbol is not recursive with the current rule meaning we restore the depth back to 0
+						createIndividual(depth+1,0, solution, nextSym);
+					}
+					
+				}
+				//createIndividual(depth,Recdepth, solution, nextSym);
 			}
 			
 		}
