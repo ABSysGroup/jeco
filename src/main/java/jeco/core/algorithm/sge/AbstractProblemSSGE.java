@@ -17,7 +17,6 @@ import jeco.core.util.random.RandomGenerator;
 
 public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArray<Integer>> {
 
-	//protected Integer[] indexes;
 	//String of non-terminal to Integer of number of derivations
 	protected Map<String, Integer> maxReferencesSymbol;
 	
@@ -37,54 +36,9 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 
 	}
 	
-	/*public void initialize() {
-		
-		super.numberOfVariables = reader.number_of_options().size();
-		maxReferencesSymbol = reader.find_references_start();
-		Map<String, Integer> options = reader.number_of_options();
-		
-		this.orderSymbols = new ArrayList<>();
-		if(options.size() != maxReferencesSymbol.size()) {
-			throw new RuntimeException("Wrong loading in bnf file");
-		}
-		
-		List<String> terminalProductions = reader.getTerminalProductions();
-		
-		int j = 0;
-		for(Map.Entry<String, Integer> entry : maxReferencesSymbol.entrySet()) {
-			//Set the order of the lists to be able to reference them later
-			this.orderSymbols.add(entry.getKey());
-			
-			//Set the rules that only produce terminals
-			if(terminalProductions.contains(entry.getKey())) {
-				this.terminals.add(j);
-			}
-			
-			j++;
-		}
-		
-		//Get the subsequent symbols of a certain rule
-		Map<String, List<String>> subsequentSymbols = reader.getSubsequentProductions();
-		for(int i = 0; i < this.orderSymbols.size(); i++) {
-			
-			ArrayList<Integer> nextSym = new ArrayList<>();
-			this.Non_tToTerminals.add(nextSym);
-			for(int k = 0; k < this.orderSymbols.size(); k++) {
-				if(subsequentSymbols.get(this.orderSymbols.get(i)).contains(this.orderSymbols.get(k))) {
-					nextSym.add(k);
-				}
-			}
-		}
-		
-        this.lowerBound = new double[numberOfVariables];
-        this.upperBound = new double[numberOfVariables];
-		
-		for (int i = 0; i < numberOfVariables; i++) {
-			lowerBound[i] = 0;
-			upperBound[i] = options.get(this.orderSymbols.get(i));
-		}
-	}*/
-	
+	/**
+	 * Random solution implemented by original SGE (StaticSGE) implementation
+	 */
 	protected Solution<VariableArray<Integer>> generateRandomSolution() {
         Solution<VariableArray<Integer>> solI = new Solution<>(numberOfObjectives);
         //For each variable
@@ -103,17 +57,6 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
         return solI;
     }
 	
-	/*@Override
-	public Solutions<VariableArray<Integer>> newRandomSetOfSolutions(int size){
-		Solutions<VariableArray<Integer>> solutions = new Solutions<>();
-		
-		for(int i = 0; i < size; i++) {
-			solutions.add(generateRandomSolution());
-		}
-		
-		return solutions;
-	}*/
-
 	
 	@Override
 	public void evaluate(Solutions<VariableArray<Integer>> solutions) {
@@ -123,7 +66,7 @@ public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArr
 	}
 	
 	/**
-	 * Generate phenotype from a list of VariableArray
+	 * Generates a phenotype from a list of VariableArray
 	 */
 	@Override
 	public Phenotype generatePhenotype(Solution<VariableArray<Integer>> solution) {

@@ -92,13 +92,10 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	
 	public static void main(String[] args) {
         // First create the problem
-        //ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 4, true, false, 4,0);
-        //ProblemDSGE_example problem = new ProblemDSGE_example("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 0, true, true);
-		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 1, true, false);
-		ProblemDSGE_example problem = new ProblemDSGE_example("D:\\TFG\\Accuracy2Clases_Recursion_v6_Mix_BinExpr.bnf", 6, true, true, 6,1);
+        
+		ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 4, true, false);
 		
         // Second create the algorithm
-        //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
                 new UniformCrossover<VariableList<Integer>>(0.7,0.25),
                 new BinaryTournament<VariableList<Integer>>(new SimpleDominance<>()), 0.1);

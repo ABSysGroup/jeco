@@ -1,14 +1,23 @@
 package jeco.core.operator.mutation;
 
+import jeco.core.algorithm.sge.AbstractProblemSSGE;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ * 
+ * Mutation of AbstractProblemSSGE that performs the interchange of the value of an allele by another of the possible values,
+ * it is performed on any allele on any of the non-terminal lists as long as a certain probability is accepted. Equivalent to
+ * BasicMutationVariableListAll in DSGE
+ *
+ * @param <T>
+ */
 public class IntegerFlipMutationListAll <T extends Variable<Integer[]>> extends MutationOperator<T> {
 
-	protected Problem<T> problem;
-	public IntegerFlipMutationListAll(Problem<T> problem, double probability) {
+	protected AbstractProblemSSGE problem;
+	public IntegerFlipMutationListAll(AbstractProblemSSGE problem, double probability) {
 		super(probability);
 		this.problem = problem;
 		// TODO Auto-generated constructor stub
@@ -34,7 +43,7 @@ public class IntegerFlipMutationListAll <T extends Variable<Integer[]>> extends 
 						}while(newValue == solution.getVariable(i).getValue()[j]);
 						
 						solution.getVariable(i).getValue()[j] = newValue;
-						//solution.getVariable(i).getValue()[j] = RandomGenerator.nextInteger(lowerBound, upperBound);
+
 					}
 				}
 			}

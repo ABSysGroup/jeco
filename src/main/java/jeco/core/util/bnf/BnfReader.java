@@ -526,6 +526,12 @@ public class BnfReader {
     	return false;
     }
     
+    /**
+     * Given a Rule and a Symbol it tests if they have the same recursion
+     * @param rule
+     * @param symbol
+     * @return boolean
+     */
     public boolean sameRecursion(Rule r, Symbol s) {
     	if(r.getRecursive() && (s.equals(r.lhs))) {
     		return true;
@@ -632,8 +638,7 @@ public class BnfReader {
 
     public static void main(String[] args) {
         BnfReader bnfReader = new BnfReader();
-        //bnfReader.load("test/grammar_example.bnf");
-        bnfReader.load("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf");
+        bnfReader.load("test/grammar_example.bnf");
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());
             System.out.println(rule.lhs.toString());

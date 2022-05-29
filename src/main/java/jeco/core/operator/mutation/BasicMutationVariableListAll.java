@@ -9,7 +9,9 @@ import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
 /**
- * 
+ * Mutation of AbstractProblemDSGE that performs the interchange of the value of an allele by another of the possible values,
+ * it is performed on any allele on any of the non-terminal lists as long as a certain probability is accepted. Equivalent to
+ * IntegerFlipMutationListAll in SSGE
  *
  * @param <T>
  */

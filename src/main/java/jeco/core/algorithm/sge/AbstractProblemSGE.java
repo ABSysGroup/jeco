@@ -14,11 +14,11 @@ import jeco.core.util.bnf.BnfReaderSge;
 public abstract class AbstractProblemSGE<T extends Variable<?>> extends AbstractGECommon<T> {
 	
 	protected String pathToBnf;
-	protected ArrayList<Integer> maxDerivations;
+	protected ArrayList<Integer> maxDerivations; //Max derivations for each list
 	protected BnfReaderSge reader;
-	protected ArrayList<String> orderSymbols;
-	protected ArrayList<Integer> terminals;
-	protected ArrayList<ArrayList<Integer>> Non_tToTerminals;
+	protected ArrayList<String> orderSymbols; //Order of the Rule symbols in the genotype
+	protected ArrayList<Integer> terminals; //List of terminal symbols
+	protected ArrayList<ArrayList<Integer>> Non_tToTerminals; //List of each non-terminal to other symbols
 	
 	public AbstractProblemSGE(String pathToBnf, int numberOfVariables, int numberOfObjectives) {
 		super(numberOfVariables, numberOfObjectives);
@@ -31,7 +31,7 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 	}
 	
 	/**
-	 * Initialization for the algorithm, common to both DynamicSGE and StaticSGE version, set the bounds
+	 * Initialization for the algorithm, common to both DSGE and  the StaticSGE version, set the bounds
 	 * for each non-terminal, the order of the lists and a map with the next productions for a certain one.
 	 * 
 	 */
@@ -102,6 +102,11 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 		return solutions;
 	}
 	
+	/**
+	 * To be implemented by the different problems
+	 * @param solution
+	 * @param phenotype
+	 */
 	protected abstract void evaluate(Solution<T> solution, Phenotype phenotype);
 	
 }

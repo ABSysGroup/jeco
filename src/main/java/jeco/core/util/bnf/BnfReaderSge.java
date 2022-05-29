@@ -9,6 +9,12 @@ import java.util.concurrent.Semaphore;
 
 public class BnfReaderSge extends BnfReader {
 	
+	/**
+	 * Transform a recursive grammar to a non-recursive grammar with depth max_depth
+	 * @param pathToBnfFile
+	 * @param max_depth
+	 * @return
+	 */
 	 public boolean loadSGE(String pathToBnfFile, int max_depth) {
 
 		 boolean load = super.load(pathToBnfFile);
@@ -23,19 +29,6 @@ public class BnfReaderSge extends BnfReader {
 				  Rule extra = r.clone();
 				  Symbol ruleLhs = temp.getLHS();
 				  
-				 /* ArrayList<Production> nonRecursive = new ArrayList<>();
-				  boolean enter = false;
-				  for(Production p: temp) {
-					  for(Symbol s: p) {
-						  if(s.equals(ruleLhs)) {
-							  enter = true;
-						  }
-					  }
-					  if(!enter) {
-						  nonRecursive.add(p);
-					  }
-					  enter = false;
-				  }*/
 				 //generate non-recursive rules up to max_depth
 				  for(int i = 0; i < max_depth; i++) {
 					  
@@ -97,63 +90,17 @@ public class BnfReaderSge extends BnfReader {
 			  this.rules.add(r);
 		  }
 		  
-		 //Update the recursion
+		 //Update the recursion fields
 		 this.updateRuleFields();
 		 return load;
 	 }
-	
-	  /* For structured gramatical evolution 
-     * 
-     * The code might produce lists that are longer than needed if the instructions in the bnf produce more of a certain symbol down the line
-     * For example if we have
-     * <line> ::= <var> <var> | <z> <var>
-     * <z> ::= <var> <var>
-     * 
-     *  the correct answer should be to count <var> as 1 instante <z> as 1 instance and then <z> will multiply the <var> by 2 and add the 1
-     *  for line, what  actually happens is that the Map of references takes the biggest value for <var> and for <z> but they don't look into
-     *  either so when we calculate the max references for each variable we will count 2 for <var> plus 1 <z> plus 2 <var> that come from the recursive
-     *  call in <z> with has been already calculated (and it has it's own multiplication number) so in total after calculating the references in line
-     *  we will get 4 <var> and 1 <z> which would be incorrect since the actual maximum for <var> is 3
-     *  
-     *  This won't affect currently in the code but must be fixed later on.
-     *   
-     */
-   /* public Map<String, Map<String ,Integer>> count_references() {
-
-    	Map<String, Map<String ,Integer>> count_references = new HashMap<>();
-  	
-    	for(Rule r : this.rules) {
-    		Map<String, Integer> temp = new HashMap<>();
-    		for(Production p: r) {
-    			Map<String, Integer> count = new HashMap<>();
-    			for(Symbol s: p) {
-    				if(!s.isTerminal()) {
-    					if(!count.containsKey(s.symbolString)) {
-    						count.put(s.symbolString, 0);
-    					}
-    					
-    					count.put(s.symbolString, count.get(s.symbolString) +1);
-    				}
-    				
-    				for(Map.Entry<String, Integer> entry : count.entrySet()) {
-    					if(!temp.containsKey(entry.getKey())) {
-    						temp.put(entry.getKey(), 0);
-    					}
-    					
-    					if(temp.get(entry.getKey()) < entry.getValue()) {
-    						temp.put(entry.getKey(), entry.getValue());
-    					}
-    				}
-    			}
-    			
-    			
-    		}
-    		count_references.put(r.lhs.symbolString, temp);
-    	}
-    	
-    	return count_references;
-    }*/
     
+	 /**
+	  * Counts the amount of references to a Rule, must be performed after recursion has been deleted from the grammar.
+	  * Returns a Map with each Rule as a String and an Integer with the amount of references
+	  * @param rule
+	  * @return
+	  */
     public Map<String, Integer> count_references(Rule r) {
     	Map<String, Integer> max_ref = new HashMap<String, Integer>();
     	
@@ -197,48 +144,11 @@ public class BnfReaderSge extends BnfReader {
     	return max_ref;
     }
     
+    
     public Map<String, Integer> find_references_start(){
-    	//return find_references(this.rules.get(0), this.count_references(), 1);
     	return count_references(this.rules.get(0));
     }
     
-    /*public Map<String, Integer> find_references(Rule r, Map<String, Map<String, Integer>> references, int mult) {
-    	
-    	if(r != null) {
-    	Map<String, Integer> references_rule = references.get(r.lhs.symbolString);
-    	Map<String, Integer> this_references = new HashMap<>();
-    	
-    	for(Map.Entry<String, Integer> entry : references_rule.entrySet()) {
-    				
-    		Map<String, Integer> recursive_call_ref = find_references(this.findRule(entry.getKey()), references, entry.getValue());
-    		
-    		for(Map.Entry<String, Integer> entry_2 : recursive_call_ref.entrySet()) {
-    			if(!this_references.containsKey(entry_2.getKey())) {
-    				this_references.put(entry_2.getKey(), 0);
-    			}
-    			
-    			this_references.put(entry_2.getKey(), this_references.get(entry_2.getKey())+ entry_2.getValue() );
-    		}
-    		
-    	}
-    	this_references.put(r.lhs.symbolString, 1);
-    	
-    	for(Map.Entry<String, Integer> entry : this_references.entrySet()) {
-    		this_references.put(entry.getKey(), entry.getValue()*mult);
-    	}
-    	
-    	
-    	return this_references;
-    	}
-    	return null;
-    }*/
-    
-    public ArrayList<Production> getNonRecursiveProductions(Rule r){
-    	ArrayList<Production> prod = new ArrayList<>();
-    	
-    	
-    	return prod;
-    }
     
     public Map<String, Integer> number_of_options(){
     	Map<String, Integer> options = new HashMap<>();
@@ -250,7 +160,10 @@ public class BnfReaderSge extends BnfReader {
     	return options;
     }
     
-    
+    /**
+     * Get a list with only the terminal productions of a grammar
+     * @return
+     */
     public List<String> getTerminalProductions(){
     	List<String> terminals = new ArrayList<>();
     	
@@ -272,6 +185,10 @@ public class BnfReaderSge extends BnfReader {
     	return terminals;
     }
     
+    /**
+     * Returns a Map with each Rule as a String related to list of the symbols that said Rule can produce
+     * @return
+     */
     public Map<String, List<String>> getSubsequentProductions(){
     	Map<String, List<String>> nextSymbols= new HashMap<>();
     	
@@ -292,8 +209,8 @@ public class BnfReaderSge extends BnfReader {
 
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        //bnfReader.loadSGE("test/grammar.bnf", 4);
-        bnfReader.loadSGE("D:\\Documento\\UNI\\TFG\\Accuracy2Clases_Recursion_v5_Mix_BinExpr.bnf", 3);
+        bnfReader.loadSGE("test/grammar.bnf", 4);
+
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);
             System.out.println(rule.toString());
@@ -312,8 +229,6 @@ public class BnfReaderSge extends BnfReader {
         }
         
         System.out.println(max_length);
-        
-       // Map<String, Integer> ref2 = bnfReader.count_references(bnfReader.getRules().get(0));
         
     }
 

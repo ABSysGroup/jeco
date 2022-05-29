@@ -6,6 +6,12 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ * Uniform Crosssover for AbstractProblemSGE<T> that interchanges only the non-terminal lists
+ * that contain terminal symbols. Functions the same as Uniform Crossover
+ *
+ * @param <T>
+ */
 public class UniformTerminalCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 
 	private double DEFAULT_PROBABILITY;

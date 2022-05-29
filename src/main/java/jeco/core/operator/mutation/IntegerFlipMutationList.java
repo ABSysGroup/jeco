@@ -1,17 +1,26 @@
 package jeco.core.operator.mutation;
 
+import jeco.core.algorithm.sge.AbstractProblemSSGE;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ * 
+ * Mutation for AbstractProblemSSGE that chooses an internal list element and interchanges it by another value in the accepted range, it only 
+ * performs one mutation per non-terminal list only if a probability is accepted. Equivalent to
+ * BasicMutationVariableList in DSGE
+ *
+ *
+ * @param <T>
+ */
 public class IntegerFlipMutationList <T extends Variable<Integer[]>> extends MutationOperator<T> {
 
-	protected Problem<T> problem;
-	public IntegerFlipMutationList(Problem<T> problem, double probability) {
+	protected AbstractProblemSSGE problem;
+	public IntegerFlipMutationList(AbstractProblemSSGE problem, double probability) {
 		super(probability);
 		this.problem = problem;
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public Solution<T> execute(Solution<T> solution) {
@@ -33,7 +42,6 @@ public class IntegerFlipMutationList <T extends Variable<Integer[]>> extends Mut
 				}while(newValue == solution.getVariable(i).getValue()[selected_gene]);
 				
 				solution.getVariable(i).getValue()[selected_gene] = newValue;
-				//solution.getVariable(i).getValue()[selected_gene] = RandomGenerator.nextInteger(lowerBound, upperBound);
 				
 			}
 		}
