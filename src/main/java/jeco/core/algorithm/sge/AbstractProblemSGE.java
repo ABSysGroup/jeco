@@ -11,6 +11,11 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.bnf.BnfReaderSge;
 
+/**
+ * Class with the common methods of the Static SGE and Dynamic SGE
+ *
+ * @param <T>
+ */
 public abstract class AbstractProblemSGE<T extends Variable<?>> extends AbstractGECommon<T> {
 	
 	protected String pathToBnf;

@@ -13,6 +13,12 @@ import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 
+/**
+ * Genetic Algorithms that always keeps the best individuals from the parents and the children as the next population
+ * It regenerates a percentage in case the population fitness converges too soon.
+ *
+ * @param <V>
+ */
 public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variable<?>> extends SimpleGeneticAlgorithm<V> {
 	
 	double percentaje;

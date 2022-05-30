@@ -149,7 +149,10 @@ public class BnfReaderSge extends BnfReader {
     	return count_references(this.rules.get(0));
     }
     
-    
+    /**
+     * Number of productions of each Rule
+     * @return
+     */
     public Map<String, Integer> number_of_options(){
     	Map<String, Integer> options = new HashMap<>();
     	
