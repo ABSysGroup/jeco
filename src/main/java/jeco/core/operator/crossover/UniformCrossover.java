@@ -5,6 +5,12 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ *General use UniformCrossover, will interchange the alleles of type T of the
+ *individuals if they accept a certain probability
+ *
+ * @param <T>
+ */
 public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 
 	private double DEFAULT_PROBABILITY;

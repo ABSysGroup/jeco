@@ -10,6 +10,13 @@ import jeco.core.problem.Solution;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ * Mutation for AbstractProblemDSGE that chooses an internal list element and interchanges it by another value in the accepted range, it only 
+ * performs one mutation per non-terminal list only if a probability is accepted. Equivalent to
+ * IntegerFlipMutationList in SSGE
+ *
+ * @param <T>
+ */
 public class BasicMutationVariableList <T extends Variable<ArrayList<Integer>>> extends MutationOperator<T>  {
 
 	private AbstractProblemDSGE problem;
@@ -25,21 +32,24 @@ public class BasicMutationVariableList <T extends Variable<ArrayList<Integer>>> 
 		ArrayList<Integer> options = new ArrayList<>();
 		
 		//Check that the mutation will affect the gene because it  has more than one derivation, and that we are using the gene mutated
-		//(Since a gene might not be in use in the current solution)
+		//(Since a list might not be in use in the current solution)
 		for(int i = 0; i < problem.getNumberOfVariables(); i++) {
-			if(problem.getLowerBound(i) < problem.getUpperBound(i) && ((VariableList<Integer>) solution.getVariable(i)).size() > 0) {
+			if((problem.getLowerBound(i)+1) < problem.getUpperBound(i) && (solution.getVariable(i).getValue().size() > 0)) {
 				options.add(i);
 			}
 		}
-		
-		//int randGene = RandomGenerator.nextInt(options.size());
+	
 		
 		for(int i = 0;i<options.size(); i++) {
 			if (RandomGenerator.nextDouble() < probability) {
 			
-				int randAlele = RandomGenerator.nextInt( ((VariableList<Integer>) solution.getVariable(options.get(i))).size());
-				int randValue = RandomGenerator.nextInt((int) problem.getLowerBound(options.get(i)),(int) problem.getUpperBound(options.get(i)));
+				int randAlele = RandomGenerator.nextInt(solution.getVariable(options.get(i)).getValue().size());
 				
+				int randValue;
+				
+				do {
+					randValue = RandomGenerator.nextInt((int) Math.round(problem.getLowerBound(options.get(i))),(int) Math.round(problem.getUpperBound(options.get(i))));
+				}while(randValue == solution.getVariable(options.get(i)).getValue().get(randAlele));
 		
 				solution.getVariable(options.get(i)).getValue().remove(randAlele);
 				solution.getVariable(options.get(i)).getValue().add(randAlele, randValue);

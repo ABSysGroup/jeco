@@ -30,24 +30,17 @@ public class SubTreeCrossover<T extends Variable<?>> extends CrossoverOperator<T
 		
 		if (RandomGenerator.nextDouble() <= probability) {
 			
+			//Get a random non-terminal to interchagen
 			int gene = RandomGenerator.nextInt(problem.getNextProd().size());
-			//ArrayList<Integer> nextProd = problem.getNextProd().get(gene);
 			ArrayList<Integer> changed = new ArrayList<Integer>();
 			
-			//Raiz del árbol
+			//Interchange the lists of the non-terminal for the children
 			T variableR = child1.getVariable(gene);
 			child1.getVariables().set(gene, child2.getVariable(gene));
 			child2.getVariables().set(gene, variableR);
 			changed.add(gene);
 			
-			/*for(Integer i: nextProd) {
-				if((i != gene) && RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY) {
-					T variable = child1.getVariable(i);
-					child1.getVariables().set(i, child2.getVariable(i));
-					child2.getVariables().set(i, variable);
-				}
-			}*/
-			
+			//Change the next symbols recursively
 			rec_Change(child1, child2,gene,changed);
 			
 			
@@ -57,10 +50,18 @@ public class SubTreeCrossover<T extends Variable<?>> extends CrossoverOperator<T
 		return solutions;
 	}
 	
+	/**
+	 * Auxiliary function, performs the recursive change of the non-terminal lists if they accept a certain
+	 * probability
+	 * @param child1
+	 * @param child2
+	 * @param gene
+	 * @param changed
+	 */
 	void rec_Change(Solution<T> child1, Solution<T> child2, int gene, ArrayList<Integer> changed) {
 		ArrayList<Integer> nextProd = problem.getNextProd().get(gene);
 		for(Integer i: nextProd) {
-			if(!(changed.contains(i)) && RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY) {
+			if(!(changed.contains(i)) && (RandomGenerator.nextDouble() <= DEFAULT_PROBABILITY)) {
 				T variable = child1.getVariable(i);
 				child1.getVariables().set(i, child2.getVariable(i));
 				child2.getVariables().set(i, variable);

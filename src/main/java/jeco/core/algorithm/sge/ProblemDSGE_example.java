@@ -7,6 +7,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
+import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
@@ -28,12 +29,17 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
 	private int goal = 126;
 	
-	public ProblemDSGE_example(String path, int depht){
-		super(path, 1, depht);
+	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth){
+		super(path, 1, depht,bloatingControl, treeDepth);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 	
+	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
+		 ScriptEngineManager mgr = new ScriptEngineManager();
+		evaluator = mgr.getEngineByName("JavaScript");
+	}
 
 	@Override
 	public void evaluate(Solution<VariableList<Integer>> solution, Phenotype phenotype) {
@@ -73,7 +79,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	@Override
 	public Problem<VariableList<Integer>> clone() {
 
-		ProblemDSGE_example clone = new ProblemDSGE_example(super.pathToBnf, 5);
+		ProblemDSGE_example clone = new ProblemDSGE_example(super.pathToBnf, 5,true ,true);
 		return clone;
 	}
 	
@@ -86,14 +92,13 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 5);
-		//ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 5);
-     
+        
+		ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 4, true, false);
+		
         // Second create the algorithm
-        //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
-        SimpleGeneticAlgorithm<VariableList<Integer>> algorithm = new SimpleGeneticAlgorithm<VariableList<Integer>>(problem,100,200,true, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
-                new SubTreeCrossover<VariableList<Integer>>(problem, 0.7,0.25),
-                new BinaryTournament<VariableList<Integer>>(new SimpleDominance<>()));
+        StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
+                new UniformCrossover<VariableList<Integer>>(0.7,0.25),
+                new BinaryTournament<VariableList<Integer>>(new SimpleDominance<>()), 0.1);
         // Run
         algorithm.initialize();
         Solutions<VariableList<Integer>> solutions = algorithm.execute();

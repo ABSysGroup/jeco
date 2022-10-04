@@ -1,7 +1,7 @@
 <start> ::= <expr> <op> <expr>
 | <expr>
 <expr> ::= <term> <op> <term>
-| ( <term> <op> <term> ) | <expr>
+| ( <term> <op> <term> ) | <expr> <op> <expr>
 <op> ::= +
 | -
 | /

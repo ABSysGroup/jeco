@@ -71,6 +71,7 @@ public class SimpleGrammaticalEvolution_example extends AbstractProblemGE {
         // Second create the algorithm
         SimpleGrammaticalEvolution algorithm = new SimpleGrammaticalEvolution(problem,100,200,1.0 / problem.getNumberOfVariables(),SinglePointCrossover.DEFAULT_PROBABILITY);
         // Run
+
         algorithm.initialize();
         Solutions<Variable<Integer>> solutions = algorithm.execute();
         for (Solution<Variable<Integer>> solution : solutions) {

@@ -13,6 +13,12 @@ import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 
+/**
+ * Genetic Algorithms that always keeps the best individuals from the parents and the children as the next population
+ * It regenerates a percentage in case the population fitness converges too soon.
+ *
+ * @param <V>
+ */
 public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variable<?>> extends SimpleGeneticAlgorithm<V> {
 	
 	double percentaje;
@@ -65,7 +71,7 @@ public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variabl
                 mutationOperator.execute(solution);
                 childPop.add(solution);
             }
-        } // for
+        } // we evaluate the children  before replacement
         problem.evaluate(childPop);
         
         // Replacement
@@ -113,7 +119,7 @@ public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variabl
      * @return 
      */
     protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
-        Collections.sort(offspring, dominance);
+        //Collections.sort(offspring, dominance);
        
         for(int i = 0; i < offspring.size(); i++) {
         	 population.add(offspring.get(i));
