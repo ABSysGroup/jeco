@@ -169,8 +169,9 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
             leaders.remove(leaders.size() - 1);
         }
     }
-
-    public Solutions<V> getSolutions() {
+    
+    @Override
+    public Solutions<V> getPopulation() {
         return population;
     }
 

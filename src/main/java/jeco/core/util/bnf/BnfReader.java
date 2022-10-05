@@ -497,7 +497,46 @@ public class BnfReader {
         for (Rule rule : rules) {
             rule.minimumDepth = Integer.MAX_VALUE >> 1;
             rule.recursive = false;
+            
+            for(Production p: rule) {
+            	p.recursive = false;
+            	p.minimumDepth = Integer.MAX_VALUE >> 1;
+            }
         }
+    }
+    
+    
+    /**
+     * Checks that given a Rule and a Production they are both recursive and that the recursive element is the same one
+     * @param r
+     * @param p
+     * @return
+     */
+    public boolean sameRecursion(Rule r, Production p) {
+    	if(r.getRecursive() && p.getRecursive()) {
+    		
+    		for(Symbol s: p) {
+    			if(s.equals(r.lhs)) {
+    				return true;
+    			}
+    		}
+    		
+    	}
+    		
+    	return false;
+    }
+    
+    /**
+     * Given a Rule and a Symbol it tests if they have the same recursion
+     * @param rule
+     * @param symbol
+     * @return boolean
+     */
+    public boolean sameRecursion(Rule r, Symbol s) {
+    	if(r.getRecursive() && (s.equals(r.lhs))) {
+    		return true;
+    	}
+    	return false;
     }
 
     protected boolean isRecursive(ArrayList<Rule> visitedRules, Rule currentRule) {
@@ -516,6 +555,7 @@ public class BnfReader {
             return true;
         }
 
+   
         // Go through each production in the rule
         for (Production production : prodIt) {
             for (Symbol symbol : production) {
@@ -526,13 +566,21 @@ public class BnfReader {
                             visitedRules.add(definingRule);
                             if (isRecursive(visitedRules, currentRule)) {
                                 production.recursive = true;
+                           
                                 return true;
+                                
                             }
+                        //If we have already checked for recursiveness we set the production accordingly
+                        }else {
+                        	if(definingRule.recursive) {
+                        		production.recursive = true;
+                        	}
                         }
                     }
                 }
             }
         }
+       // return recursive;
         return false;
     }
 

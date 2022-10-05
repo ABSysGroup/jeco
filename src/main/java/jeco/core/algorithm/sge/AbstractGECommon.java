@@ -5,6 +5,12 @@ import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Variable;
 
+/**
+ * SuperClass for GE and SGE it contains the necessary methods to generate the Phenotype of the individuals
+ * for this superclass
+ *
+ * @param <T>
+ */
 public abstract class AbstractGECommon<T extends Variable<?>> extends Problem<T>{
 
 	public AbstractGECommon(int numberOfVariables, int numberOfObjectives) {

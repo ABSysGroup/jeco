@@ -41,6 +41,7 @@ public class NSGAII<T extends Variable<?>> extends Algorithm<T> {
   protected int currentGeneration;
   protected Solutions<T> population;
 
+  @Override
   public Solutions<T> getPopulation() {
     return population;
   }
@@ -161,6 +162,7 @@ public class NSGAII<T extends Variable<?>> extends Algorithm<T> {
     }
     return reducedPop;
   }
+  
 
   public void setMutationOperator(MutationOperator<T> mutationOperator) {
     this.mutationOperator = mutationOperator;

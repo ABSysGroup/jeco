@@ -6,19 +6,24 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
+import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.operator.comparator.SimpleDominance;
+import jeco.core.operator.crossover.SubTreeCrossover;
 import jeco.core.operator.crossover.UniformCrossover;
+import jeco.core.operator.crossover.UniformTerminalCrossover;
 import jeco.core.operator.mutation.IntegerFlipMutationList;
+import jeco.core.operator.mutation.IntegerFlipMutationListAll;
 import jeco.core.operator.selection.BinaryTournament;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 
 
-public class ProblemSGE_example extends AbstractProblemSGE{
+public class ProblemSGE_example extends AbstractProblemSSGE{
 	
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
@@ -83,13 +88,13 @@ public class ProblemSGE_example extends AbstractProblemSGE{
 	
 	public static void main(String[] args) {
         // First create the problem
-        ProblemSGE_example problem = new ProblemSGE_example("test/grammar.bnf", 4);
-     
-        // Second create the algorithm
-        //StructuredGramaticalEvolution algorithm = new StructuredGramaticalEvolution(problem,100,200,0.3,0.7);
-        NSGAII<VariableArray<Integer>> algorithm = new NSGAII<>(problem,100,200,new IntegerFlipMutationList<VariableArray<Integer>>(problem, 0.3),
-                new UniformCrossover<VariableArray<Integer>>( 0.7),
-                new BinaryTournament<VariableArray<Integer>>(new SimpleDominance<>()));
+       
+		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example.bnf", 4);
+        
+		// Second create the algorithm
+        StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableArray<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<>(problem,100,500,false,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),
+                new SubTreeCrossover<VariableArray<Integer>>(problem, 0.7, 0.5),
+                new BinaryTournament<VariableArray<Integer>>(new SimpleDominance<>()), 0.1);
         // Run
         algorithm.initialize();
         Solutions<VariableArray<Integer>> solutions = algorithm.execute();

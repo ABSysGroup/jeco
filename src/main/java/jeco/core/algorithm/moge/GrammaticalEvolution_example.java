@@ -68,6 +68,7 @@ public class GrammaticalEvolution_example extends AbstractProblemGE {
 		GrammaticalEvolution_example problem = new GrammaticalEvolution_example("test/grammar_example.bnf");
 		// Second create the algorithm
 		GrammaticalEvolution algorithm = new GrammaticalEvolution(problem, 100, 1000);
+
 		algorithm.initialize();
 		Solutions<Variable<Integer>> solutions = algorithm.execute();
 		for (Solution<Variable<Integer>> solution : solutions) {
