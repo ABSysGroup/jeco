@@ -11,9 +11,12 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/**Binary tournament operator for NSGAII
+ */
 public class BinaryTournamentNSGAII<T extends Variable<?>> extends SelectionOperator<T> {
 
     private static final Logger logger = Logger.getLogger(BinaryTournamentNSGAII.class.getName());
+    /**Comparator to perform the binary selection operator*/
     protected Comparator<Solution<T>> comparator;
 
     /**

@@ -15,11 +15,21 @@ import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ * Abstract problem for the original Structured Grammatical Evolution, uses Static lists, the Evaluate method must be implemented for each problem.
+ *
+ */
 public abstract class AbstractProblemSSGE extends AbstractProblemSGE<VariableArray<Integer>> {
 
-	//String of non-terminal to Integer of number of derivations
+	/**String of non-terminal to Integer of number of derivations */
 	protected Map<String, Integer> maxReferencesSymbol;
 	
+	/**AbstractProblemSSGE constructor 
+	 * 
+	 * @param pathToBnf path to bnf file that contains the grammar
+	 * @param numberOfObjectives number of objectives
+	 * @param depth recursive depth for each rule
+	 */
 	protected AbstractProblemSSGE(String pathToBnf, int numberOfObjectives, int depth) {
 		super(pathToBnf, 0, numberOfObjectives); //I need to read the file before I am able to know the size of the cromosome
 		reader.loadSGE(pathToBnf, depth);

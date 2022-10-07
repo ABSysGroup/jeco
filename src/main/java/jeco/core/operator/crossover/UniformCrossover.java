@@ -9,7 +9,7 @@ import jeco.core.util.random.RandomGenerator;
  *General use UniformCrossover, will interchange the alleles of type T of the
  *individuals if they accept a certain probability
  *
- * @param <T>
+ * @param <T> extends Variable, the type of the individuals genotype elements to perform the crossover.
  */
 public class UniformCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 

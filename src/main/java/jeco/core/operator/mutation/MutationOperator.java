@@ -18,5 +18,10 @@ public abstract class MutationOperator<T extends Variable<?>> {
 		this.probability = probability;
 	}
 
+	/**Executes mutation over a solution with a probability
+	 * 
+	 * @param solution solution over which a mutation is performed
+	 * @return mutated solution
+	 */
 	abstract public Solution<T> execute(Solution<T> solution);
 }

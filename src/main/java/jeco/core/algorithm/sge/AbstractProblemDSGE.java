@@ -17,6 +17,10 @@ import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
+/**
+ * Abstract problem for Dynamic Structured Grammatical Evolution, the Evaluate method must be implemented for each problem.
+ *
+ */
 public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableList<Integer>> {
 	
 	//Max depth an individual can be
@@ -28,11 +32,11 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	
 	/**
 	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0
-	 * @param pathToBnf
-	 * @param numberOfObjectives
-	 * @param maxDepth
-	 * @param bloatingControl
-	 * @param treeDepth
+	 * @param pathToBnf path of bnf file with grammar
+	 * @param numberOfObjectives of the problem chosen
+	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
+	 * @param bloatingControl boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
+	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
 	 */
 	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth) {
 		super(pathToBnf, 0, numberOfObjectives);
@@ -48,13 +52,13 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	
 	/**
 	 * Constructor with all parameters including maxInitDepth and minRecInitDepth
-	 * @param pathToBnf
-	 * @param numberOfObjectives
-	 * @param maxDepth
-	 * @param bloatingControl
-	 * @param treeDepth
-	 * @param maxInit
-	 * @param minRecInit
+	 * @param pathToBnf path of bnf file with grammar
+	 * @param numberOfObjectives of the problem chosen
+	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
+	 * @param bloatingControl  boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
+	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
+	 * @param maxInit maximum depth of the initial solution tree constructed or amount of times each rule can perform recursion in the creation of solutions.
+	 * @param minRecInit minimum recursive depth for all rules that all initial solutions must have.
 	 */
 	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit) {
 		super(pathToBnf, 0, numberOfObjectives);
@@ -70,7 +74,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 
 	
 	/**
-	 * Generates a random Individual of type VariableList<Integer>
+	 * Generates a random Individual of type VariableList of Integers
 	 */
 	protected Solution<VariableList<Integer>> generateRandomSolution() {
         Solution<VariableList<Integer>> solI = new Solution<>(this.numberOfObjectives);
@@ -321,6 +325,9 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		
 	}
 	
+	/**
+	 * Calls evaluate method for each solution in a list of solutions.
+	 */
 	@Override
 	public void evaluate(Solutions<VariableList<Integer>> solutions) {
 	        for (Solution<VariableList<Integer>> solution : solutions) {

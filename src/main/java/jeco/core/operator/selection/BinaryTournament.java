@@ -8,14 +8,23 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
+/** Binary tournament selection
+ */
 public class BinaryTournament<T extends Variable<?>> extends SelectionOperator<T> {
 
+	/**Comparator of a list of solutions*/
     protected Comparator<Solution<T>> comparator;
 
+    /**Constructor for Binary tournament with comparator 
+     * @param comparator comparator for selection
+     */
     public BinaryTournament(Comparator<Solution<T>> comparator) {
         this.comparator = comparator;
     } // BinaryTournament
 
+    /**Constructor for Binary Tournament
+     * 
+     */
     public BinaryTournament() {
         this(new SolutionDominance<T>());
     } // Constructor

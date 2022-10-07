@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**BnfReader for grammar file
+ *
+ */
 public class BnfReader {
 
     protected ArrayList<Rule> rules = new ArrayList<Rule>();
@@ -508,9 +511,9 @@ public class BnfReader {
     
     /**
      * Checks that given a Rule and a Production they are both recursive and that the recursive element is the same one
-     * @param r
-     * @param p
-     * @return
+     * @param r given rule
+     * @param p given production
+     * @return true if r and p are recursive, false otherwise.
      */
     public boolean sameRecursion(Rule r, Production p) {
     	if(r.getRecursive() && p.getRecursive()) {
@@ -528,9 +531,9 @@ public class BnfReader {
     
     /**
      * Given a Rule and a Symbol it tests if they have the same recursion
-     * @param rule
-     * @param symbol
-     * @return boolean
+     * @param r given rule
+     * @param s given symbol
+     * @return true if r and s are recursive, false otherwise.
      */
     public boolean sameRecursion(Rule r, Symbol s) {
     	if(r.getRecursive() && (s.equals(r.lhs))) {

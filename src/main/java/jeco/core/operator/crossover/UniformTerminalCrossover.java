@@ -7,10 +7,10 @@ import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
 /**
- * Uniform Crosssover for AbstractProblemSGE<T> that interchanges only the non-terminal lists
+ * Uniform Crosssover for AbstractProblemSGE that interchanges only the non-terminal lists
  * that contain terminal symbols. Functions the same as Uniform Crossover
  *
- * @param <T>
+ * @param <T> extends Variable, the type of the individuals genotype elements to perform the crossover.
  */
 public class UniformTerminalCrossover<T extends Variable<?>> extends CrossoverOperator<T> {
 

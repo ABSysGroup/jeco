@@ -13,7 +13,8 @@ import jeco.core.util.random.RandomGenerator;
  * BasicMutationVariableList in DSGE
  *
  *
- * @param <T>
+ * @param <T> extends Variable, the type of the individuals genotype elements that will be mutated, they must extends an array
+ * of Integers to perform the mutation
  */
 public class IntegerFlipMutationList <T extends Variable<Integer[]>> extends MutationOperator<T> {
 

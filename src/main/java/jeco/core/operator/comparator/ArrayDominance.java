@@ -3,6 +3,9 @@ package jeco.core.operator.comparator;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**Comparator Array Dominance
+ *
+ */
 public class ArrayDominance implements Comparator<ArrayList<Double>> {
 
   @Override
