@@ -8,10 +8,23 @@ import java.util.ArrayList;
  */
 public abstract class AbstractPopPredictor {
 
+	/**Compute YP
+	 * 
+	 * @param idx idx
+	 * @param xx xx
+	 * @return
+	 */
     public abstract double[] computeYP(int idx, double[][] xx);
 
+    /**compute New X
+     * 
+     * @param idx idx
+     * @param xx xx
+     * @return
+     */
     public abstract double[][] computeNewX(int idx, double[][] xx);
 
+    
     public static String generateClassHeader(Integer threadId) {
         StringBuilder currentJavaFile = new StringBuilder();
         currentJavaFile.append("import java.util.ArrayList;\n\n");
@@ -19,6 +32,11 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
+    /**generate compute Yp
+     *  
+     * @param phenotypes phenotypes
+     * @return string
+     */
     public static String generateComputeYp(ArrayList<String> phenotypes) {
         StringBuilder currentJavaFile = new StringBuilder();
         currentJavaFile.append("\tpublic double[] computeYP(int idx, double[][] xx) {\n");
@@ -57,6 +75,11 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
+    /**Generate compute new x
+     * 
+     * @param phenotypes phenotypes
+     * @return string
+     */
     public static String generateComputeNewX(ArrayList<String> phenotypes) {
         StringBuilder currentJavaFile = new StringBuilder();
         currentJavaFile.append("\tpublic double[][] computeNewX(int idx, double[][] xx) {\n");
@@ -94,12 +117,22 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
+    /**Generate class footer
+     * 
+     * @return string
+     */
     public static String generateClassFooter() {
         StringBuilder currentJavaFile = new StringBuilder();
         currentJavaFile.append("}\n");
         return currentJavaFile.toString();
     }
 
+    /**Generate class code
+     * 
+     * @param threadId threadId
+     * @param phenotypes phenotypes
+     * @return string
+     */
     public static String generateClassCode(Integer threadId, ArrayList<String> phenotypes) {
         StringBuilder javaCode = new StringBuilder();
         javaCode.append(generateClassHeader(threadId));

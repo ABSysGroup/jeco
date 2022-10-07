@@ -12,8 +12,9 @@ import jeco.core.problem.Variable;
  */
 public abstract class Algorithm<V extends Variable<?>> extends Observable {
 
+  /**Problem for algorithm*/
   protected Problem<V> problem = null;
-  // Attribute to stop execution of the algorithm.
+  /**Attribute to stop execution of the algorithm. */
   protected boolean stop = false;
   
   /**
@@ -24,22 +25,37 @@ public abstract class Algorithm<V extends Variable<?>> extends Observable {
       stop = true;}
   
 
+  /**Constructor of algorithm
+   * @param problem problem to set to the algorithm
+   */
   public Algorithm(Problem<V> problem) {
     this.problem = problem;}
   
-
+  /**Set problem for algorithm
+   * @param problem problem to set
+   */
   public void setProblem(Problem<V> problem) {
     this.problem = problem;}
   
-
+  
+  /**Initializes algorithm
+   */
   public abstract void initialize();
 
+  /**Performs one generation of the algorithm
+   */
   public abstract void step();
   
+  /**Gets population of an algorithm
+   * @return a list of solutions
+   */
   public Solutions<V> getPopulation() {
 	  throw new RuntimeException("Not implemented in specific algorithm type");
   }
   
+  /**Executes algorithm
+   * @return solutions
+   */
   public abstract Solutions<V> execute();
   
 }

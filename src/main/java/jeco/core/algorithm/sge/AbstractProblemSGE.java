@@ -14,18 +14,30 @@ import jeco.core.util.bnf.BnfReaderSge;
 /**
  * Class with the common methods of the Static SGE and Dynamic SGE
  *
- * @param <T>
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  */
 public abstract class AbstractProblemSGE<T extends Variable<?>> extends AbstractGECommon<T> {
 	
+	/**Path to bnf file with the grammar to be used*/
 	protected String pathToBnf;
-	protected ArrayList<Integer> maxDerivations; //Max derivations for each list
+	/**Max derivations for each list */
+	protected ArrayList<Integer> maxDerivations;
+	/**Reader that parses the grammar into rules, productions and symbols*/
 	protected BnfReaderSge reader;
-	protected ArrayList<String> orderSymbols; //Order of the Rule symbols in the genotype
-	protected ArrayList<Integer> terminals; //List of terminal symbols
-	protected ArrayList<ArrayList<Integer>> Non_tToTerminals; //List of each non-terminal to other symbols
+	/**Order of the Rule symbols in the genotype */
+	protected ArrayList<String> orderSymbols; 
+	/**List of terminal symbols */
+	protected ArrayList<Integer> terminals;
+	/**List of each non-terminal to other symbols */
+	protected ArrayList<ArrayList<Integer>> Non_tToTerminals; 
 	
-	public AbstractProblemSGE(String pathToBnf, int numberOfVariables, int numberOfObjectives) {
+	/**Constructor for Structured Grammatical Evolution.
+	 * 
+	 * @param pathToBnf  Path to bnf file with the grammar to be used
+	 * @param numberOfVariables number of variables
+	 * @param numberOfObjectives number of objectives
+	 */
+	protected AbstractProblemSGE(String pathToBnf, int numberOfVariables, int numberOfObjectives) {
 		super(numberOfVariables, numberOfObjectives);
 		this.pathToBnf = pathToBnf;
 		this.reader = new BnfReaderSge();
@@ -85,14 +97,26 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 		}
 	}
 	
+	/**Returns the indexes of the terminals from the grammar.
+	 * 
+	 * @return ArrayList of indexes
+	 */
 	public ArrayList<Integer> getIndexesTerminals(){
 		return terminals;
 	}
 	
+	/**List of lists from non terminals to terminals 
+	 * 
+	 * @return Non_tToTerminals
+	 */
 	public ArrayList<ArrayList<Integer>> getNextProd(){
 		return Non_tToTerminals;
 	}
 	
+	/**
+	 * Generates an initial random solution (individual of population)
+	 * @return solution
+	 */
 	protected abstract Solution<T> generateRandomSolution();
 	
 	@Override
@@ -109,8 +133,8 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 	
 	/**
 	 * To be implemented by the different problems
-	 * @param solution
-	 * @param phenotype
+	 * @param solution solution to evaluate
+	 * @param phenotype phenotype of solution
 	 */
 	protected abstract void evaluate(Solution<T> solution, Phenotype phenotype);
 	

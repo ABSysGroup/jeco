@@ -15,18 +15,26 @@ import jeco.core.util.random.RandomGenerator;
  * performs one mutation per non-terminal list only if a probability is accepted. Equivalent to
  * IntegerFlipMutationList in SSGE
  *
- * @param <T>
+ * @param <T> extends Variable, the type of the individuals genotype elements that will be mutated, they must extends an ArrayList
+ * of integers to perform the mutation
  */
 public class BasicMutationVariableList <T extends Variable<ArrayList<Integer>>> extends MutationOperator<T>  {
 
 	private AbstractProblemDSGE problem;
 	
+	/**Constructor for BasicMutationVariableList
+	 * @param probability probability that determines whether to perform a mutation or not
+	 * @param problem problem that contains all the variables of the solutions
+	 */
 	public BasicMutationVariableList(double probability, AbstractProblemDSGE problem) {
 		super(probability);
 		this.problem = problem;
 		// TODO Auto-generated constructor stub
 	}
 
+	/**Executes mutation on a solution
+	 * 
+	 */
 	@Override
 	public Solution<T> execute(Solution<T> solution) {
 		ArrayList<Integer> options = new ArrayList<>();

@@ -17,7 +17,7 @@ import jeco.core.problem.Variable;
  * Genetic Algorithms that always keeps the best individuals from the parents and the children as the next population
  * It regenerates a percentage in case the population fitness converges too soon.
  *
- * @param <V>
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  */
 public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variable<?>> extends SimpleGeneticAlgorithm<V> {
 	
@@ -114,8 +114,8 @@ public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variabl
     /**
      * Merges the population with the offspring maintaining the best of 
      * both lists of individuals
-     * @param population
-     * @param offspring
+     * @param population population to merge
+     * @param offspring offspring to merge
      * @return 
      */
     protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {

@@ -57,6 +57,11 @@ public abstract class Problem<V extends Variable<?>> {
         this.numEvaluations = numEvaluations;
     }
 
+    /**To be implemented by each problem type, returns an initial set of solution of a given size.
+     * 
+     * @param size size of set of solutions
+     * @return A set of solutions
+     */
     public abstract Solutions<V> newRandomSetOfSolutions(int size);
 
     public void evaluate(Solutions<V> solutions) {
@@ -66,6 +71,12 @@ public abstract class Problem<V extends Variable<?>> {
         
     }
     
+    /**
+     * To be implemented for each problem, for each genotype (solution) returns a String corresponding
+     * to the phenotype of a solution
+     * @param solution individual to evaluate
+     * @return string of phenotype
+     */
     public String phenotypeToString(Solution<V> solution) { return "Not implemented"; }
 
     public abstract void evaluate(Solution<V> solution);

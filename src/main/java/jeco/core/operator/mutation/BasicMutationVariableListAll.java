@@ -13,12 +13,18 @@ import jeco.core.util.random.RandomGenerator;
  * it is performed on any allele on any of the non-terminal lists as long as a certain probability is accepted. Equivalent to
  * IntegerFlipMutationListAll in SSGE
  *
- * @param <T>
+ * @param <T> extends Variable, the type of the individuals genotype elements that will be mutated, they must extends an ArrayList
+ * of integers to perform the mutation
  */
 public class BasicMutationVariableListAll <T extends Variable<ArrayList<Integer>>> extends MutationOperator<T>  {
 
 	private AbstractProblemDSGE problem;
 	
+	/**Contructor for BasicMutationVariableListAll
+	 * 
+	 * @param probability probability of mutation for a solution
+	 * @param problem problem the solution belongs to
+	 */
 	public BasicMutationVariableListAll(double probability, AbstractProblemDSGE problem) {
 		super(probability);
 		this.problem = problem;

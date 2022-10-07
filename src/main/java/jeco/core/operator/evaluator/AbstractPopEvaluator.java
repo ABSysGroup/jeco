@@ -13,14 +13,29 @@ import java.util.ArrayList;
  */
 public abstract class AbstractPopEvaluator {
 
+	/**
+	 * Matrix with data of type double
+	 */
     protected ArrayList<double[]> dataTable;
 
+    /**
+     * to be implemented by each problem, evaluates the expression in position idxExpr
+     * @param idxExpr position of expression
+     */
     public abstract void evaluateExpression(int idxExpr);
 
+    /**
+     * Sets matrix of data
+     * @param dataTable matrix of data
+     */
     public void setDataTable(ArrayList<double[]> dataTable) {
         this.dataTable = dataTable;
     }
 
+    /**
+     * Returns matrix of data
+     * @return matrix of data
+     */
     public ArrayList<double[]> getDataTable() {
         return dataTable;
     }

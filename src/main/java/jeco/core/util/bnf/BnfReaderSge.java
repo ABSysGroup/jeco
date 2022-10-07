@@ -11,9 +11,9 @@ public class BnfReaderSge extends BnfReader {
 	
 	/**
 	 * Transform a recursive grammar to a non-recursive grammar with depth max_depth
-	 * @param pathToBnfFile
-	 * @param max_depth
-	 * @return
+	 * @param pathToBnfFile path to bnf file
+	 * @param max_depth maximun depth to generate extra rules
+	 * @return true is successful, false otherwise
 	 */
 	 public boolean loadSGE(String pathToBnfFile, int max_depth) {
 
@@ -98,8 +98,8 @@ public class BnfReaderSge extends BnfReader {
 	 /**
 	  * Counts the amount of references to a Rule, must be performed after recursion has been deleted from the grammar.
 	  * Returns a Map with each Rule as a String and an Integer with the amount of references
-	  * @param rule
-	  * @return
+	  * @param r given rule
+	  * @return map with references
 	  */
     public Map<String, Integer> count_references(Rule r) {
     	Map<String, Integer> max_ref = new HashMap<String, Integer>();
@@ -151,7 +151,7 @@ public class BnfReaderSge extends BnfReader {
     
     /**
      * Number of productions of each Rule
-     * @return
+     * @return map with string prduction to number
      */
     public Map<String, Integer> number_of_options(){
     	Map<String, Integer> options = new HashMap<>();
@@ -165,7 +165,7 @@ public class BnfReaderSge extends BnfReader {
     
     /**
      * Get a list with only the terminal productions of a grammar
-     * @return
+     * @return list of terminal productions
      */
     public List<String> getTerminalProductions(){
     	List<String> terminals = new ArrayList<>();
@@ -190,7 +190,7 @@ public class BnfReaderSge extends BnfReader {
     
     /**
      * Returns a Map with each Rule as a String related to list of the symbols that said Rule can produce
-     * @return
+     * @return map from string to list of productions
      */
     public Map<String, List<String>> getSubsequentProductions(){
     	Map<String, List<String>> nextSymbols= new HashMap<>();
