@@ -9,6 +9,6 @@ This library is currently available as a Maven dependency:
 <dependency>
   <groupId>com.github.absysgroup.jeco</groupId>
   <artifactId>jeco-core</artifactId>
-  <version>1.0.17</version>
+  <version>1.0.20</version>
 </dependency>
 ```
