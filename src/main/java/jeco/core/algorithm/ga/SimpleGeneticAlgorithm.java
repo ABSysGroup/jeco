@@ -184,7 +184,13 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
      * @return
      */
     protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
-        // Direct replacement with no strategy.
+        /* Generational implementarion. Only maintains the best individual from the previous population removing
+           the worst from the offspring. */
+        Collections.sort(population, dominance);
+        offspring.add(population.get(0));
+        Collections.sort(offspring, dominance);
+        offspring.remove(population.size() - 1);
+
         return offspring;
     }
 
