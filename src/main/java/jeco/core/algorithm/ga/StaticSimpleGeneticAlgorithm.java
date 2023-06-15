@@ -21,41 +21,7 @@ public class StaticSimpleGeneticAlgorithm<V extends Variable<?>> extends SimpleG
         super(problem, maxPopulationSize, maxGenerations, stopWhenSolved, mutationOperator, crossoverOperator, selectionOperator);
     }
 
-    @Override
-    public void step() {
-        currentGeneration++;
-        // Create the offSpring solutionSet        
-        Solutions<V> childPop = new Solutions<V>();
-        Solution<V> parent1, parent2;
-        for (int i = 0; i < (maxPopulationSize / 2); i++) {
-            //obtain parents
-            parent1 = selectionOperator.execute(population).get(0);
-            parent2 = selectionOperator.execute(population).get(0);
-            Solutions<V> offSpring = crossoverOperator.execute(parent1, parent2);
-            for (Solution<V> solution : offSpring) {
-                mutationOperator.execute(solution);
-                childPop.add(solution);
-            }
-        } // for
-        problem.evaluate(childPop);
-        
-        // Replacement
-        population = replacement(population,childPop);
 
-        //Actualize the archive
-        for (Solution<V> solution : population) {
-            Solution<V> clone = solution.clone();
-            leaders.add(clone);
-        }
-        reduceLeaders();
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("@ ").append(currentGeneration).append(";").append(leaders.get(0).getObjective(0));
-        buffer.append(";").append(leaders.get(leaders.size() - 1).getObjective(0)).append(";").append(leaders.get(leaders.size() / 2).getObjective(0));
-        logger.fine(buffer.toString());
-
-    }
-
-    
     /**
      * Merges the population with the offspring removing the worst 2 individuals
      * of the population and including the 2 better offspring.
