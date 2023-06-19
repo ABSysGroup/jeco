@@ -18,8 +18,6 @@ import jeco.core.util.bnf.BnfReaderSge;
  */
 public abstract class AbstractProblemSGE<T extends Variable<?>> extends AbstractGECommon<T> {
 	
-	/**Path to bnf file with the grammar to be used*/
-	protected String pathToBnf;
 	/**Max derivations for each list */
 	protected ArrayList<Integer> maxDerivations;
 	/**Reader that parses the grammar into rules, productions and symbols*/
@@ -38,8 +36,7 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 	 * @param numberOfObjectives number of objectives
 	 */
 	protected AbstractProblemSGE(String pathToBnf, int numberOfVariables, int numberOfObjectives) {
-		super(numberOfVariables, numberOfObjectives);
-		this.pathToBnf = pathToBnf;
+		super(pathToBnf,numberOfVariables, numberOfObjectives);
 		this.reader = new BnfReaderSge();
 		terminals = new ArrayList<Integer>();
 		this.Non_tToTerminals = new ArrayList<ArrayList<Integer>>();
@@ -113,29 +110,5 @@ public abstract class AbstractProblemSGE<T extends Variable<?>> extends Abstract
 		return Non_tToTerminals;
 	}
 	
-	/**
-	 * Generates an initial random solution (individual of population)
-	 * @return solution
-	 */
-	protected abstract Solution<T> generateRandomSolution();
-	
-	@Override
-	public Solutions<T> newRandomSetOfSolutions(int size) {
-		Solutions<T> solutions = new Solutions<>();
-		
-		for(int i = 0; i < size; i++) {
-			solutions.add(generateRandomSolution());
-		}
-		
-		
-		return solutions;
-	}
-	
-	/**
-	 * To be implemented by the different problems
-	 * @param solution solution to evaluate
-	 * @param phenotype phenotype of solution
-	 */
-	protected abstract void evaluate(Solution<T> solution, Phenotype phenotype);
 	
 }

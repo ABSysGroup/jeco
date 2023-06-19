@@ -209,7 +209,8 @@ public class BnfReaderSge extends BnfReader {
     	
     	return nextSymbols;
     }
-
+    
+    
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
         bnfReader.loadSGE("test/grammar.bnf", 4);

@@ -30,10 +30,7 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	/**Default number of objectives for a problem*/
 	public static final int NUM_OF_OBJECTIVES_DEFAULT = 2;
 
-	/**Path to bnf file that contains the grammar to be used to generate the individuals*/
-	protected String pathToBnf;
-	/**Reader object that parses the bnf file into rules, productions and symbols*/
-	protected BnfReader reader;
+
 	protected int maxCntWrappings = MAX_CNT_WRAPPINGS_DEFAULT;
 	/**Index to generate phenotype from the list of numbers that corresponds to the genotype */
 	protected int currentIdx;
@@ -55,10 +52,7 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	 * @param codonUpperBound maximum integer number for each allele in the chromosome, number used for modulus operator.
 	 */
 	public AbstractProblemGE(String pathToBnf, int numberOfObjectives, int chromosomeLength, int maxCntWrappings, int codonUpperBound) {
-		super(chromosomeLength, numberOfObjectives);
-		this.pathToBnf = pathToBnf;
-		reader = new BnfReader();
-		reader.load(pathToBnf);
+		super(pathToBnf, chromosomeLength, numberOfObjectives);
 		this.maxCntWrappings = maxCntWrappings;
 		for (int i = 0; i < numberOfVariables; i++) {
 			lowerBound[i] = 0;
@@ -100,7 +94,7 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	 * @param solution an individuals genotype
 	 * @param phenotype the corresponding Phenotype of the solution
 	 */
-	abstract public void evaluate(Solution<Variable<Integer>> solution, Phenotype phenotype);
+	//abstract public void evaluate(Solution<Variable<Integer>> solution, Phenotype phenotype);
 	
 	/**
 	 * Calls evaluate method for each solution in a list of solutions.
@@ -218,8 +212,8 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 		return solutions;
 	}
 
-        
-        private Solution<Variable<Integer>> generateRandomSolution() {
+        @Override
+		protected Solution<Variable<Integer>> generateRandomSolution() {
             Solution<Variable<Integer>> solI = new Solution<>(numberOfObjectives);
             for (int j = 0; j < numberOfVariables; ++j) {
                 Variable<Integer> varJ = new Variable<>(RandomGenerator.nextInteger((int) upperBound[j]));

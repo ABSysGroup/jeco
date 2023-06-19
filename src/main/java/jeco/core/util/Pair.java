@@ -1,5 +1,7 @@
 package jeco.core.util;
 
+import java.util.Objects;
+
 public class Pair<T,Z> {
 	public T a;
 	public Z b;
@@ -27,6 +29,23 @@ public class Pair<T,Z> {
 
 	public void setB(Z b) {
 		this.b = b;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(a, b);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pair other = (Pair) obj;
+		return Objects.equals(a, other.a) && Objects.equals(b, other.b);
 	}
 	
 	

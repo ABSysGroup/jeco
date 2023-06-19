@@ -88,7 +88,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
         } 
         
         //Create the individual with initial depth 0
-        createIndividual(0,0, temp, reader.getRules().get(0).getLHS());
+        createIndividual(0,0, temp, reader.getRules().get(0).getLHS(), true);
 
         for(VariableList<Integer> var : temp) {
         	solI.getVariables().add(var);
@@ -190,9 +190,24 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		
 		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
 		ArrayList<Integer> listProd = new ArrayList<>();
-		int index = 0; 
+		int index = 0;
+		int min = Integer.MAX_VALUE;
+		
+		//We search for the minimun depth possible
 		for(Production p: ruleSymbol) {
-			if(!reader.sameRecursion(ruleSymbol, p)) {
+			if(p.getMinimumDepth() < min) {
+				min = p.getMinimumDepth();
+			}
+		}
+		
+		for(Production p: ruleSymbol) {
+			/*if(!reader.sameRecursion(ruleSymbol, p)) {
+				listProd.add(index);
+			}
+			index++;*/
+			
+			//Productions that have the minimun depth to reach a terminal
+			if(p.getMinimumDepth() == min) {
 				listProd.add(index);
 			}
 			index++;
@@ -205,7 +220,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		return rand_prod;
 	}
 	
-	private int RecursiveExpansion(Rule ruleSymbol) {
+	/*private int RecursiveExpansion(Rule ruleSymbol) {
 		int rand_prod;
 		
 		//We get the productions that are recursive with the ruleSymbol and put their indexes in a list
@@ -223,7 +238,7 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		rand_prod = listProd.get(selec);
 		
 		return rand_prod;
-	}
+	}*/
 	
 	/**
 	 * Transform the production at pos to a non-recursive production to control bloating due to the tree becoming too big through mutation and crossover
@@ -260,13 +275,84 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		
 	}
 	
+	
+	/**
+	 * Adds a random expansion to the list of the rule identified by sym to the solution
+	 * @param sym
+	 * @param solution
+	 * @return
+	 */
+	private int generateExpansionToMinimumDepth(Rule ruleSymbol, int expansion, int depth_to_expand) {
+		int rand_prod;
+		
+		//If the expansion has enough minimum depth we just return that expansion
+		if(ruleSymbol.get(expansion).getMaximumDepth() >= depth_to_expand) {
+			return expansion;
+		}
+		
+		ArrayList<Integer> listProd = new ArrayList<>();
+		
+		/*int max = 0;
+		//We search for the maximum minimum depth possible
+		for(Production p: ruleSymbol) {
+			if(p.getMinimumDepth() > max) {
+				max = p.getMinimumDepth();
+			}
+		}
+		
+		//If some rule has the minimum depth over the minimum initial depth_to_expand we choose one 
+		if(max >= depth_to_expand) {
+			
+			
+			int index = 0;
+			for(Production p: ruleSymbol) {*/
+				/*if(!reader.sameRecursion(ruleSymbol, p)) {
+					listProd.add(index);
+				}
+				index++;*/
+				
+				//Productions that have the minimun depth to reach a terminal
+				/*if(p.getMinimumDepth() >= depth_to_expand) {
+					listProd.add(index);
+				}
+				index++;
+			}
+			
+			//Select one of the indexes of the list randomly
+			int selec = RandomGenerator.nextInt(listProd.size());
+			rand_prod = listProd.get(selec);
+		}
+		else { //NO rules minimum depth is over the minimum initial depth, therefore we look at the maximum depths (which will probably mean we have to enter recursion)
+			*/
+			int index = 0;
+			for(Production p: ruleSymbol) {
+				
+				//Productions that have the maximum depth over the depth to expand
+				if(p.getMaximumDepth() >= depth_to_expand) {
+					listProd.add(index);
+				}
+				index++;
+			}
+			
+			//Select one of the indexes of the list randomly
+			int selec = RandomGenerator.nextInt(listProd.size());
+			rand_prod = listProd.get(selec);
+			
+			
+		//}
+		
+		return rand_prod;
+		
+	}
+	
 	/**
 	 * Creates a new solution with a certain initial depth
 	 * @param depth
+	 * @param initDepth
 	 * @param solution
 	 * @param sym
 	 */
-	private void createIndividual(int depth, int Recdepth, ArrayList<VariableList<Integer>> solution, Symbol sym) {
+	private void createIndividual(int depth, int innitDepth, ArrayList<VariableList<Integer>> solution, Symbol sym, boolean MinInitD) {
 		Rule ruleSymbol = reader.findRule(sym);
 		int rand_prod = RandomGenerator.nextInt(ruleSymbol.size());
 		
@@ -280,50 +366,96 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 				
 			}
 			
-		}else {
+		}/*else {
 			//If the rule is recursive and we are expanding a non-recursive production but the minRecDepthInit is less than the minimum then we generate only recursive expansions
 			//We only generate the new recursive rule of we have not gone over the max depth limit
-			if(ruleSymbol.getRecursive() && (Recdepth < this.minRecDepthInit) && (depth < this.maxDepthInit)) {
-				rand_prod = RecursiveExpansion(ruleSymbol);
+			if((innitDepth < this.minRecDepthInit) && (depth < this.maxDepthInit) && MinInitD) {
+				//rand_prod = RecursiveExpansion(ruleSymbol);
+				rand_prod = generateExpansionToMinimumDepth(ruleSymbol);
 				expansion = ruleSymbol.get(rand_prod);
 			
 			}
+		}*/
+		
+		if((innitDepth < this.minRecDepthInit) && (depth < this.maxDepthInit) && MinInitD) {
+			//rand_prod = RecursiveExpansion(ruleSymbol);
+			rand_prod = generateExpansionToMinimumDepth(ruleSymbol, rand_prod, (minRecDepthInit - innitDepth));
+			expansion = ruleSymbol.get(rand_prod);
+		
 		}
 		
 		solution.get(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
 		
+		int symToExpandMinInnit = getBranchForMinInit(expansion, MinInitD, innitDepth);
+		
+		int index = 0;
 		for(Symbol nextSym: expansion) {
 			if(!nextSym.isTerminal()) { //If the next symbol not a terminal we continue to generate the individual
+				
+				//Para la rama elegida hacemos que continue creando el camino más largo
+				boolean nextInitDepth = false;
+				if(index == symToExpandMinInnit) {
+					nextInitDepth = true;
+				}
 				
 				boolean sameRecursion = reader.sameRecursion(ruleSymbol, nextSym); 
 
 				if(!treeDepth) {
 					if(sameRecursion) {
-						//The next symbol has the same recursion as this rule therefore we add depth+1 and Recdepth+1
-						createIndividual(depth+1,Recdepth+1, solution, nextSym);
+						//The next symbol has the same recursion as this rule therefore we add depth+1 and innitDepth+1
+						createIndividual(depth+1,innitDepth+1, solution, nextSym,nextInitDepth);
 					}else {
 						//The next symbol is not recursive with the current rule therefore we reset the depth to 0
-						createIndividual(0,0, solution, nextSym);
+						createIndividual(0, innitDepth+1, solution, nextSym,nextInitDepth);
 					}
 				}else {
-					//We consider tree depth
-					if(sameRecursion) {
-						//The next symbol has the same recursion as this symbol so we can add one to the initial Rec depth
-						createIndividual(depth+1,Recdepth+1, solution, nextSym);
-					}else {
-						//The next symbol is not recursive with the current rule meaning we restore the depth back to 0
-						createIndividual(depth+1,0, solution, nextSym);
-					}
+					
+					//The next symbol has the same recursion as this symbol so we can add one to the initial Rec depth
+					createIndividual(depth+1, innitDepth+1, solution, nextSym,nextInitDepth);
 					
 				}
 
 			}
+			
+			index++;
 			
 		}
 		
 		
 		
 	}
+	
+	/**Get the branch that we are going to expand
+	 * 
+	 * @param p
+	 * @param reached
+	 * @param initD
+	 * @return
+	 */
+	private int getBranchForMinInit(Production p, boolean expand, int initD) {
+		int sym = -1;
+		
+		if(expand) {
+			int pos = 0;
+			List<Integer> listProd = new ArrayList<Integer>();
+			for(Symbol s: p) {
+				if(!s.isTerminal() && (reader.findRule(s).getMaximumDepth() > (this.maxDepthInit - initD))) {
+					listProd.add(pos);
+				}
+				
+				pos++;
+			}
+			
+			if(listProd.size() > 0) {
+				int selec = RandomGenerator.nextInt(listProd.size());
+				sym = listProd.get(selec);
+			}
+		}
+		
+		
+		return sym;
+	}
+	
 	
 	/**
 	 * Calls evaluate method for each solution in a list of solutions.

@@ -1,6 +1,6 @@
 <expr> ::= <expr> <op> <expr>
            | <var>
 <op> ::= + | * | / | -
-<var> ::= x1
+<var> ::= x1 | 0.5 | 1
 
 
