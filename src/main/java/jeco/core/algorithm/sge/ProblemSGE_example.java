@@ -15,6 +15,7 @@ import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.SubTreeCrossover;
 import jeco.core.operator.crossover.UniformCrossover;
 import jeco.core.operator.crossover.UniformTerminalCrossover;
+import jeco.core.operator.initialization.PTC2;
 import jeco.core.operator.mutation.IntegerFlipMutationList;
 import jeco.core.operator.mutation.IntegerFlipMutationListAll;
 import jeco.core.operator.selection.BinaryTournament;
@@ -90,7 +91,8 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
         // First create the problem
        
 		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example.bnf", 4);
-        
+		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
+		
 		// Second create the algorithm
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableArray<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<>(problem,100,500,false,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),
                 new SubTreeCrossover<VariableArray<Integer>>(problem, 0.7, 0.5),

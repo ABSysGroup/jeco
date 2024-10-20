@@ -11,7 +11,7 @@ public class Rule extends ArrayList<Production> {
     protected Symbol lhs = null; //Left hand side symbol of the rule
     
     protected int maximumDepth;
-    
+    protected int maxExpansions;
     
     public Rule(){
         super();

@@ -1,6 +1,7 @@
 package jeco.core.algorithm.sge;
 
 import jeco.core.algorithm.moge.Phenotype;
+import jeco.core.operator.initialization.Initializator;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
@@ -22,6 +23,9 @@ public abstract class AbstractGECommon<T extends Variable<?>> extends Problem<T>
 	/**Path to bnf file that contains the grammar to be used to generate the individuals*/
 	protected String pathToBnf;
 	
+	/**Object that returns an initialized population of trees to be transformed*/
+	protected Initializator initializator = null;
+	
 	/**
 	 * Abstract constructor of AbstractGECommon
 	 * @param numberOfVariables number of variable
@@ -40,6 +44,22 @@ public abstract class AbstractGECommon<T extends Variable<?>> extends Problem<T>
 	public String phenotypeToString(Solution<T> solution) {
 		return generatePhenotype(solution).toString();
 	}
+	
+	/**Sets the initializator of the method
+	 * 
+	 * @param initializator object
+	 */
+    public void setInitializator(Initializator init) {
+        this.initializator = init;
+    }
+    
+	/**Given a genotype (solution) generates the corresponding genotype, to be implemented for each
+	 * type of solution
+	 * 
+	 * @param solution genotype to transform
+	 * @return phenotype of solution
+	 */
+	protected abstract Solution<T> initializeInd();
 
 	/**Given a genotype (solution) generates the corresponding genotype, to be implemented for each
 	 * type of solution
@@ -70,7 +90,11 @@ public abstract class AbstractGECommon<T extends Variable<?>> extends Problem<T>
 		Solutions<T> solutions = new Solutions<>();
 		
 		for(int i = 0; i < size; i++) {
-			solutions.add(generateRandomSolution());
+			if(this.initializator != null) {
+				solutions.add(initializeInd());
+			}else {
+				solutions.add(generateRandomSolution());
+			}
 		}
 		
 		

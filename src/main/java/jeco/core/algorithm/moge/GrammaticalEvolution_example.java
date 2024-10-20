@@ -6,6 +6,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import jeco.core.operator.initialization.PTC2;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
@@ -65,11 +66,13 @@ public class GrammaticalEvolution_example extends AbstractProblemGE {
 
   public static void main(String[] args) {
 		// First create the problem
-		GrammaticalEvolution_example problem = new GrammaticalEvolution_example("test/grammar_example.bnf");
+		//GrammaticalEvolution_example problem = new GrammaticalEvolution_example("test/grammar_example.bnf");
+		GrammaticalEvolution_example problem = new GrammaticalEvolution_example("C:/Users/Marina/Documents/T-GE-NEN/Tower/grammar.bnf");
+		problem.setInitializator(new PTC2(100, 10, problem.reader));
 		// Second create the algorithm
 		GrammaticalEvolution algorithm = new GrammaticalEvolution(problem, 100, 1000);
 
-		algorithm.initialize();
+        algorithm.initialize();
 		Solutions<Variable<Integer>> solutions = algorithm.execute();
 		for (Solution<Variable<Integer>> solution : solutions) {
 			logger.info("Fitness = (" + solution.getObjectives().get(0) + ", " + solution.getObjectives().get(1) + ")");

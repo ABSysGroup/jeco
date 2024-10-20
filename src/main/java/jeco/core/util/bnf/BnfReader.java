@@ -492,6 +492,8 @@ public class BnfReader {
             calculateMinimumDepthRecursive(rule, visitedRules);
             visitedRules.clear();
             calculateMaximumDepthRecursive(rule, visitedRules);
+            
+            setProductionNumberExpansions(rule);
         }
 
         for (Rule rule : rules) {
@@ -684,7 +686,67 @@ public class BnfReader {
             production.minimumDepth = minDepth;
         }
     }
-
+    
+    public void setProductionNumberExpansions(Rule rule) {
+    	
+    	int maxExpansions = 0;
+        for (Production production : rule) {
+        	
+        	int num = setProductionNumberExpansionsAux(production);
+        	production.maxExpansions = num;
+        	
+        	if(num >= maxExpansions) {
+        		if(num == Integer.MAX_VALUE) {
+        			maxExpansions = num;
+        		}else {
+        			maxExpansions = num+1;
+        		}
+        	}
+        }
+        
+        rule.maxExpansions = maxExpansions;
+    	
+    }
+    
+    public int setProductionNumberExpansionsAux(Production p) {
+    	int numExpansions= 0;
+    	for (Symbol symbol : p) {
+    		if(symbol.type == Symbol.SYMBOL_TYPE.NT_SYMBOL) {
+    			 Rule ruleAux = this.findRule(symbol);
+            	 int temp = 0;
+            	 int max = 0;
+                 if (ruleAux != null) {
+                     for(Production prod: ruleAux) {
+                    	 if(prod.maximumDepth == Integer.MAX_VALUE) {
+                    		 temp = Integer.MAX_VALUE;
+                    	 }else {
+                    		 temp = setProductionNumberExpansionsAux(prod);
+                    		 
+                    		 if(temp != Integer.MAX_VALUE) {
+                    			 temp = temp+1;
+                    		 }
+                    	 }
+                    	 
+                    	 if(temp > max) {
+                    		 max = temp;
+                    	 }
+                     }
+                 }
+                 
+                 if(max == Integer.MAX_VALUE) {
+                	 numExpansions = max;
+                	 break;
+                 }else {
+                	 numExpansions += max;
+                 }
+    			
+    		}
+    	}
+    	
+    	return numExpansions;
+    }
+    
+    
     public ArrayList<Rule> getRules() {
         return rules;
     }
@@ -694,13 +756,17 @@ public class BnfReader {
     public static void main(String[] args) {
         BnfReader bnfReader = new BnfReader();
         //bnfReader.load("test/grammar_example.bnf");
-        bnfReader.load("C:\\Users\\Marina\\Documents\\TFG\\Accuracy2Clases_Recursion_v6_Mix_BinExpr.bnf");
+        //bnfReader.load("C:\\Users\\Marina\\Documents\\TFG\\Accuracy2Clases_Recursion_v6_Mix_BinExpr.bnf");
+        bnfReader.load("C:/Users/Marina/Documents/T-GE-NEN/Tower/grammar.bnf");
+        
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());
             System.out.println(rule.lhs.toString());
             //bnfReader.setProductionMinimumDepth(rule);
             System.out.println(rule.minimumDepth);
             System.out.println(rule.maximumDepth);
+            
+            System.out.println(rule.maxExpansions);
             try {
             	System.out.println(bnfReader.isRecursive( new ArrayList<Rule>(), rule));
 				System.out.println(bnfReader.isInfinitlyRecursive(rule));
@@ -715,6 +781,8 @@ public class BnfReader {
             	System.out.println("Maximum depth: " + p.toString());
             	System.out.println(p.maximumDepth);
             	System.out.println(p.recursive);
+            	System.out.println("Maximum expansions: " + p.toString());
+                System.out.println(p.maxExpansions);
             }
         
         }

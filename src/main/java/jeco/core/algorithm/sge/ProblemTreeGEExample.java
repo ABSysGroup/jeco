@@ -1,4 +1,4 @@
-package jeco.core.algorithm.moge;
+package jeco.core.algorithm.sge;
 
 import java.util.logging.Logger;
 
@@ -11,9 +11,8 @@ import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
-import jeco.core.algorithm.sge.NodeTree;
 import jeco.core.operator.comparator.SimpleDominance;
-import jeco.core.operator.crossover.NodeSubTreeCrossover;
+import jeco.core.operator.crossover.RecListTCrossover;
 import jeco.core.operator.crossover.SubTreeCrossover;
 import jeco.core.operator.crossover.UniformCrossover;
 import jeco.core.operator.crossover.UniformTerminalCrossover;
@@ -22,33 +21,31 @@ import jeco.core.operator.mutation.BasicMutationRecListT;
 import jeco.core.operator.mutation.BasicMutationVariableList;
 import jeco.core.operator.mutation.BasicMutationVariableListAll;
 import jeco.core.operator.mutation.IntegerFlipMutationList;
-import jeco.core.operator.mutation.NodeTreeRegenMutation;
 import jeco.core.operator.selection.BinaryTournament;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
-import jeco.core.util.bnf.Symbol;
 
-public class CFG_GPExample extends CFG_GP {
+public class ProblemTreeGEExample extends AbstractProblemTreeGE {
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
 	private int goal = 126;
 	
-	public CFG_GPExample(String path, int depht, boolean bloatingControl, boolean treeDepth){
-		super(path, 1, depht,bloatingControl, treeDepth);
+	public ProblemTreeGEExample(String path, int depht, boolean bloatingControl, boolean treeDepth){
+		super(path, 1, depht,bloatingControl, treeDepth, depht+2);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 	
-	public CFG_GPExample(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
-		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
+	public ProblemTreeGEExample(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec, depht+2);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 
 	@Override
-	public void evaluate(Solution<NodeTree> solution, Phenotype phenotype) {
+	public void evaluate(Solution<RecListT<Integer>> solution, Phenotype phenotype) {
 
 		  String currentFunction = "";
 		    double error, totError = 0;
@@ -83,14 +80,14 @@ public class CFG_GPExample extends CFG_GP {
 
 
 	@Override
-	public Problem<NodeTree> clone() {
+	public Problem<RecListT<Integer>> clone() {
 
-		CFG_GPExample clone = new CFG_GPExample(super.pathToBnf, 5,true ,true);
+		ProblemTreeGEExample clone = new ProblemTreeGEExample(super.pathToBnf, 5,true ,true);
 		return clone;
 	}
 	
 	@Override
-	public void evaluate(Solution<NodeTree> solution) {
+	public void evaluate(Solution<RecListT<Integer>> solution) {
 		logger.severe("Should not be called");
 		
 	}
@@ -99,17 +96,19 @@ public class CFG_GPExample extends CFG_GP {
 	public static void main(String[] args) {
         // First create the problem
         
-		CFG_GPExample problem = new CFG_GPExample("test\\grammar_example.bnf", 4, true, true);
-		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
+		//C:\\Users\\Marina\\Documents\\T-GE-NEN\\Vlad-4\\Grammar2.bnf
+		//"test\\grammar_example.bnf"
+		ProblemTreeGEExample problem = new ProblemTreeGEExample("C:\\Users\\Marina\\Documents\\T-GE-NEN\\Vlad-4\\Grammar2.bnf", 4, true, false,3,2);
+		problem.setInitializator(new PTC2(100, 10, 1, problem.reader));
 		
         // Second create the algorithm
-        StaticSimpleGeneticAlgorithmBestWithPopRenovation<NodeTree> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<NodeTree>(problem,100,200,false, new NodeTreeRegenMutation<NodeTree>(0.3, problem, true),
-                new NodeSubTreeCrossover<NodeTree>(0.7,problem),
-                new BinaryTournament<NodeTree>(new SimpleDominance<>()), 0.1);
+        StaticSimpleGeneticAlgorithmBestWithPopRenovation<RecListT<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<RecListT<Integer>>(problem,100,200,false, new BasicMutationRecListT<RecListT<Integer>>(0.3, problem, false, true),
+                new RecListTCrossover<RecListT<Integer>>(0.7,problem, false, true, false),
+                new BinaryTournament<RecListT<Integer>>(new SimpleDominance<>()), 0.1);
         // Run
         algorithm.initialize();
-        Solutions<NodeTree> solutions = algorithm.execute();
-        for (Solution<NodeTree> solution : solutions) {
+        Solutions<RecListT<Integer>> solutions = algorithm.execute();
+        for (Solution<RecListT<Integer>> solution : solutions) {
             logger.info("Fitness = (" + solution.getObjectives().get(0) + ")");
             logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }

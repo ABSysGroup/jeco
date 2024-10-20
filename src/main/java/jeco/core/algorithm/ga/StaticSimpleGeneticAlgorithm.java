@@ -16,9 +16,17 @@ import jeco.core.problem.Variable;
  * @author J. Manuel Colmenar
  */
 public class StaticSimpleGeneticAlgorithm<V extends Variable<?>> extends SimpleGeneticAlgorithm<V> {
-
-    public StaticSimpleGeneticAlgorithm(Problem problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved, MutationOperator mutationOperator, CrossoverOperator crossoverOperator, SelectionOperator selectionOperator) {
+	private int num_chang;
+    
+	public StaticSimpleGeneticAlgorithm(Problem problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved, MutationOperator mutationOperator, CrossoverOperator crossoverOperator, SelectionOperator selectionOperator) {
         super(problem, maxPopulationSize, maxGenerations, stopWhenSolved, mutationOperator, crossoverOperator, selectionOperator);
+        num_chang = 2;
+
+    }
+    
+    public StaticSimpleGeneticAlgorithm(Problem problem, Integer maxPopulationSize, Integer maxGenerations, Boolean stopWhenSolved, MutationOperator mutationOperator, CrossoverOperator crossoverOperator, SelectionOperator selectionOperator, int num) {
+        super(problem, maxPopulationSize, maxGenerations, stopWhenSolved, mutationOperator, crossoverOperator, selectionOperator);
+        num_chang = num;
     }
 
     @Override
@@ -66,11 +74,20 @@ public class StaticSimpleGeneticAlgorithm<V extends Variable<?>> extends SimpleG
      */
     protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
         Collections.sort(offspring, dominance);
-        population.add(offspring.get(0));
-        population.add(offspring.get(1));
+        for(int i = 0; i < this.num_chang; i++) {
+            population.add(offspring.get(i));
+
+        }
+        //population.add(offspring.get(0));
+        //population.add(offspring.get(1));
         Collections.sort(population, dominance);
-        population.remove(population.size() - 1);
-        population.remove(population.size() - 1);
+        
+        for(int i = 0; i < this.num_chang; i++) {
+            population.remove(population.size() - 1);
+
+        }
+        //population.remove(population.size() - 1);
+        //population.remove(population.size() - 1);
 
         return population;
     }

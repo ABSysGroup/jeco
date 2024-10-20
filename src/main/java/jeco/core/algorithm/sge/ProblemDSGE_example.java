@@ -15,6 +15,7 @@ import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.SubTreeCrossover;
 import jeco.core.operator.crossover.UniformCrossover;
 import jeco.core.operator.crossover.UniformTerminalCrossover;
+import jeco.core.operator.initialization.PTC2;
 import jeco.core.operator.mutation.BasicMutationVariableList;
 import jeco.core.operator.mutation.BasicMutationVariableListAll;
 import jeco.core.operator.mutation.IntegerFlipMutationList;
@@ -93,8 +94,9 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public static void main(String[] args) {
         // First create the problem
         
-		ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 4, true, false);
-		
+		ProblemDSGE_example problem = new ProblemDSGE_example("C:\\Users\\Marina\\Documents\\TFG\\jeco\\test\\grammar_example.bnf", 10, true, true, 5, 4);
+		//ProblemDSGE_example problem = new ProblemDSGE_example("C:\\Users\\Marina\\Documents\\TFG\\SimbolicRegression.bnf", 10, true, true);
+		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
         // Second create the algorithm
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
                 new UniformCrossover<VariableList<Integer>>(0.7,0.25),

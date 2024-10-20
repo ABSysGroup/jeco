@@ -5,6 +5,8 @@ import java.util.List;
 
 import jeco.core.algorithm.sge.AbstractGECommon;
 import jeco.core.algorithm.sge.NodeTree;
+import jeco.core.algorithm.sge.RecListT;
+import jeco.core.algorithm.sge.VariableList;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
@@ -102,8 +104,11 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 		Phenotype phenotype = new Phenotype();
 		Rule firstRule = reader.getRules().get(0);
 		
+		phenotype.setUsedGenes(0);
+
 		auxCreatePhenotype(firstRule.getLHS(), phenotype, 0,  solution.getVariable(0));
 		
+		solution.setNumberGenes(phenotype.getUsedGenes());
   
 		return phenotype;
 	}
@@ -137,10 +142,11 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 		if(next.isTerminal()) { //If next element is a terminal we add it to the phenotype
 			phenotype.add(next.toString());
 			
+			
 		}
 		else {
 			Rule nextRule = this.reader.findRule(next); //We find the equivalent rule from the symbol of the node
-			
+			//System.out.println(depth);
 			//If we go over the maximum depth through crossover, and the next element is recursive, we generate a new subtree that is within the range required
 			if(bloatingControl && nextRule.getRecursive() && (depth >= this.maxDepth)) {
 				if(sameRecursion(nextRule, solution)) {
@@ -152,6 +158,7 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 			
 			//We get the children nodes
 			List<NodeTree> children = solution.getChildren();
+			phenotype.setUsedGenes(phenotype.getUsedGenes()+1);
 			
 			//For each of the children we perform recursion
 			for(int i = 0 ; i < children.size() ; i++) {
@@ -369,6 +376,43 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 	            evaluate(solution, this.generatePhenotype(solution));
 	        }
 	}
+	
+    @Override
+    protected Solution<NodeTree> initializeInd(){
+    	Solution<NodeTree> solI = new Solution<>(numberOfObjectives);
+        NodeTree temp = new NodeTree();
+        
+    	RecListT<Integer> n = this.initializator.initialize();
+        constructSolutionFromTree(temp, n);
+
+        solI.getVariables().add(temp);
+        
+    	return solI;
+    }
+    
+    private void constructSolutionFromTree(NodeTree solI, RecListT<Integer> n) {
+
+        solI.setDepth(n.getDepth());
+        solI.setValue(n.getS());
+        solI.setChildren(new ArrayList<NodeTree>());
+        Production p = this.reader.findRule(n.getS()).get(n.getValue());
+        List<RecListT<Integer>> children = n.getInteriorList();
+        int index = 0;
+        for(Symbol s: p) {
+        	if(s.isTerminal()) {
+        		NodeTree nT = solI.getnewEmpty();
+        		nT.setValue(s);
+        		nT.setDepth(n.getDepth()+1);
+        		nT.setChildren(new ArrayList<NodeTree>());
+        	}else {
+        		
+        		NodeTree nT = solI.getnewEmpty();
+            	constructSolutionFromTree(nT, children.get(index));
+            	index++;	
+        	}
+        }
+        
+    }
 
 
 }
