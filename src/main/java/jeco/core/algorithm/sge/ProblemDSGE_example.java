@@ -32,13 +32,13 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth){
 		super(path, 1, depht,bloatingControl, treeDepth);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
-		evaluator = mgr.getEngineByName("JavaScript");
+		evaluator = mgr.getEngineByName("graal.js");
 	}
 	
 	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
 		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
-		evaluator = mgr.getEngineByName("JavaScript");
+		evaluator = mgr.getEngineByName("graal.js");
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public static void main(String[] args) {
         // First create the problem
         
-		ProblemDSGE_example problem = new ProblemDSGE_example("test\\grammar_example.bnf", 4, true, false);
+		ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 4, true, false);
 		
         // Second create the algorithm
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
@@ -102,9 +102,9 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
         // Run
         algorithm.initialize();
         Solutions<VariableList<Integer>> solutions = algorithm.execute();
+		System.out.println("\n\n>>>>> Final solutions: " + solutions.size());
         for (Solution<VariableList<Integer>> solution : solutions) {
-            logger.info("Fitness = (" + solution.getObjectives().get(0) + ")");
-            logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
+			System.out.println("Fitness = (" + solution.getObjectives().get(0) + ") -- Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }
   }
 }

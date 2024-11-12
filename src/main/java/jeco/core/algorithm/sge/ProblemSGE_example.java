@@ -33,7 +33,7 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	public ProblemSGE_example(String path, int depth){
 		super(path, 1, depth);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
-		evaluator = mgr.getEngineByName("JavaScript");
+		evaluator = mgr.getEngineByName("graal.js");
 	}
 	
 
@@ -98,9 +98,9 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
         // Run
         algorithm.initialize();
         Solutions<VariableArray<Integer>> solutions = algorithm.execute();
+		System.out.println("\n\n>>>>> Final solutions: " + solutions.size());
         for (Solution<VariableArray<Integer>> solution : solutions) {
-            logger.info("Fitness = (" + solution.getObjectives().get(0) + ")");
-            logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
+			System.out.println("Fitness = (" + solution.getObjectives().get(0) + ") -- Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }
   }
 

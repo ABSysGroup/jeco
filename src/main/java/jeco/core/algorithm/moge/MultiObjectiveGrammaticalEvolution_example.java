@@ -25,7 +25,7 @@ public class MultiObjectiveGrammaticalEvolution_example extends AbstractProblemG
 	public MultiObjectiveGrammaticalEvolution_example(String pathToBnf) {
 		super(pathToBnf);
 		ScriptEngineManager mgr = new ScriptEngineManager();
-		evaluator = mgr.getEngineByName("JavaScript");
+		evaluator = mgr.getEngineByName("graal.js");
 	}
 
 	public void evaluate(Solution<Variable<Integer>> solution, Phenotype phenotype) {
@@ -68,8 +68,7 @@ public class MultiObjectiveGrammaticalEvolution_example extends AbstractProblemG
 		Solutions<Variable<Integer>> solutions = algorithm.execute();
 	  	System.out.println("Final solutions: "+solutions.size());
 		for (Solution<Variable<Integer>> solution : solutions) {
-			logger.info("Fitness = (" + solution.getObjectives().get(0) + ", " + solution.getObjectives().get(1) + ")");
-			logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
+			System.out.println("Fitness = (" + solution.getObjectives().get(0) + ", " + solution.getObjectives().get(1) + ") -- Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
 		}
 	}		
 
