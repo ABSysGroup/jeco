@@ -6,16 +6,11 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
 import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
-import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.SubTreeCrossover;
-import jeco.core.operator.crossover.UniformCrossover;
-import jeco.core.operator.crossover.UniformTerminalCrossover;
-import jeco.core.operator.mutation.IntegerFlipMutationList;
 import jeco.core.operator.mutation.IntegerFlipMutationListAll;
 import jeco.core.operator.selection.BinaryTournament;
 import jeco.core.problem.Problem;
