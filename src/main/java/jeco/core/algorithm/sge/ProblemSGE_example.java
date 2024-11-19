@@ -84,7 +84,7 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	public static void main(String[] args) {
         // First create the problem
        
-		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example.bnf", 4);
+		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example_sge.bnf", 4);
         
 		// Second create the algorithm
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableArray<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<>(problem,100,500,false,new IntegerFlipMutationListAll<VariableArray<Integer>>(problem, 0.3),

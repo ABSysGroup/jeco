@@ -87,7 +87,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public static void main(String[] args) {
         // First create the problem
         
-		ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example.bnf", 4, true, false);
+		ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example_sge.bnf", 4, true, false);
 		
         // Second create the algorithm
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
