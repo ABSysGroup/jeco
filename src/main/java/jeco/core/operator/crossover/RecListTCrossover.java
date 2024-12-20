@@ -52,8 +52,6 @@ public class RecListTCrossover <T extends RecListT<Integer>> extends CrossoverOp
 			Symbol s = null;
 			
 			if(crossOnlyUsedGenes || (used2 && used1) /*|| (!used2 && !used1)*/) {
-				//used1 = true;
-				//used2 = true;
 				//First we choose a rule to interchange
 				do {
 					int rule = RandomGenerator.nextInt(problem.getReader().getRules().size());
@@ -78,9 +76,6 @@ public class RecListTCrossover <T extends RecListT<Integer>> extends CrossoverOp
 				}while((!child1.getVariable(0).containsSymbol(s)  || !child2.getVariable(0).containsUsedSymbol(problem.getReader(), s)));
 				
 			}else {
-				//used1 = false;
-				//used2 = false;
-				//used1 = RandomGenerator.nextBoolean();
 				
 				//First we choose a rule to interchange
 				

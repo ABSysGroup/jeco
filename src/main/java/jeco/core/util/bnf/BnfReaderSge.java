@@ -213,7 +213,7 @@ public class BnfReaderSge extends BnfReader {
     
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        bnfReader.loadSGE("test/grammar.bnf", 4);
+        bnfReader.loadSGE("test/grammar_example_sge.bnf", 4);
 
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);

@@ -12,6 +12,15 @@ import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
+/**PTC2 implementation for grammatical structures. It has been slightly modified to use grammatical rules, this affects
+ * some of the steps, such as the generation of terminals/non-terminals. In general the resulting individuals are often larger than the set size due to
+ * following the grammar structure. It could be paliated if the minimum expansion number to get to a symbol is taken into
+ * account but it would require to modify the base algorithm further 
+ * TODO Add option to take into account the minimum number of expansions to get to a terminal. 
+ * 
+ * @author Marina
+ *
+ */
 public class PTC2 extends Initializator{
 	private int probD;
 	private int depth;

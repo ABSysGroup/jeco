@@ -33,7 +33,7 @@ public class CFG_GPExample extends CFG_GP {
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 126;
+	private int goal = 254;
 	
 	public CFG_GPExample(String path, int depht, boolean bloatingControl, boolean treeDepth){
 		super(path, 1, depht,bloatingControl, treeDepth);
@@ -41,8 +41,8 @@ public class CFG_GPExample extends CFG_GP {
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 	
-	public CFG_GPExample(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
-		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
+	public CFG_GPExample(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec, boolean minimumDepthSearch){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec, minimumDepthSearch);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
@@ -99,7 +99,7 @@ public class CFG_GPExample extends CFG_GP {
 	public static void main(String[] args) {
         // First create the problem
         
-		CFG_GPExample problem = new CFG_GPExample("test\\grammar_example.bnf", 4, true, true);
+		CFG_GPExample problem = new CFG_GPExample("test\\grammar_example_sge.bnf", 4, true, true,3,2, true);
 		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
 		
         // Second create the algorithm

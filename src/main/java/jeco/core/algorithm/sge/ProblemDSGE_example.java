@@ -28,7 +28,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 126;
+	private int goal = 254;
 	
 	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth){
 		super(path, 1, depht,bloatingControl, treeDepth);
@@ -36,8 +36,8 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 	
-	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
-		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
+	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec, boolean minimumSearch){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec,minimumSearch);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
@@ -94,7 +94,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public static void main(String[] args) {
         // First create the problem
         
-		ProblemDSGE_example problem = new ProblemDSGE_example("C:\\Users\\Marina\\Documents\\TFG\\jeco\\test\\grammar_example.bnf", 10, true, true, 5, 4);
+		ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example_sge.bnf", 10, true, true, 5, 4, true);
 		//ProblemDSGE_example problem = new ProblemDSGE_example("C:\\Users\\Marina\\Documents\\TFG\\SimbolicRegression.bnf", 10, true, true);
 		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
         // Second create the algorithm

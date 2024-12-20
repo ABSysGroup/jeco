@@ -12,8 +12,10 @@ public class NodeTreeRegenMutation <T extends NodeTree> extends MutationOperator
 	private CFG_GP problem;
 	private boolean normalize;
 	/**Constructor for BasicMutationVariableList
+	 * DOES NOT ALLOW CONCURRENCY
 	 * @param probability probability that determines whether to perform a mutation or not
 	 * @param problem problem that contains all the variables of the solutions
+	 * @param normalize whether to consider that each rule type has the same probability (true), or at random from all the nodes of the tree (false)
 	 */
 	public NodeTreeRegenMutation(double probability, CFG_GP problem, boolean normalize) {
 		super(probability);
@@ -78,7 +80,7 @@ public class NodeTreeRegenMutation <T extends NodeTree> extends MutationOperator
 	public void executeMutation(NodeTree l) {
 		
 		NodeTree newSubTree = new NodeTree();
-		problem.createIndividual(l.getDepth(), l.getDepth(), newSubTree, l.getValue(), true);
+		problem.createIndividual(l.getDepth(), l.getDepth(), newSubTree, l.getValue(), false);
 		
 		if(!l.getValue().equals(newSubTree.getValue())) {
 			new RuntimeException("error in mutation");

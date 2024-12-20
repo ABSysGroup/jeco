@@ -2,6 +2,8 @@ package jeco.core.algorithm.moge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import jeco.core.algorithm.sge.AbstractGECommon;
 import jeco.core.algorithm.sge.NodeTree;
@@ -29,11 +31,12 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 	private int minDepthInit;
 	private boolean bloatingControl;
 	private boolean treeDepth;
+	private boolean minimunDepthSearch;
+
 	
-	
-	
+	private Logger logger = Logger.getLogger(CFG_GP.class.getName());
 	/**
-	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0
+	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0, and minimunDepthSearch set to true (it searches the minimum path)
 	 * @param pathToBnf path of bnf file with grammar
 	 * @param numberOfObjectives of the problem chosen
 	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
@@ -48,7 +51,7 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 		this.minDepthInit = 0;
 		this.maxDepthInit = maxDepth;
 		
-		//initialize();
+		this.minimunDepthSearch = true;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -64,13 +67,34 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 	 */
 	public CFG_GP(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit) {
 		super(pathToBnf, 0, numberOfObjectives);
+		this.bloatingControl = bloatingControl;
+		this.treeDepth = treeDepth;
+		this.maxDepth = maxDepth;
+		this.minDepthInit = minRecInit;
+		this.maxDepthInit = maxInit;
+		this.minimunDepthSearch = true;
+		// TODO Auto-generated constructor stub
+	}
+	
+	/**
+	 * Constructor with all parameters including maxInitDepth and minInitDepth
+	 * @param pathToBnf path of bnf file with grammar
+	 * @param numberOfObjectives of the problem chosen
+	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
+	 * @param bloatingControl  boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
+	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
+	 * @param maxInit maximum depth of the initial solution tree constructed or amount of times each rule can perform recursion in the creation of solutions.
+	 * @param minInit minimum depth of the tree considered.
+	 */
+	public CFG_GP(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit, boolean minimunDepthSearch) {
+		super(pathToBnf, 0, numberOfObjectives);
 		//reader.load(pathToBnf);
 		this.bloatingControl = bloatingControl;
 		this.treeDepth = treeDepth;
 		this.maxDepth = maxDepth;
 		this.minDepthInit = minRecInit;
 		this.maxDepthInit = maxInit;
-		
+		this.minimunDepthSearch = minimunDepthSearch;
 		//initialize();
 		// TODO Auto-generated constructor stub
 	}
@@ -182,7 +206,7 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 		}
 	}
 	
-	private int TerminalExpansion(Rule ruleSymbol) {
+	/*private int TerminalExpansion(Rule ruleSymbol) {
 
 		int rand_prod;
 		
@@ -211,7 +235,7 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 		rand_prod = listProd.get(selec);
 		
 		return rand_prod;
-	}
+	}*/
 	
 	
 	/**
@@ -241,8 +265,17 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 			}
 			
 			//Select one of the indexes of the list randomly
-			int selec = RandomGenerator.nextInt(listProd.size());
-			rand_prod = listProd.get(selec);
+			int selec;
+			if(listProd.size() == 0) {
+				selec = RandomGenerator.nextInt(ruleSymbol.size());
+				rand_prod = selec;
+				logger.log(Level.WARNING, "Should not happen, implies minimum depth parameter is not set properly and cannot be enforced, selects random production instead, ensure this is on purpose");
+
+			}else {
+				selec = RandomGenerator.nextInt(listProd.size());
+				rand_prod = listProd.get(selec);
+
+			}
 			
 			
 		//}
@@ -275,7 +308,11 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 			//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
 			if(reader.sameRecursion(ruleSymbol, expansion)) {
 				if(depth >= this.maxDepthInit) {
-					rand_prod = TerminalExpansion(ruleSymbol);
+					if(this.minimunDepthSearch) {
+						rand_prod = this.reader.terminalExpansionMinimunDepth(ruleSymbol);
+					}else {
+						rand_prod = this.reader.terminalExpansion(ruleSymbol);
+					}
 					expansion = ruleSymbol.get(rand_prod);
 					
 				}

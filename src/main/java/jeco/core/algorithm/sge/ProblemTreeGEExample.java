@@ -30,7 +30,7 @@ public class ProblemTreeGEExample extends AbstractProblemTreeGE {
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 126;
+	private int goal = 254;
 	
 	public ProblemTreeGEExample(String path, int depht, boolean bloatingControl, boolean treeDepth){
 		super(path, 1, depht,bloatingControl, treeDepth, depht+2);
@@ -38,8 +38,8 @@ public class ProblemTreeGEExample extends AbstractProblemTreeGE {
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
 	
-	public ProblemTreeGEExample(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
-		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec, depht+2);
+	public ProblemTreeGEExample(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec, boolean minimumDepthSearch){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec, depht+2, minimumDepthSearch);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("JavaScript");
 	}
@@ -98,7 +98,7 @@ public class ProblemTreeGEExample extends AbstractProblemTreeGE {
         
 		//C:\\Users\\Marina\\Documents\\T-GE-NEN\\Vlad-4\\Grammar2.bnf
 		//"test\\grammar_example.bnf"
-		ProblemTreeGEExample problem = new ProblemTreeGEExample("C:\\Users\\Marina\\Documents\\T-GE-NEN\\Vlad-4\\Grammar2.bnf", 4, true, false,3,2);
+		ProblemTreeGEExample problem = new ProblemTreeGEExample("test/grammar_example_sge.bnf", 4, true, false,3,2, true);
 		problem.setInitializator(new PTC2(100, 10, 1, problem.reader));
 		
         // Second create the algorithm

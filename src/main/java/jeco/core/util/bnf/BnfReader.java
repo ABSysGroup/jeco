@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import jeco.core.util.random.RandomGenerator;
+
 /**BnfReader for grammar file
  *
  */
@@ -548,6 +550,72 @@ public class BnfReader {
     	}
     	return false;
     }
+    
+    /**Generates shortest path to terminal
+     * 
+     * @param ruleSymbol
+     * @return
+     */
+	public int terminalExpansionMinimunDepth(Rule ruleSymbol) {
+
+		int rand_prod;
+		
+		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
+		ArrayList<Integer> listProd = new ArrayList<>();
+		int index = 0;
+		int min = Integer.MAX_VALUE;
+		
+		//We search for the minimun depth possible
+		for(Production p: ruleSymbol) {
+			if(p.getMinimumDepth() < min) {
+				min = p.getMinimumDepth();
+			}
+		}
+		
+		for(Production p: ruleSymbol) {
+			/*if(!reader.sameRecursion(ruleSymbol, p)) {
+				listProd.add(index);
+			}
+			index++;*/
+			
+			//Productions that have the minimun depth to reach a terminal
+			if(p.getMinimumDepth() == min) {
+				listProd.add(index);
+			}
+			index++;
+		}
+		
+		//Select one of the indexes of the list
+		int selec = RandomGenerator.nextInt(listProd.size());
+		rand_prod = listProd.get(selec);
+		
+		return rand_prod;
+	}
+	
+    /**Generates random non-recursive rule
+     * 
+     * @param ruleSymbol
+     * @return
+     */
+	public int terminalExpansion(Rule ruleSymbol) {
+		int rand_prod;
+		
+		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
+		ArrayList<Integer> listProd = new ArrayList<>();
+		int index = 0; 
+		for(Production p: ruleSymbol) {
+			if(!this.sameRecursion(ruleSymbol, p)) {
+				listProd.add(index);
+			}
+			index++;
+		}
+		
+		//Select one of the indexes of the list
+		int selec = RandomGenerator.nextInt(listProd.size());
+		rand_prod = listProd.get(selec);
+		
+		return rand_prod;
+	}
 
     protected boolean isRecursive(ArrayList<Rule> visitedRules, Rule currentRule) {
         ArrayList<Production> prodIt;
@@ -757,7 +825,7 @@ public class BnfReader {
         BnfReader bnfReader = new BnfReader();
         //bnfReader.load("test/grammar_example.bnf");
         //bnfReader.load("C:\\Users\\Marina\\Documents\\TFG\\Accuracy2Clases_Recursion_v6_Mix_BinExpr.bnf");
-        bnfReader.load("C:/Users/Marina/Documents/T-GE-NEN/Tower/grammar.bnf");
+        bnfReader.load("test/grammar_example_sge.bnf");
         
         for (Rule rule : bnfReader.rules) {
             System.out.println(rule.toString());

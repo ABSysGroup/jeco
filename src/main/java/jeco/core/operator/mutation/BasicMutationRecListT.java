@@ -34,57 +34,6 @@ public class BasicMutationRecListT <T extends RecListT<Integer>> extends Mutatio
 		// TODO Auto-generated constructor stub
 	}
 	
-	/*@Override
-	public Solution<T> execute(Solution<T> solution) {
-
-		RecListT<Integer> list = solution.getVariable(0);
-		
-		executeMutation(list);
-		
-		return solution;
-	}
-	
-	public void executeMutation(RecListT<Integer> l) {
-		boolean mutated = false;
-		if (RandomGenerator.nextDouble() <= probability) {
-			if(this.problem.getReader().findRule(l.getS()).size() > 1) {
-				int randAlele= 0;
-				mutated = true;
-				do {
-					randAlele = RandomGenerator.nextInt(this.problem.getReader().findRule(l.getS()).size());
-				}while(randAlele == l.getValue());
-				l.setValue(randAlele);
-			}
-			
-			
-		}
-		
-		if(this.keepMut || !mutated) {
-		
-			
-			if(this.mutateAllChildren) {
-				for(RecListT<Integer> IntList: l.getInteriorList()) {
-					executeMutation(IntList);
-				
-				}
-			}else {
-				Production p = problem.getReader().findRule(l.getS()).get(l.getValue());
-				
-				l.resetIndex();
-	
-				
-				for(Symbol sym: p) {
-					RecListT<Integer> next = l.getnextSymbol(sym);
-					if(next != null) {
-						executeMutation(next);
-					}
-				}
-				
-				l.resetIndex();
-			}
-		}
-		
-	}*/
 	
 	@Override
 	public Solution<T> execute(Solution<T> solution) {

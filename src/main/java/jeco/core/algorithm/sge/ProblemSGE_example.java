@@ -29,7 +29,7 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 126;
+	private int goal = 254;
 	
 	public ProblemSGE_example(String path, int depth){
 		super(path, 1, depth);
@@ -90,7 +90,7 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	public static void main(String[] args) {
         // First create the problem
        
-		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example.bnf", 4);
+		ProblemSGE_example problem = new ProblemSGE_example("test/grammar_example_sge.bnf", 4);
 		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
 		
 		// Second create the algorithm

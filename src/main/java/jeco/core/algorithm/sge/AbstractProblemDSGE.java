@@ -31,8 +31,10 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 	private boolean bloatingControl;
 	private boolean treeDepth;
 	
+	private boolean minimunDepthSearch;
+	
 	/**
-	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0
+	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0, nor minimunDepthSearch set to true (considers minimum path)
 	 * @param pathToBnf path of bnf file with grammar
 	 * @param numberOfObjectives of the problem chosen
 	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
@@ -47,12 +49,14 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		this.maxDepth = maxDepth;
 		this.minRecDepthInit = 0;
 		this.maxDepthInit = maxDepth;
+		this.minimunDepthSearch = true;
+
 		initialize();
 		// TODO Auto-generated constructor stub
 	}
 	
 	/**
-	 * Constructor with all parameters including maxInitDepth and minRecInitDepth
+	 * Constructor with all parameters including maxInitDepth and minRecInitDepth except for the depth types, which is set to minimum depth
 	 * @param pathToBnf path of bnf file with grammar
 	 * @param numberOfObjectives of the problem chosen
 	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
@@ -69,10 +73,34 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		this.maxDepth = maxDepth;
 		this.minRecDepthInit = minRecInit;
 		this.maxDepthInit = maxInit;
+		this.minimunDepthSearch = true;
 		initialize();
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Constructor with all parameters including maxInitDepth, minRecInitDepth and minimunDepthSearch.
+	 * @param pathToBnf path of bnf file with grammar
+	 * @param numberOfObjectives of the problem chosen
+	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
+	 * @param bloatingControl  boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
+	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
+	 * @param maxInit maximum depth of the initial solution tree constructed or amount of times each rule can perform recursion in the creation of solutions.
+	 * @param minRecInit minimum recursive depth for all rules that all initial solutions must have.
+	 * @param minimunDepthSearch set the type of generation to minimum path (true) or random non-recursive rules (false). For some grammar structures it might be less biased the false option
+	 */
+	public AbstractProblemDSGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit, Boolean minimunDepthSearch) {
+		super(pathToBnf, 0, numberOfObjectives);
+		reader.load(pathToBnf);
+		this.bloatingControl = bloatingControl;
+		this.treeDepth = treeDepth;
+		this.maxDepth = maxDepth;
+		this.minRecDepthInit = minRecInit;
+		this.maxDepthInit = maxInit;
+		this.minimunDepthSearch = minimunDepthSearch;
+		initialize();
+		// TODO Auto-generated constructor stub
+	}
 	
 	/**
 	 * Generates a random Individual of type VariableList of Integers
@@ -189,47 +217,15 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		int rand_prod;
 		Rule ruleSymbol = this.reader.findRule(sym);
 		
-		rand_prod = TerminalExpansion(ruleSymbol);
-		
+		if(this.minimunDepthSearch) {
+			rand_prod = this.reader.terminalExpansionMinimunDepth(ruleSymbol);
+		}else {
+			rand_prod = this.reader.terminalExpansion(ruleSymbol);
+		}		
 		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(rand_prod);
 
 	}
 	
-	private int TerminalExpansion(Rule ruleSymbol) {
-
-		int rand_prod;
-		
-		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
-		ArrayList<Integer> listProd = new ArrayList<>();
-		int index = 0;
-		int min = Integer.MAX_VALUE;
-		
-		//We search for the minimun depth possible
-		for(Production p: ruleSymbol) {
-			if(p.getMinimumDepth() < min) {
-				min = p.getMinimumDepth();
-			}
-		}
-		
-		for(Production p: ruleSymbol) {
-			/*if(!reader.sameRecursion(ruleSymbol, p)) {
-				listProd.add(index);
-			}
-			index++;*/
-			
-			//Productions that have the minimun depth to reach a terminal
-			if(p.getMinimumDepth() == min) {
-				listProd.add(index);
-			}
-			index++;
-		}
-		
-		//Select one of the indexes of the list
-		int selec = RandomGenerator.nextInt(listProd.size());
-		rand_prod = listProd.get(selec);
-		
-		return rand_prod;
-	}
 	
 	/*private int RecursiveExpansion(Rule ruleSymbol) {
 		int rand_prod;
@@ -262,8 +258,11 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		int rand_prod;
 		Rule ruleSymbol = this.reader.findRule(sym);
 		
-		rand_prod = TerminalExpansion(ruleSymbol);
-		
+		if(this.minimunDepthSearch) {
+			rand_prod = this.reader.terminalExpansionMinimunDepth(ruleSymbol);
+		}else {
+			rand_prod = this.reader.terminalExpansion(ruleSymbol);
+		}		
 		//Remove the previous values that we had on the position and add the new non-recursive value
 		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).remove(pos);
 		solution.getVariable(this.orderSymbols.indexOf(sym.toString())).add(pos,rand_prod);
@@ -372,22 +371,18 @@ public abstract class AbstractProblemDSGE extends AbstractProblemSGE<VariableLis
 		//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
 		if(reader.sameRecursion(ruleSymbol, expansion)) {
 			if(depth >= this.maxDepthInit) {
-				rand_prod = TerminalExpansion(ruleSymbol);
+				if(this.minimunDepthSearch) {
+					rand_prod = this.reader.terminalExpansionMinimunDepth(ruleSymbol);
+				}else {
+					rand_prod = this.reader.terminalExpansion(ruleSymbol);
+				}
 				expansion = ruleSymbol.get(rand_prod);
 				
 			}
 			
-		}/*else {
-			//If the rule is recursive and we are expanding a non-recursive production but the minRecDepthInit is less than the minimum then we generate only recursive expansions
-			//We only generate the new recursive rule of we have not gone over the max depth limit
-			if((innitDepth < this.minRecDepthInit) && (depth < this.maxDepthInit) && MinInitD) {
-				//rand_prod = RecursiveExpansion(ruleSymbol);
-				rand_prod = generateExpansionToMinimumDepth(ruleSymbol);
-				expansion = ruleSymbol.get(rand_prod);
-			
-			}
-		}*/
+		}
 		
+		//Case where this branch needs to expand to minimum depth, always tree depth
 		if((innitDepth < this.minRecDepthInit) && (depth < this.maxDepthInit) && MinInitD) {
 			//rand_prod = RecursiveExpansion(ruleSymbol);
 			rand_prod = generateExpansionToMinimumDepth(ruleSymbol, rand_prod, (minRecDepthInit - innitDepth));

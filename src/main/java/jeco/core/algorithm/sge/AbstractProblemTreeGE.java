@@ -17,7 +17,7 @@ import jeco.core.util.bnf.Symbol;
 import jeco.core.util.random.RandomGenerator;
 
 /**
- * Abstract problem for Dynamic Structured Grammatical Evolution, the Evaluate method must be implemented for each problem.
+ * Abstract problem for T-GE-NEN, the Evaluate method must be implemented for each problem.
  *
  */
 public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<Integer>> {
@@ -30,7 +30,8 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 	private boolean treeDepth;
 	private int maxDepthForNonCodifiers;
 	
-	
+	private boolean minimunDepthSearch;
+
 	
 	/**
 	 * Constructor without initialMaxdepth, set to the maxDepth, nor initialMinRecDepth which is set to 0
@@ -48,6 +49,7 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 		this.minRecDepthInit = 0;
 		this.maxDepthInit = maxDepth;
 		this.maxDepthForNonCodifiers = maxDepthForNonCodifiers;
+		this.minimunDepthSearch = true;
 		if(this.maxDepthForNonCodifiers < this.maxDepth) {
 			throw new RuntimeException("Non-codifier depth must be the same or higher than codifing depth");
 		}
@@ -75,12 +77,39 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 		this.minRecDepthInit = minRecInit;
 		this.maxDepthInit = maxInit;
 		this.maxDepthForNonCodifiers = maxDepthForNonCodifiers;
-		
+		this.minimunDepthSearch = true;
 		if(this.maxDepthForNonCodifiers < this.maxDepth) {
 			throw new RuntimeException("Non-codifier depth must be the same or higher than codifing depth");
 		}
 		
 		//initialize();
+		// TODO Auto-generated constructor stub
+	}
+	
+	/**
+	 * @param pathToBnf path of bnf file with grammar
+	 * @param numberOfObjectives of the problem chosen
+	 * @param maxDepth maximum depth of the solution tree constructed or amount of times each rule can perform recursion.
+	 * @param bloatingControl  boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
+	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
+	 * @param maxInit maximum depth of the initial solution tree constructed or amount of times each rule can perform recursion in the creation of solutions.
+	 * @param minRecInit minimum recursive depth for all rules that all initial solutions must have.
+	 * @param minimunDepthSearch set the type of generation to minimum path (true) or random non-recursive rules (false). For some grammar structures it might be less biased the false option
+	 */
+	public AbstractProblemTreeGE(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit,int maxDepthForNonCodifiers, Boolean minimunDepthSearch) {
+		super(pathToBnf, 0, numberOfObjectives);
+		//reader.load(pathToBnf);
+		this.bloatingControl = bloatingControl;
+		this.treeDepth = treeDepth;
+		this.maxDepth = maxDepth;
+		this.minRecDepthInit = minRecInit;
+		this.maxDepthInit = maxInit;
+		this.maxDepthForNonCodifiers = maxDepthForNonCodifiers;
+		
+		if(this.maxDepthForNonCodifiers < this.maxDepth) {
+			throw new RuntimeException("Non-codifier depth must be the same or higher than codifing depth");
+		}
+		this.minimunDepthSearch = minimunDepthSearch;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -228,63 +257,6 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 		}
 	}
 	
-	private int TerminalExpansion(Rule ruleSymbol) {
-
-		int rand_prod;
-		
-		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
-		ArrayList<Integer> listProd = new ArrayList<>();
-		int min = Integer.MAX_VALUE;
-		
-		//We search for the minimun depth possible
-		for(Production p: ruleSymbol) {
-			if(p.getMinimumDepth() < min) {
-				min = p.getMinimumDepth();
-			}
-		}
-		
-		int index = 0;
-		for(Production p: ruleSymbol) {
-			/*if(!reader.sameRecursion(ruleSymbol, p)) {
-				listProd.add(index);
-			}
-			index++;*/
-			
-			//Productions that have the minimun depth to reach a terminal
-			if(p.getMinimumDepth() == min) {
-				listProd.add(index);
-			}
-			index++;
-		}
-		
-		//Select one of the indexes of the list
-		int selec = RandomGenerator.nextInt(listProd.size());
-		rand_prod = listProd.get(selec);
-		
-		return rand_prod;
-	}
-	
-	
-	/*private int TerminalExpansion(Rule ruleSymbol) {
-
-		int rand_prod;
-		
-		//We get the productions that are not recursive with the ruleSymbol and put their indexes in a list
-		ArrayList<Integer> listProd = new ArrayList<>();
-		int index = 0; 
-		for(Production p: ruleSymbol) {
-			if(!reader.sameRecursion(ruleSymbol, p)) {
-				listProd.add(index);
-			}
-			index++;
-		}
-		
-		//Select one of the indexes of the list
-		int selec = RandomGenerator.nextInt(listProd.size());
-		rand_prod = listProd.get(selec);
-		
-		return rand_prod;
-	}*/
 	
 	/*private int RecursiveExpansion(Rule ruleSymbol) {
 		int rand_prod;
@@ -317,8 +289,11 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 		int rand_prod;
 		Rule ruleSymbol = this.reader.findRule(sym);
 		
-		rand_prod = TerminalExpansion(ruleSymbol);
-
+		if(this.minimunDepthSearch) {
+			rand_prod = this.reader.terminalExpansionMinimunDepth(ruleSymbol);
+		}else {
+			rand_prod = this.reader.terminalExpansion(ruleSymbol);
+		}
 		solution.setValue(rand_prod);
 		
 		//deleteExtraChildren(sym, solution);
@@ -457,7 +432,11 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 		//If the rule and expansion is recursive and we have gone over the maxDepth we only generate non_recursive expansions 
 		if(reader.sameRecursion(ruleSymbol, expansion)) {
 			if(depth >= this.maxDepthInit) {
-				rand_prod = TerminalExpansion(ruleSymbol);
+				if(this.minimunDepthSearch) {
+					rand_prod = this.reader.terminalExpansionMinimunDepth(ruleSymbol);
+				}else {
+					rand_prod = this.reader.terminalExpansion(ruleSymbol);
+				}
 				expansion = ruleSymbol.get(rand_prod);	
 			}
 			
