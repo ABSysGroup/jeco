@@ -1,10 +1,10 @@
 <start> ::= <expr> <op> <expr>
 | <expr>
 <expr> ::= <term> <op> <term>
-| ( <term> <op> <term> ) | <expr> <op> <expr>
+| ( <term> <op> <term> )
 <op> ::= +
 | -
 | /
 | *
-<term> ::= X
+<term> ::= x1
 | 0.5

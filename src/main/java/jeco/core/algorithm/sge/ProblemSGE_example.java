@@ -6,10 +6,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
 import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
-import jeco.core.algorithm.moga.NSGAII;
 import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.SubTreeCrossover;
@@ -34,7 +32,7 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
 	public ProblemSGE_example(String path, int depth){
 		super(path, 1, depth);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
-		evaluator = mgr.getEngineByName("JavaScript");
+		evaluator = mgr.getEngineByName("graal.js");
 	}
 	
 
@@ -100,9 +98,9 @@ public class ProblemSGE_example extends AbstractProblemSSGE{
         // Run
         algorithm.initialize();
         Solutions<VariableArray<Integer>> solutions = algorithm.execute();
+		System.out.println("\n\n>>>>> Final solutions: " + solutions.size());
         for (Solution<VariableArray<Integer>> solution : solutions) {
-            logger.info("Fitness = (" + solution.getObjectives().get(0) + ")");
-            logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
+			System.out.println("Fitness = (" + solution.getObjectives().get(0) + ") -- Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }
   }
 

@@ -28,7 +28,7 @@ public class SimpleGrammaticalEvolution_example extends AbstractProblemGE {
   public SimpleGrammaticalEvolution_example(String pathToBnf) {
     super(pathToBnf, 1);
     ScriptEngineManager mgr = new ScriptEngineManager();
-    evaluator = mgr.getEngineByName("JavaScript");
+    evaluator = mgr.getEngineByName("graal.js");
   }
 
   @Override
@@ -71,12 +71,11 @@ public class SimpleGrammaticalEvolution_example extends AbstractProblemGE {
         // Second create the algorithm
         SimpleGrammaticalEvolution algorithm = new SimpleGrammaticalEvolution(problem,100,200,1.0 / problem.getNumberOfVariables(),SinglePointCrossover.DEFAULT_PROBABILITY);
         // Run
-
         algorithm.initialize();
         Solutions<Variable<Integer>> solutions = algorithm.execute();
+        System.out.println("\n\n>>>>> Final solutions: " + solutions.size());
         for (Solution<Variable<Integer>> solution : solutions) {
-            logger.info("Fitness = (" + solution.getObjectives().get(0) + ")");
-            logger.info("Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
+            System.out.println("Fitness = (" + solution.getObjectives().get(0) + ") -- Phenotype = (" + problem.generatePhenotype(solution).toString() + ")");
         }
   }
 

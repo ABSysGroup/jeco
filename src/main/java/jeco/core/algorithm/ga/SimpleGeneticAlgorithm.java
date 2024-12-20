@@ -27,7 +27,6 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     /////////////////////////////////////////////////////////////////////////
     protected SimpleDominance<V> dominance = new SimpleDominance<V>();
     protected Solutions<V> population;
-    protected Solutions<V> leaders;
     protected MutationOperator<V> mutationOperator;
     protected CrossoverOperator<V> crossoverOperator;
     protected SelectionOperator<V> selectionOperator;
@@ -46,12 +45,7 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
     @Override
     public void initialize() {
         population = problem.newRandomSetOfSolutions(maxPopulationSize);
-        leaders = new Solutions<V>();
         problem.evaluate(population);
-        for (Solution<V> solution : population) {
-            leaders.add(solution.clone());
-        }
-        reduceLeaders();
         currentGeneration = 0;
     }
 
@@ -67,7 +61,7 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
         while ((currentGeneration < maxGenerations) && !stop){
             step();
             int percentage = Math.round((currentGeneration * 100) / (float)maxGenerations);
-            Double bestObj = leaders.get(0).getObjectives().get(0);
+            Double bestObj = population.get(0).getObjectives().get(0);
             
             // For observers:
             obsData.put("CurrentGeneration", String.valueOf(currentGeneration));
@@ -109,10 +103,10 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
         }
         if (stop) {
             logger.info("Execution stopped at generation "+ currentGeneration);
-            logger.info("Best objective value: "+leaders.get(0).getObjectives().get(0));
+            logger.info("Best objective value: "+population.get(0).getObjectives().get(0));
         }
         
-        return leaders;
+        return population;
     }
 
     @Override
@@ -133,19 +127,14 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
         } // for
         problem.evaluate(childPop);
         population = replacement(population,childPop);
-        //Actualize the archive
-        for (Solution<V> solution : population) {
-            Solution<V> clone = solution.clone();
-            leaders.add(clone);
-        }
-        reduceLeaders();
+
         StringBuilder buffer = new StringBuilder();
-        buffer.append("@ ").append(currentGeneration).append(";").append(leaders.get(0).getObjective(0));
-        buffer.append(";").append(leaders.get(leaders.size() - 1).getObjective(0)).append(";").append(leaders.get(leaders.size() / 2).getObjective(0));
+        buffer.append("@ ").append(currentGeneration).append(";").append(population.get(0).getObjective(0));
+        buffer.append(";").append(population.get(population.size() - 1).getObjective(0)).append(";").append(population.get(population.size() / 2).getObjective(0));
         logger.fine(buffer.toString());
 
     }
-
+/*
     public void reduceLeaders() {
         Collections.sort(leaders, dominance);
         // Remove repetitions:
@@ -169,7 +158,8 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
             leaders.remove(leaders.size() - 1);
         }
     }
-    
+  */
+
     @Override
     public Solutions<V> getPopulation() {
         return population;
@@ -181,10 +171,16 @@ public class SimpleGeneticAlgorithm<V extends Variable<?>> extends Algorithm<V> 
      *
      * @param population
      * @param offspring
-     * @return
+     * @return New population already sorted
      */
     protected Solutions<V> replacement(Solutions<V> population, Solutions<V> offspring) {
-        // Direct replacement with no strategy.
+        /* Generational implementarion. Only maintains the best individual from the previous population removing
+           the worst from the offspring. */
+        Collections.sort(population, dominance);
+        offspring.add(population.get(0));
+        Collections.sort(offspring, dominance);
+        offspring.remove(population.size() - 1);
+
         return offspring;
     }
 

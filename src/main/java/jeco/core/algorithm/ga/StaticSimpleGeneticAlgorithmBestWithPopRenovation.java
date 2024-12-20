@@ -82,15 +82,9 @@ public class StaticSimpleGeneticAlgorithmBestWithPopRenovation<V extends Variabl
         	
         }
 
-        //Actualize the archive
-        for (Solution<V> solution : population) {
-            Solution<V> clone = solution.clone();
-            leaders.add(clone);
-        }
-        reduceLeaders();
         StringBuilder buffer = new StringBuilder();
-        buffer.append("@ ").append(currentGeneration).append(";").append(leaders.get(0).getObjective(0));
-        buffer.append(";").append(leaders.get(leaders.size() - 1).getObjective(0)).append(";").append(leaders.get(leaders.size() / 2).getObjective(0));
+        buffer.append("@ ").append(currentGeneration).append(";").append(population.get(0).getObjective(0));
+        buffer.append(";").append(population.get(population.size() - 1).getObjective(0)).append(";").append(population.get(population.size() / 2).getObjective(0));
         logger.fine(buffer.toString());
 
     }

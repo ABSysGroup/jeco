@@ -29,8 +29,5 @@ public class SimpleGeneticAlgorithm_example {
 		for(Solution<Variable<Double>> solution : solutions) {
 			System.out.println("Fitness = " + solution.getObjectives().get(0));
 		}
-		//System.out.println("solutions.size()="+ solutions.size());
-		//System.out.println(solutions.toString());
-		//System.out.println("solutions.size()="+ solutions.size());
 	}
 }
