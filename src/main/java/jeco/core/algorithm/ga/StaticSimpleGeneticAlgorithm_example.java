@@ -26,7 +26,7 @@ public class StaticSimpleGeneticAlgorithm_example {
 		SBXCrossover<Variable<Double>> crossoverOp = new SBXCrossover<Variable<Double>>(problem);
 		SimpleDominance<Variable<Double>> comparator = new SimpleDominance<Variable<Double>>();
 		BinaryTournament<Variable<Double>> selectionOp = new BinaryTournament<Variable<Double>>(comparator);
-		StaticSimpleGeneticAlgorithmBestWithPopRenovation<Variable<Double>> ga = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<Variable<Double>>(problem, 100, 5000, true, mutationOp, crossoverOp, selectionOp, 0.2);
+		StaticSimpleGeneticAlgorithm<Variable<Double>> ga = new StaticSimpleGeneticAlgorithm<Variable<Double>>(problem, 100, 5000, true, mutationOp, crossoverOp, selectionOp);
 		ga.initialize();
 		Solutions<Variable<Double>> solutions = ga.execute();
 		for(Solution<Variable<Double>> solution : solutions) {

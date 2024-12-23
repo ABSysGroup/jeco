@@ -2,17 +2,11 @@ package jeco.core.algorithm.sge;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import jeco.core.algorithm.moge.Phenotype;
-import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
-import jeco.core.problem.Variable;
-import jeco.core.util.Pair;
-import jeco.core.util.bnf.BnfReader;
-import jeco.core.util.bnf.BnfReaderSge;
 import jeco.core.util.bnf.Production;
 import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;

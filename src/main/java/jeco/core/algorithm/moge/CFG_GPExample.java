@@ -7,6 +7,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import jeco.core.algorithm.ga.SimpleGeneticAlgorithm;
+import jeco.core.algorithm.ga.SimpleGeneticAlgorithmWithElitism;
 import jeco.core.algorithm.ga.StaticSimpleGeneticAlgorithmBestWithPopRenovation;
 import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moga.NSGAII;
@@ -103,7 +104,7 @@ public class CFG_GPExample extends CFG_GP {
 		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
 		
         // Second create the algorithm
-        StaticSimpleGeneticAlgorithmBestWithPopRenovation<NodeTree> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<NodeTree>(problem,100,200,false, new NodeTreeRegenMutation<NodeTree>(0.3, problem, true),
+		SimpleGeneticAlgorithmWithElitism<NodeTree> algorithm = new SimpleGeneticAlgorithmWithElitism<NodeTree>(problem,100,200,false, new NodeTreeRegenMutation<NodeTree>(0.3, problem, true),
                 new NodeSubTreeCrossover<NodeTree>(0.7,problem),
                 new BinaryTournament<NodeTree>(new SimpleDominance<>()), 0.1);
         // Run

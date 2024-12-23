@@ -8,8 +8,6 @@ import java.util.logging.Logger;
 import jeco.core.algorithm.sge.AbstractGECommon;
 import jeco.core.algorithm.sge.NodeTree;
 import jeco.core.algorithm.sge.RecListT;
-import jeco.core.algorithm.sge.VariableList;
-import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
 import jeco.core.util.bnf.BnfReader;

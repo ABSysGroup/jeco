@@ -1,7 +1,6 @@
 package jeco.core.algorithm.sge;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import jeco.core.problem.Variable;
 

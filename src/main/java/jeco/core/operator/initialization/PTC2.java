@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jeco.core.algorithm.sge.RecListT;
-import jeco.core.algorithm.sge.VariableList;
-import jeco.core.util.Pair;
 import jeco.core.util.bnf.BnfReader;
 import jeco.core.util.bnf.Production;
 import jeco.core.util.bnf.Rule;

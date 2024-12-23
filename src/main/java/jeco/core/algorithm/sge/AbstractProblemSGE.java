@@ -1,13 +1,9 @@
 package jeco.core.algorithm.sge;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jeco.core.algorithm.moge.Phenotype;
-import jeco.core.problem.Solution;
-import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.bnf.BnfReaderSge;
 

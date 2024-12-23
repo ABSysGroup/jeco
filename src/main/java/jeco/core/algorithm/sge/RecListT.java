@@ -7,7 +7,6 @@ import java.util.Map;
 
 import jeco.core.problem.Variable;
 import jeco.core.util.bnf.BnfReader;
-import jeco.core.util.bnf.Production;
 import jeco.core.util.bnf.Rule;
 import jeco.core.util.bnf.Symbol;
 
