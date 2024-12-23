@@ -83,7 +83,7 @@ public class NodeTreeRegenMutation <T extends NodeTree> extends MutationOperator
 		problem.createIndividual(l.getDepth(), l.getDepth(), newSubTree, l.getValue(), false);
 		
 		if(!l.getValue().equals(newSubTree.getValue())) {
-			new RuntimeException("error in mutation");
+			throw new RuntimeException("error in mutation");
 		}
 		
 		l.setChildren(newSubTree.getChildren());

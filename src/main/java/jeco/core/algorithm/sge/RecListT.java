@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import jeco.core.problem.Variable;
 import jeco.core.util.bnf.BnfReader;
@@ -277,13 +278,23 @@ public class RecListT<T>  extends Variable<T>  {
 		}
 	}
 	
+	
+	
     @SuppressWarnings("unchecked")
 	@Override
     public boolean equals(Object right) {
+		if (getClass() != right.getClass())
+			return false;
     	RecListT<T> var = (RecListT<T>)right;
-        return (var == this);
+
+		return (var == this);
     }
 	
+	/*@Override
+	public int hashCode() {
+    	return System.identityHashCode(this);
+	}*/
+
 	public boolean containsSymbol(Symbol s) {
 		boolean contains = false;
 		
