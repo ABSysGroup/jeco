@@ -9,6 +9,8 @@ public class Production extends ArrayList<Symbol> {
     protected boolean recursive; // Recursive nature of production
     protected int minimumDepth; // Minimum depth of parse tree for production to map to terminal symbol(s)
     
+    protected int maximumDepth;
+    protected int maxExpansions;
     /*public Production(int newLength){
         super(newLength);
         setRecursive(false);
@@ -26,6 +28,8 @@ public class Production extends ArrayList<Symbol> {
     	}
     	clone.recursive = recursive;
     	clone.minimumDepth = minimumDepth;
+    	clone.maxExpansions = maxExpansions;
+    	clone.maximumDepth = maximumDepth;
     	return clone;
     }
     
@@ -54,11 +58,18 @@ public class Production extends ArrayList<Symbol> {
         recursive = newRecursive;
     }*/
     
-    /*
      
     public int getMinimumDepth() {    
         return minimumDepth;
-    }*/
+    }
+    
+	public int getMaximumDepth(){
+		return maximumDepth;
+	}
+    
+	public int getMaximumExpansions(){
+		return this.maxExpansions;
+	}
     
     /*public void setMinimumDepth(int newMinimumDepth){
         minimumDepth = newMinimumDepth;

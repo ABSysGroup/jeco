@@ -11,7 +11,18 @@ public class Solution<V extends Variable<?>> {
   protected ArrayList<Double> objectives = new ArrayList<Double>();
   protected HashMap<String, Number> properties = new HashMap<String, Number>();
 
-  public Solution(int numberOfObjectives) {
+  protected int numberGenes;
+  
+  
+  public int getNumberGenes() {
+	return numberGenes;
+}
+
+public void setNumberGenes(int numberGenes) {
+	this.numberGenes = numberGenes;
+}
+
+public Solution(int numberOfObjectives) {
     for (int i = 0; i < numberOfObjectives; ++i) {
       objectives.add(0.0);
     }

@@ -167,6 +167,8 @@ public class GramEvalStaticModel extends AbstractProblemGE {
         }
         return clone;
     }
+    
+    
 
     public static void main(String[] args) {
         String propertiesFilePath = "test" + File.separator + GramEvalStaticModel.class.getSimpleName() + ".properties";
@@ -211,4 +213,6 @@ public class GramEvalStaticModel extends AbstractProblemGE {
         double validationFitness = solution.getObjectives().get(0);
         logger.info("Validation fitness for solutions[0] = " + validationFitness);
     }
+
+
 }

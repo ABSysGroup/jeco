@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Semaphore;
 
 public class BnfReaderSge extends BnfReader {
 	
@@ -209,10 +208,11 @@ public class BnfReaderSge extends BnfReader {
     	
     	return nextSymbols;
     }
-
+    
+    
     public static void main(String[] args) {
         BnfReaderSge bnfReader = new BnfReaderSge();
-        bnfReader.loadSGE("test/grammar.bnf", 4);
+        bnfReader.loadSGE("test/grammar_example_sge.bnf", 4);
 
         for (Rule rule : bnfReader.rules) {
         	System.out.println("Rule recursive: "+ rule.recursive);

@@ -3,6 +3,8 @@ package jeco.core.algorithm.moge;
 import java.util.LinkedList;
 
 import jeco.core.algorithm.sge.AbstractGECommon;
+import jeco.core.algorithm.sge.NodeTree;
+import jeco.core.algorithm.sge.RecListT;
 import jeco.core.problem.Problem;
 import jeco.core.problem.Solution;
 import jeco.core.problem.Solutions;
@@ -30,10 +32,7 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	/**Default number of objectives for a problem*/
 	public static final int NUM_OF_OBJECTIVES_DEFAULT = 2;
 
-	/**Path to bnf file that contains the grammar to be used to generate the individuals*/
-	protected String pathToBnf;
-	/**Reader object that parses the bnf file into rules, productions and symbols*/
-	protected BnfReader reader;
+
 	protected int maxCntWrappings = MAX_CNT_WRAPPINGS_DEFAULT;
 	/**Index to generate phenotype from the list of numbers that corresponds to the genotype */
 	protected int currentIdx;
@@ -46,6 +45,7 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
     /** Percentage of individuals to be initialized using sensible initialization*/
 	protected double sensibleInitializationPercentage;
 
+	protected int codonUpperBound;
 	/**Constructor of a Grammatical Evolution problem that sets all possible variables
 	 * 
 	 * @param pathToBnf path of bnf file with grammar
@@ -55,16 +55,15 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	 * @param codonUpperBound maximum integer number for each allele in the chromosome, number used for modulus operator.
 	 */
 	public AbstractProblemGE(String pathToBnf, int numberOfObjectives, int chromosomeLength, int maxCntWrappings, int codonUpperBound) {
-		super(chromosomeLength, numberOfObjectives);
-		this.pathToBnf = pathToBnf;
-		reader = new BnfReader();
-		reader.load(pathToBnf);
+		super(pathToBnf, chromosomeLength, numberOfObjectives);
 		this.maxCntWrappings = maxCntWrappings;
 		for (int i = 0; i < numberOfVariables; i++) {
 			lowerBound[i] = 0;
 			upperBound[i] = codonUpperBound;
 		}
-                this.sensibleInitialization = false;
+		
+		this.codonUpperBound = codonUpperBound;
+        this.sensibleInitialization = false;
 	}
 
 	/**Constructor of a Grammatical Evolution problem that only sets numberOfObjectives, chromosomeLength, Wrappings and CodonUpperBound
@@ -75,6 +74,8 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	 */
 	public AbstractProblemGE(String pathToBnf, int numberOfObjectives) {
 		this(pathToBnf, numberOfObjectives, CHROMOSOME_LENGTH_DEFAULT, MAX_CNT_WRAPPINGS_DEFAULT, CODON_UPPER_BOUND_DEFAULT);
+	
+		this.codonUpperBound = CODON_UPPER_BOUND_DEFAULT;
 	}
 
 	/**Constructor of Grammatical Evolution problem with all variables set to the default value 
@@ -83,6 +84,8 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 	 */
 	public AbstractProblemGE(String pathToBnf) {
 		this(pathToBnf, NUM_OF_OBJECTIVES_DEFAULT, CHROMOSOME_LENGTH_DEFAULT, MAX_CNT_WRAPPINGS_DEFAULT, CODON_UPPER_BOUND_DEFAULT);
+		this.codonUpperBound = CODON_UPPER_BOUND_DEFAULT;
+	
 	}
         
 	/**Set the value of the sensible initialization
@@ -94,13 +97,15 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
         this.sensibleInitialization = value;
         this.sensibleInitializationPercentage = percentage;
     }
+ 
+
 
 	/**Evaluate method to the implemented by each problem
 	 * 
 	 * @param solution an individuals genotype
 	 * @param phenotype the corresponding Phenotype of the solution
 	 */
-	abstract public void evaluate(Solution<Variable<Integer>> solution, Phenotype phenotype);
+	//abstract public void evaluate(Solution<Variable<Integer>> solution, Phenotype phenotype);
 	
 	/**
 	 * Calls evaluate method for each solution in a list of solutions.
@@ -136,6 +141,7 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
 		processProduction(firstProduction, solution, phenotype);
                 // Account for the number of genes that were used in decodification.
                 phenotype.setUsedGenes(currentIdx + (currentWrp * solution.getVariables().size()));
+        solution.setNumberGenes(solution.getVariables().size());
 		return phenotype;
 	}
 
@@ -187,6 +193,17 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
                 }
             
 		Solutions<Variable<Integer>> solutions = new Solutions<Variable<Integer>>();
+		
+		if(this.initializator != null) {
+			 for (int i = 0; i < randomSize; ++i) {
+                 Solution<Variable<Integer>> solI = initializeInd();
+                 solutions.add(solI);
+				 
+			 }
+			
+			
+		}else {
+		
                 for (int i = 0; i < randomSize; ++i) {
 
                     Solution<Variable<Integer>> solI = generateRandomSolution();
@@ -214,18 +231,48 @@ public abstract class AbstractProblemGE extends AbstractGECommon<Variable<Intege
                     } while (solutions.size() < size);
                     
                 }
+		}
                 
 		return solutions;
 	}
 
-        
-        private Solution<Variable<Integer>> generateRandomSolution() {
+        @Override
+		protected Solution<Variable<Integer>> generateRandomSolution() {
             Solution<Variable<Integer>> solI = new Solution<>(numberOfObjectives);
             for (int j = 0; j < numberOfVariables; ++j) {
                 Variable<Integer> varJ = new Variable<>(RandomGenerator.nextInteger((int) upperBound[j]));
                 solI.getVariables().add(varJ);
             }
             return solI;
+        }
+       
+        
+        @Override
+        protected Solution<Variable<Integer>> initializeInd(){
+        	Solution<Variable<Integer>> solI = new Solution<>(numberOfObjectives);
+        	RecListT<Integer> n = this.initializator.initialize();
+        	constructSolutionFromTree(solI, n);
+        	
+        	for(int i = solI.getVariables().size(); i< this.numberOfVariables; i++) {
+                Variable<Integer> varJ = new Variable<>(RandomGenerator.nextInteger((int) upperBound[i]));
+                solI.getVariables().add(varJ);
+        	}
+        	return solI;
+        }
+        
+        private void constructSolutionFromTree(Solution<Variable<Integer>> solI, RecListT<Integer> n) {
+
+            Symbol s = n.getS();
+            Rule r = reader.findRule(s);
+            
+            int random = RandomGenerator.nextInt((int)(this.codonUpperBound/r.size()));
+            Variable<Integer> varJ = new Variable<>(n.getValue()+(random*r.size()));
+            solI.getVariables().add(varJ);
+            
+            for(RecListT<Integer> children: n.getInteriorList()) {
+            	constructSolutionFromTree(solI, children);
+            }
+            
         }
 
 }

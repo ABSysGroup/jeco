@@ -51,7 +51,9 @@ public class MultiObjectiveGrammaticalEvolution_example extends AbstractProblemG
 		}
 		solution.getObjectives().set(0, maxError);
 		solution.getObjectives().set(1, totError);
-	}	
+	}
+	
+	
 
   @Override
   public MultiObjectiveGrammaticalEvolution_example clone() {

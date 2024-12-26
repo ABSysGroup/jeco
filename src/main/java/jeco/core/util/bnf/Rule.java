@@ -10,6 +10,9 @@ public class Rule extends ArrayList<Production> {
     protected int minimumDepth = Integer.MAX_VALUE>>1;	// Minimum depth of parse tree for production to map to terminal symbol(s)
     protected Symbol lhs = null; //Left hand side symbol of the rule
     
+    protected int maximumDepth;
+    protected int maxExpansions;
+    
     public Rule(){
         super();
     }
@@ -60,9 +63,13 @@ public class Rule extends ArrayList<Production> {
         recursive=newRecursive;
     }*/
     
-/*    public int getMinimumDepth() {
+    public int getMinimumDepth() {
         return minimumDepth;
-    }*/
+    }
+    
+	public int getMaximumDepth(){
+		return maximumDepth;
+	}
     
 /*    public void setMinimumDepth(int newMinimumDepth){
         minimumDepth=newMinimumDepth;

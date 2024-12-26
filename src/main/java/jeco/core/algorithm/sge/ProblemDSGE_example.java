@@ -11,6 +11,9 @@ import jeco.core.algorithm.ge.SimpleGrammaticalEvolution_example;
 import jeco.core.algorithm.moge.Phenotype;
 import jeco.core.operator.comparator.SimpleDominance;
 import jeco.core.operator.crossover.UniformCrossover;
+import jeco.core.operator.crossover.UniformTerminalCrossover;
+import jeco.core.operator.initialization.PTC2;
+import jeco.core.operator.mutation.BasicMutationVariableList;
 import jeco.core.operator.mutation.BasicMutationVariableListAll;
 import jeco.core.operator.selection.BinaryTournament;
 import jeco.core.problem.Problem;
@@ -21,7 +24,7 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	private static final Logger logger = Logger.getLogger(SimpleGrammaticalEvolution_example.class.getName());
 	protected ScriptEngine evaluator = null;
 	private String[] variables = {"123", "43", "21", "1", "50", "43", "20", "321", "76", "54", "122"};
-	private int goal = 126;
+	private int goal = 254;
 	
 	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth){
 		super(path, 1, depht,bloatingControl, treeDepth);
@@ -29,8 +32,8 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 		evaluator = mgr.getEngineByName("graal.js");
 	}
 	
-	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec){
-		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec);
+	public ProblemDSGE_example(String path, int depht, boolean bloatingControl, boolean treeDepth, int InitMax, int InitMinRec, boolean minimumSearch){
+		super(path, 1, depht,bloatingControl, treeDepth, InitMax, InitMinRec,minimumSearch);
 		 ScriptEngineManager mgr = new ScriptEngineManager();
 		evaluator = mgr.getEngineByName("graal.js");
 	}
@@ -87,8 +90,11 @@ public class ProblemDSGE_example extends AbstractProblemDSGE {
 	public static void main(String[] args) {
         // First create the problem
         
-		ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example_sge.bnf", 4, true, false);
-		
+
+		ProblemDSGE_example problem = new ProblemDSGE_example("test/grammar_example_sge.bnf", 10, true, true, 5, 4, true);
+		//ProblemDSGE_example problem = new ProblemDSGE_example("C:\\Users\\Marina\\Documents\\TFG\\SimbolicRegression.bnf", 10, true, true);
+		problem.setInitializator(new PTC2(30, 10, 5, problem.reader));
+
         // Second create the algorithm
         StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>> algorithm = new StaticSimpleGeneticAlgorithmBestWithPopRenovation<VariableList<Integer>>(problem,100,200,false, new BasicMutationVariableListAll<VariableList<Integer>>(0.3, problem),
                 new UniformCrossover<VariableList<Integer>>(0.7,0.25),

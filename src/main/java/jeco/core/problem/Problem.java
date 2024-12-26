@@ -30,11 +30,19 @@ public abstract class Problem<V extends Variable<?>> {
     }
 
     public double getLowerBound(int i) {
-        return lowerBound[i];
+    	if(i < lowerBound.length) {
+    		return lowerBound[i];
+    	}else {
+    		return lowerBound[lowerBound.length -1];
+    	}
     }
 
     public double getUpperBound(int i) {
-        return upperBound[i];
+    	if(i < upperBound.length) {
+    		return upperBound[i];
+    	}else {
+    		return upperBound[upperBound.length -1];
+    	}
     }
 
     public int getMaxEvaluations() {
