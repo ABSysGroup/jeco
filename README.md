@@ -9,6 +9,12 @@ This library is currently available as a Maven dependency:
 <dependency>
   <groupId>com.github.absysgroup.jeco</groupId>
   <artifactId>jeco-core</artifactId>
-  <version>1.0.21</version>
+  <version>1.0.37</version>
 </dependency>
 ```
+
+Changelog
+---------
+ * [1.0.37] - 2021-10-07
+   * Added different versions of Structured Grammatical Evolution
+   * Corrected example code for Grammatical Evolution 
