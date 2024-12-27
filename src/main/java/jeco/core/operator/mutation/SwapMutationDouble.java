@@ -4,7 +4,9 @@ import jeco.core.problem.Solution;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 /**
+ * This class implements a mutation operator that swaps two elements of the genotype.
  *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  * @author cia
  */ 
 

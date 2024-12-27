@@ -23,6 +23,7 @@ import jeco.core.problem.Variable;
  * Does not require temperature to be given because it automatically adapts the
  * parameters: Natural Optimization [de Vicente et al., 2000]
  *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  * @author J. M. Colmenar
  */
 public class SimulatedAnnealing<T extends Variable<?>> extends Algorithm<T> {

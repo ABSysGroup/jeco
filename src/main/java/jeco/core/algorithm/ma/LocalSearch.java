@@ -7,7 +7,8 @@ import jeco.core.problem.Variable;
 
 /**
  * All the local searches must implement this interface.
- * 
+ *
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  * @author J. M. Colmenar
  */
 public interface LocalSearch<V extends Variable<?>> {

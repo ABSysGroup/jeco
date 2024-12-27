@@ -9,7 +9,10 @@ import jeco.core.problem.Variable;
 
 /**
  * Class for selection of elites.
- **/
+ *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
+ */
+
 public class EliteSelectorOperator<T extends Variable<?>> extends SelectionOperator<T> {
 
     public static final int DEFAULT_ELITE_SIZE = 10;

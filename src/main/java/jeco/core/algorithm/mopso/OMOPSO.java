@@ -17,12 +17,11 @@ import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
 /**
- * 
- * 
  * Input parameters:
  * - MAX_GENERATIONS
  * - MAX_POPULATION_SIZE
- * 
+ *
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  * @author José L. Risco-Martín
  *
  */

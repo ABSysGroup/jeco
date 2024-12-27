@@ -8,6 +8,7 @@ package jeco.core.operator.evaluator;
 import java.util.ArrayList;
 
 /**
+ * Abstract class for the evaluation of expressions in a population
  *
  * @author José Luis Risco Martín
  */

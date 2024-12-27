@@ -27,7 +27,9 @@ public abstract class AbstractGECommon<T extends Variable<?>> extends Problem<T>
 	protected Initializator initializator = null;
 	
 	/**
-	 * Abstract constructor of AbstractGECommon
+	 * Abstract constructor of AbstractGECommon.
+	 *
+	 * @param pathtoBnf path to bnf file
 	 * @param numberOfVariables number of variable
 	 * @param numberOfObjectives number of objectives
 	 */
@@ -47,16 +49,16 @@ public abstract class AbstractGECommon<T extends Variable<?>> extends Problem<T>
 	
 	/**Sets the initializator of the method
 	 * 
-	 * @param initializator object
+	 * @param init initializator object
 	 */
     public void setInitializator(Initializator init) {
         this.initializator = init;
     }
     
-	/**Given a genotype (solution) generates the corresponding genotype, to be implemented for each
+	/**
+	 * Given a genotype (solution) generates the corresponding genotype, to be implemented for each
 	 * type of solution
-	 * 
-	 * @param solution genotype to transform
+	 *
 	 * @return phenotype of solution
 	 */
 	protected abstract Solution<T> initializeInd();

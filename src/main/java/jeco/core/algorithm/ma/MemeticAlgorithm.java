@@ -19,7 +19,8 @@ import jeco.core.util.ErrorHandler;
 /**
  * This class implements a memetic algorithm which consists in a SimpleGA + a
  * local search.
- * 
+ *
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  * @author J. M. Colmenar
  */
 

@@ -7,7 +7,9 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 
 /**
- * ReplacementOperation removes replacementSize Individuals from the population
+ * ReplacementOperation removes replacementSize Individuals from the population.
+ *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  * @author José L. Risco-Martín
  */
 public class ReductionOperator<T extends Variable<?>> {

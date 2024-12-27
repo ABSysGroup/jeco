@@ -15,7 +15,8 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 
 /**
- *
+ * Worker class to evaluate solutions in parallel
+ * @param <V> Variable type
  * @author jlrisco
  */
 public class Worker<V extends Variable<?>> extends Thread {

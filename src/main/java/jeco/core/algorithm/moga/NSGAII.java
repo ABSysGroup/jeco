@@ -20,13 +20,12 @@ import jeco.core.problem.Variable;
 import jeco.core.util.Maths;
 
 /**
- *
- *
  * Input parameters: - MAX_GENERATIONS - MAX_POPULATION_SIZE
  *
  * Operators: - CROSSOVER: Crossover operator - MUTATION: Mutation operator -
  * SELECTION: Selection operator
  *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  * @author José L. Risco-Martín
  *
  */

@@ -6,7 +6,8 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 
 /**
- *
+ * Abstract class for algorithms
+ * @param <V> Variable type
  * @author José L. Risco-Martín
  *
  */

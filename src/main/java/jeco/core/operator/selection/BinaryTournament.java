@@ -8,7 +8,10 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
-/** Binary tournament selection
+/**
+ * Binary tournament selection.
+ *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  */
 public class BinaryTournament<T extends Variable<?>> extends SelectionOperator<T> {
 

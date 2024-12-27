@@ -32,7 +32,8 @@ import jeco.core.util.random.RandomGenerator;
  * - SORTING_METHOD: CROWDING_DISTANCE, CROWDING_DISTANCE_REPLACE, NICHE_COUNT, NICHE_COUNT_REPLACE
  * - TOP_PART_PERCENTAGE: 0.05 usually, but I am using 0.25
  * - W: PSO w factor
- * 
+ *
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  * @author José L. Risco-Martín
  *
  */

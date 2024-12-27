@@ -65,13 +65,18 @@ public abstract class Problem<V extends Variable<?>> {
         this.numEvaluations = numEvaluations;
     }
 
-    /**To be implemented by each problem type, returns an initial set of solution of a given size.
+    /**
+     * To be implemented by each problem type, returns an initial set of solution of a given size.
      * 
      * @param size size of set of solutions
      * @return A set of solutions
      */
     public abstract Solutions<V> newRandomSetOfSolutions(int size);
 
+    /**
+     * Evaluates a set of solutions
+     * @param solutions set of solutions to evaluate
+     */
     public void evaluate(Solutions<V> solutions) {
         for (Solution<V> solution : solutions) {
             evaluate(solution);

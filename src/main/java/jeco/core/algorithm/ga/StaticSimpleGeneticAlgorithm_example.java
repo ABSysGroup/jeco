@@ -10,6 +10,7 @@ import jeco.core.problem.Variable;
 import jeco.core.problems.Rastringin;
 
 /**
+ * Example of how to use the StaticSimpleGeneticAlgorithm class.
  *
  * @author J. Manuel Colmenar
  */

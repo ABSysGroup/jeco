@@ -11,7 +11,10 @@ import jeco.core.problem.Solutions;
 import jeco.core.problem.Variable;
 import jeco.core.util.random.RandomGenerator;
 
-/**Binary tournament operator for NSGAII
+/**
+ * Binary tournament operator for NSGAII.
+ *
+ * @param <T> extends Variable, the type of the individuals genotype elements.
  */
 public class BinaryTournamentNSGAII<T extends Variable<?>> extends SelectionOperator<T> {
 

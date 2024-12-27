@@ -9,6 +9,8 @@ import jeco.core.problem.Variable;
 /**
  * This class implements a <code>Comparator</code> (a method for comparing
  * <code>Solution</code> objects) based on epsilon dominance.
+ *
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  */
 public class EpsilonDominanceComparator<V extends Variable<?>> implements Comparator<Solution<V>> {
 

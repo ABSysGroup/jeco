@@ -12,7 +12,8 @@ import jeco.core.problem.Variable;
 /**
  * Simple GA with a different offspring replacement that is more static because
  * it does not replaces all the population but only the 2 worst individuals.
- * 
+ *
+ * @param <V> extends Variable, the type of the individuals genotype elements.
  * @author J. Manuel Colmenar
  */
 public class StaticSimpleGeneticAlgorithm<V extends Variable<?>> extends SimpleGeneticAlgorithm<V> {

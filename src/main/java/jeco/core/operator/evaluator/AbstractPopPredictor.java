@@ -3,28 +3,35 @@ package jeco.core.operator.evaluator;
 import java.util.ArrayList;
 
 /**
+ * Abstract class for the evaluation of expressions in a population.
  *
  * @author José Luis Risco Martín
  */
 public abstract class AbstractPopPredictor {
 
-	/**Compute YP
+	/**
+     * Compute YP
 	 * 
 	 * @param idx idx
 	 * @param xx xx
-	 * @return
+	 * @return double[] that computes YP
 	 */
     public abstract double[] computeYP(int idx, double[][] xx);
 
-    /**compute New X
+    /**
+     * Compute New X
      * 
      * @param idx idx
      * @param xx xx
-     * @return
+     * @return double[][] that computes new X
      */
     public abstract double[][] computeNewX(int idx, double[][] xx);
 
-    
+    /**
+     * Generates the class header
+     * @param threadId threadId
+     * @return string
+     */
     public static String generateClassHeader(Integer threadId) {
         StringBuilder currentJavaFile = new StringBuilder();
         currentJavaFile.append("import java.util.ArrayList;\n\n");
@@ -32,7 +39,8 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
-    /**generate compute Yp
+    /**
+     * Generate compute Yp
      *  
      * @param phenotypes phenotypes
      * @return string
@@ -75,7 +83,8 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
-    /**Generate compute new x
+    /**
+     * Generate compute new x
      * 
      * @param phenotypes phenotypes
      * @return string
@@ -117,7 +126,8 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
-    /**Generate class footer
+    /**
+     * Generate class footer
      * 
      * @return string
      */
@@ -127,7 +137,8 @@ public abstract class AbstractPopPredictor {
         return currentJavaFile.toString();
     }
 
-    /**Generate class code
+    /**
+     * Generate class code
      * 
      * @param threadId threadId
      * @param phenotypes phenotypes
