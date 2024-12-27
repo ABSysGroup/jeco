@@ -41,10 +41,6 @@ public class PTC2 extends Initializator{
 	
 	/**
 	 * Creates a new tree using PTC2 and returns it, each algorithm that makes use of this function should transform the tree to their representation 
-	 * @param depth
-	 * @param initDepth
-	 * @param solution
-	 * @param sym
 	 */
 	@Override
 	public RecListT<Integer> initialize() {

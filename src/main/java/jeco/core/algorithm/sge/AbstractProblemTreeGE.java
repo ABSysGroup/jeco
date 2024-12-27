@@ -275,11 +275,10 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 	}*/
 	
 	/**
-	 * Transform the production at pos to a non-recursive production to control bloating due to the tree becoming too big through mutation and crossover
+	 * Transform the production at pos to a non-recursive production to control bloating due to the tree becoming
+	 * too big through mutation and crossover
 	 * @param sym
 	 * @param solution
-	 * @param pos
-	 * @return
 	 */
 	public void transformToTerminalExpansion(Symbol sym, RecListT<Integer> solution) {
 		int rand_prod;
@@ -331,8 +330,7 @@ public abstract class AbstractProblemTreeGE extends AbstractGECommon<RecListT<In
 	/**
 	 * Returns a random expansion of the rule identified by sym
 	 * @param sym
-	 * @param solution
-	 * @return
+	 * @return random expansion
 	 */
 	public Integer generateExpansion(Symbol sym) {
 		Rule ruleSymbol = this.reader.findRule(sym);

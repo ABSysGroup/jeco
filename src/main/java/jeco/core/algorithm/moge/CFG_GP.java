@@ -61,7 +61,7 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 	 * @param bloatingControl  boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
 	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
 	 * @param maxInit maximum depth of the initial solution tree constructed or amount of times each rule can perform recursion in the creation of solutions.
-	 * @param minInit minimum depth of the tree considered.
+	 * @param minRecInit minimum depth of the tree considered.
 	 */
 	public CFG_GP(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit) {
 		super(pathToBnf, 0, numberOfObjectives);
@@ -82,7 +82,7 @@ public abstract class CFG_GP extends AbstractGECommon<NodeTree> {
 	 * @param bloatingControl  boolean that determines whether to limit the depth of the trees in the solution or not during the evolution.
 	 * @param treeDepth boolean that determines if the maxDepth refers to the maximun depth of the tress or the maximum depth of each recursion.
 	 * @param maxInit maximum depth of the initial solution tree constructed or amount of times each rule can perform recursion in the creation of solutions.
-	 * @param minInit minimum depth of the tree considered.
+	 *
 	 */
 	public CFG_GP(String pathToBnf, int numberOfObjectives, int maxDepth, boolean bloatingControl, boolean treeDepth, int maxInit, int minRecInit, boolean minimunDepthSearch) {
 		super(pathToBnf, 0, numberOfObjectives);
